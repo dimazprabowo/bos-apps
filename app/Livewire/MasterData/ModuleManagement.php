@@ -274,7 +274,7 @@ class ModuleManagement extends Component
             'modules' => $service->getFiltered(
                 $this->search,
                 $this->riskFilter,
-                true
+                false
             ),
             'riskLevels' => RiskLevel::cases(),
             'coeLevels' => CoEControlLevel::cases(),
