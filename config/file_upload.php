@@ -47,5 +47,10 @@ return [
             'max_size' => 10240, // 10 MB
             'mimes' => ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'],
         ],
+
+        'work_order_reference' => [
+            'max_size' => 10240, // 10 MB
+            'mimes' => ['pdf', 'doc', 'docx', 'xls', 'xlsx'],
+        ],
     ],
 ];

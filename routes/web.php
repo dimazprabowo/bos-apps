@@ -30,9 +30,19 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
         })->middleware('can:companies_view')->name('companies');
 
         // Modules
-        Route::get('/modules', function () {
-            return view('master-data.modules');
-        })->middleware('can:modules_view')->name('modules');
+        Route::prefix('modules')->name('modules.')->group(function () {
+            Route::get('/', function () {
+                return view('master-data.modules');
+            })->middleware('can:modules_view')->name('index');
+
+            Route::get('/create', function () {
+                return view('master-data.module-create');
+            })->middleware('can:modules_create')->name('create');
+
+            Route::get('/{module}/edit', function (\App\Models\Module $module) {
+                return view('master-data.module-edit', ['module' => $module]);
+            })->middleware('can:modules_update')->name('edit');
+        });
 
         // Competencies
         Route::get('/competencies', function () {

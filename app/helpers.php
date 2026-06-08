@@ -151,11 +151,30 @@ if (!function_exists('registration_deadline')) {
 if (!function_exists('registration_closed_message')) {
     /**
      * Get registration closed message
-     * 
+     *
      * @return string
      */
     function registration_closed_message(): string
     {
         return \App\Helpers\ConfigHelper::getRegistrationClosedMessage();
+    }
+}
+
+if (!function_exists('formatRupiah')) {
+    /**
+     * Format number to Rupiah currency
+     *
+     * @param mixed $amount Amount to format
+     * @param bool $withPrefix Include "Rp" prefix
+     * @return string
+     */
+    function formatRupiah($amount, bool $withPrefix = true): string
+    {
+        if ($amount === null || $amount === '') {
+            return $withPrefix ? 'Rp 0' : '0';
+        }
+
+        $formatted = number_format((float) $amount, 0, ',', '.');
+        return $withPrefix ? 'Rp ' . $formatted : $formatted;
     }
 }

@@ -68,7 +68,7 @@ class PermissionSeeder extends Seeder
             'chat_create',
             'chat_delete',
 
-            // Master Data — Modules (Template Pengadaan)
+            // Master Data — Modules
             'modules_view',
             'modules_create',
             'modules_update',

@@ -68,9 +68,9 @@ trait HasMenuItems
         }
         if ($perms['modules_view']) {
             $masterDataChildren[] = [
-                'name'   => 'Modul Pengadaan',
-                'route'  => 'master-data.modules',
-                'active' => $req->routeIs('master-data.modules'),
+                'name'   => 'Modul',
+                'route'  => 'master-data.modules.index',
+                'active' => $req->routeIs('master-data.modules.*'),
             ];
         }
         if ($perms['competencies_view']) {

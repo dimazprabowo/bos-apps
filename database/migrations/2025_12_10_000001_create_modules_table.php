@@ -16,10 +16,8 @@ return new class extends Migration
             $table->string('method')->nullable();
             $table->text('resource')->nullable();
             $table->string('duration')->nullable();
-            $table->text('deliverable')->nullable();
             $table->enum('risk_level', ['low', 'medium', 'high'])->default('low');
             $table->decimal('pricing_baseline', 15, 2)->nullable();
-            $table->enum('coe_control_level', ['none', 'standard', 'enhanced', 'full'])->default('none');
             $table->boolean('is_active')->default(true);
             $table->text('notes')->nullable();
             $table->timestamps();

@@ -26,7 +26,7 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
 
     public function query()
     {
-        $query = Module::withCount('projects');
+        $query = Module::with('deliverables')->withCount('projects');
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -40,7 +40,7 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
             $query->where('risk_level', $this->riskFilter);
         }
 
-        return $query->where('is_active', true)->orderBy('name');
+        return $query->orderBy('name');
     }
 
     public function headings(): array
@@ -56,7 +56,6 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
             'Deliverable',
             'Risk Level',
             'Pricing Baseline',
-            'CoE Control',
             'Jumlah Project',
             'Status',
             'Tanggal Dibuat',
@@ -68,6 +67,9 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
         static $no = 0;
         $no++;
 
+        // Get all deliverables names
+        $deliverables = $module->deliverables->pluck('name')->join(', ') ?: '-';
+
         return [
             $no,
             $module->code,
@@ -76,10 +78,9 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
             $module->method ?? '-',
             $module->resource ?? '-',
             $module->duration ?? '-',
-            $module->deliverable ?? '-',
+            $deliverables,
             $module->risk_level->label(),
             $module->pricing_baseline ? 'Rp ' . number_format($module->pricing_baseline, 0, ',', '.') : '-',
-            $module->coe_control_level->label(),
             $module->projects_count,
             $module->is_active ? 'Aktif' : 'Non-Aktif',
             $module->created_at->format('d/m/Y H:i'),

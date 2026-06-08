@@ -117,7 +117,7 @@ class RolePermissionService
                 ['name' => 'chat_create', 'label' => 'Buat Chat'],
                 ['name' => 'chat_delete', 'label' => 'Hapus Chat'],
             ],
-            'Modul Pengadaan' => [
+            'Modul' => [
                 ['name' => 'modules_view',         'label' => 'Lihat Modul'],
                 ['name' => 'modules_create',       'label' => 'Tambah Modul'],
                 ['name' => 'modules_update',       'label' => 'Edit Modul'],

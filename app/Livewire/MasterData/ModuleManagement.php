@@ -2,7 +2,6 @@
 
 namespace App\Livewire\MasterData;
 
-use App\Enums\CoEControlLevel;
 use App\Enums\RiskLevel;
 use App\Exports\ModulesExport;
 use App\Livewire\Traits\HasNotification;
@@ -29,12 +28,17 @@ class ModuleManagement extends Component
     public $method;
     public $resource;
     public $duration;
-    public $deliverable;
     public $risk_level = 'low';
     public $pricing_baseline;
-    public $coe_control_level = 'none';
     public $is_active = 1;
     public $notes;
+
+    // Nested data structures
+    public $workOrderItems = [];
+    public $workOrderReferences = [];
+    public $teams = [];
+    public $tools = [];
+    public $deliverables = [];
 
     public $showDeleteModal = false;
     public $deletingModuleId;
@@ -57,7 +61,6 @@ class ModuleManagement extends Component
             'deliverable' => 'nullable|string',
             'risk_level' => ['required', 'string', 'in:' . implode(',', RiskLevel::values())],
             'pricing_baseline' => 'nullable|numeric|min:0',
-            'coe_control_level' => ['required', 'string', 'in:' . implode(',', CoEControlLevel::values())],
             'is_active' => 'required|in:0,1',
             'notes' => 'nullable|string',
         ];
@@ -72,10 +75,8 @@ class ModuleManagement extends Component
             'method' => 'metode',
             'resource' => 'resource',
             'duration' => 'durasi',
-            'deliverable' => 'deliverable',
             'risk_level' => 'tingkat risiko',
             'pricing_baseline' => 'harga baseline',
-            'coe_control_level' => 'level kontrol CoE',
             'is_active' => 'status aktif',
             'notes' => 'catatan',
         ];
@@ -94,32 +95,14 @@ class ModuleManagement extends Component
     public function create()
     {
         $this->authorize('create', Module::class);
-        $this->resetForm();
-        $this->editMode = false;
-        $this->showModal = true;
+        return $this->redirect(route('master-data.modules.create'), navigate: true);
     }
 
     public function edit($id)
     {
         $module = Module::findOrFail($id);
         $this->authorize('update', $module);
-
-        $this->moduleId = $module->id;
-        $this->code = $module->code;
-        $this->name = $module->name;
-        $this->scope = $module->scope;
-        $this->method = $module->method;
-        $this->resource = $module->resource;
-        $this->duration = $module->duration;
-        $this->deliverable = $module->deliverable;
-        $this->risk_level = $module->risk_level->value;
-        $this->pricing_baseline = $module->pricing_baseline;
-        $this->coe_control_level = $module->coe_control_level->value;
-        $this->is_active = $module->is_active ? 1 : 0;
-        $this->notes = $module->notes;
-
-        $this->editMode = true;
-        $this->showModal = true;
+        return $this->redirect(route('master-data.modules.edit', $module), navigate: true);
     }
 
     public function save(ModuleService $service)
@@ -137,9 +120,13 @@ class ModuleManagement extends Component
                 'deliverable' => $this->deliverable,
                 'risk_level' => $this->risk_level,
                 'pricing_baseline' => $this->pricing_baseline,
-                'coe_control_level' => $this->coe_control_level,
                 'is_active' => $this->is_active,
                 'notes' => $this->notes,
+                'work_order_items' => $this->workOrderItems,
+                'work_order_references' => $this->workOrderReferences,
+                'teams' => $this->teams,
+                'tools' => $this->tools,
+                'deliverables' => $this->deliverables,
             ];
 
             if ($this->editMode) {
@@ -219,16 +206,18 @@ class ModuleManagement extends Component
             'method',
             'resource',
             'duration',
-            'deliverable',
             'risk_level',
             'pricing_baseline',
-            'coe_control_level',
             'is_active',
             'notes',
+            'workOrderItems',
+            'workOrderReferences',
+            'teams',
+            'tools',
+            'deliverables',
         ]);
 
         $this->risk_level = RiskLevel::Low->value;
-        $this->coe_control_level = CoEControlLevel::None->value;
         $this->is_active = 1;
     }
 
@@ -237,14 +226,14 @@ class ModuleManagement extends Component
         $this->authorize('exportExcel', Module::class);
 
         return (new ModulesExport($this->search, $this->riskFilter))
-            ->download('modul-pengadaan-' . now()->format('Y-m-d-His') . '.xlsx');
+            ->download('modul-' . now()->format('Y-m-d-His') . '.xlsx');
     }
 
     public function exportPdf(ModuleService $service)
     {
         $this->authorize('exportPdf', Module::class);
 
-        $modules = Module::withCount('projects')
+        $modules = Module::with('deliverables')->withCount('projects')
             ->when($this->search, function ($q) {
                 $q->where(function ($q) {
                     $q->where('code', 'like', "%{$this->search}%")
@@ -255,7 +244,6 @@ class ModuleManagement extends Component
             ->when($this->riskFilter !== null && $this->riskFilter !== '', function ($q) {
                 $q->where('risk_level', $this->riskFilter);
             })
-            ->where('is_active', true)
             ->orderBy('name')
             ->get();
 
@@ -264,7 +252,7 @@ class ModuleManagement extends Component
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
-            'modul-pengadaan-' . now()->format('Y-m-d-His') . '.pdf'
+            'modul-' . now()->format('Y-m-d-His') . '.pdf'
         );
     }
 
@@ -277,7 +265,130 @@ class ModuleManagement extends Component
                 false
             ),
             'riskLevels' => RiskLevel::cases(),
-            'coeLevels' => CoEControlLevel::cases(),
+            'competencies' => \App\Models\Competency::active()->get(),
         ]);
+    }
+
+    // Helper methods for nested arrays
+    public function addWorkOrderItem()
+    {
+        $this->workOrderItems[] = [
+            'order' => count($this->workOrderItems) + 1,
+            'name' => '',
+            'description' => '',
+            'nature' => 'mandatory',
+            'is_active' => true,
+            'subitems' => [],
+        ];
+    }
+
+    public function removeWorkOrderItem($index)
+    {
+        unset($this->workOrderItems[$index]);
+        $this->workOrderItems = array_values($this->workOrderItems);
+        $this->reorderWorkOrderItems();
+    }
+
+    public function addWorkOrderSubitem($itemIndex)
+    {
+        $this->workOrderItems[$itemIndex]['subitems'][] = [
+            'order' => count($this->workOrderItems[$itemIndex]['subitems']) + 1,
+            'name' => '',
+            'description' => '',
+            'nature' => $this->workOrderItems[$itemIndex]['nature'],
+            'is_active' => true,
+        ];
+    }
+
+    public function removeWorkOrderSubitem($itemIndex, $subitemIndex)
+    {
+        unset($this->workOrderItems[$itemIndex]['subitems'][$subitemIndex]);
+        $this->workOrderItems[$itemIndex]['subitems'] = array_values($this->workOrderItems[$itemIndex]['subitems']);
+        $this->reorderWorkOrderSubitems($itemIndex);
+    }
+
+    public function addWorkOrderReference()
+    {
+        $this->workOrderReferences[] = [
+            'document_name' => '',
+            'document_id' => '',
+            'file_path' => '',
+        ];
+    }
+
+    public function removeWorkOrderReference($index)
+    {
+        unset($this->workOrderReferences[$index]);
+        $this->workOrderReferences = array_values($this->workOrderReferences);
+    }
+
+    public function addTeam()
+    {
+        $this->teams[] = [
+            'position_name' => '',
+            'quantity' => 1,
+            'nature' => 'mandatory',
+            'competencies' => [],
+        ];
+    }
+
+    public function removeTeam($index)
+    {
+        unset($this->teams[$index]);
+        $this->teams = array_values($this->teams);
+    }
+
+    public function addTool()
+    {
+        $this->tools[] = [
+            'name' => '',
+            'requires_calibration' => false,
+            'quantity' => 1,
+        ];
+    }
+
+    public function removeTool($index)
+    {
+        unset($this->tools[$index]);
+        $this->tools = array_values($this->tools);
+    }
+
+    public function addDeliverable()
+    {
+        $this->deliverables[] = [
+            'order' => count($this->deliverables) + 1,
+            'name' => '',
+            'description' => '',
+            'nature' => 'mandatory',
+            'is_active' => true,
+        ];
+    }
+
+    public function removeDeliverable($index)
+    {
+        unset($this->deliverables[$index]);
+        $this->deliverables = array_values($this->deliverables);
+        $this->reorderDeliverables();
+    }
+
+    private function reorderWorkOrderItems()
+    {
+        foreach ($this->workOrderItems as $index => $item) {
+            $this->workOrderItems[$index]['order'] = $index + 1;
+        }
+    }
+
+    private function reorderWorkOrderSubitems($itemIndex)
+    {
+        foreach ($this->workOrderItems[$itemIndex]['subitems'] as $index => $subitem) {
+            $this->workOrderItems[$itemIndex]['subitems'][$index]['order'] = $index + 1;
+        }
+    }
+
+    private function reorderDeliverables()
+    {
+        foreach ($this->deliverables as $index => $deliverable) {
+            $this->deliverables[$index]['order'] = $index + 1;
+        }
     }
 }

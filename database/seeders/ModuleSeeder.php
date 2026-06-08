@@ -2,15 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Enums\CoEControlLevel;
 use App\Enums\RiskLevel;
 use App\Models\Module;
+use App\Models\Competency;
 use Illuminate\Database\Seeder;
 
 class ModuleSeeder extends Seeder
 {
     public function run(): void
     {
+        $competencies = Competency::all();
+
         $modules = [
             [
                 'code' => 'MOD001',
@@ -18,12 +20,50 @@ class ModuleSeeder extends Seeder
                 'scope' => 'Inspeksi menyeluruh untuk kapal baru meliputi struktur, mesin, dan sistem keselamatan',
                 'method' => 'Survey fisik dan dokumentasi',
                 'resource' => '2 Surveyor Senior, 1 Asisten Surveyor',
-                'duration' => '2 minggu',
-                'deliverable' => 'Laporan inspeksi lengkap dan sertifikat kelayakan',
+                'duration' => '14',
                 'risk_level' => RiskLevel::Medium->value,
                 'pricing_baseline' => 50000000,
-                'coe_control_level' => CoEControlLevel::Standard->value,
                 'is_active' => true,
+                'work_order_items' => [
+                    [
+                        'order' => 1,
+                        'name' => 'Pemeriksaan Struktur',
+                        'description' => 'Inspeksi hull dan superstructure',
+                        'nature' => 'mandatory',
+                        'is_active' => true,
+                        'subitems' => [
+                            ['order' => 1, 'name' => 'Visual Inspection', 'description' => 'Pemeriksaan visual kondisi plat', 'nature' => 'mandatory', 'is_active' => true],
+                            ['order' => 2, 'name' => 'Thickness Measurement', 'description' => 'Pengukuran ketebalan plat', 'nature' => 'mandatory', 'is_active' => true],
+                        ],
+                    ],
+                    [
+                        'order' => 2,
+                        'name' => 'Pemeriksaan Mesin',
+                        'description' => 'Inspeksi sistem propulsi dan auxiliary',
+                        'nature' => 'mandatory',
+                        'is_active' => true,
+                        'subitems' => [
+                            ['order' => 1, 'name' => 'Main Engine', 'description' => 'Inspeksi mesin utama', 'nature' => 'mandatory', 'is_active' => true],
+                            ['order' => 2, 'name' => 'Generator', 'description' => 'Inspeksi generator set', 'nature' => 'mandatory', 'is_active' => true],
+                        ],
+                    ],
+                ],
+                'work_order_references' => [
+                    ['document_name' => 'Rules for Classification of Ships', 'document_id' => 'BKI-RCS-2024'],
+                    ['document_name' => 'IACS UR', 'document_id' => 'IACS-UR-2024'],
+                ],
+                'teams' => [
+                    ['position_name' => 'Surveyor Senior', 'quantity' => 2, 'nature' => 'mandatory', 'competencies' => $competencies->take(2)->pluck('id')->toArray()],
+                    ['position_name' => 'Asisten Surveyor', 'quantity' => 1, 'nature' => 'mandatory', 'competencies' => $competencies->take(1)->pluck('id')->toArray()],
+                ],
+                'tools' => [
+                    ['name' => 'Ultrasonic Thickness Gauge', 'requires_calibration' => true, 'quantity' => 2],
+                    ['name' => 'Camera', 'requires_calibration' => false, 'quantity' => 1],
+                ],
+                'deliverables' => [
+                    ['order' => 1, 'name' => 'Laporan Inspeksi', 'description' => 'Laporan lengkap inspeksi', 'nature' => 'mandatory', 'is_active' => true],
+                    ['order' => 2, 'name' => 'Sertifikat Kelayakan', 'description' => 'Sertifikat kelayakan berlayar', 'nature' => 'mandatory', 'is_active' => true],
+                ],
             ],
             [
                 'code' => 'MOD002',
@@ -31,71 +71,114 @@ class ModuleSeeder extends Seeder
                 'scope' => 'Sertifikasi prosedur dan operator welding untuk konstruksi maritim',
                 'method' => 'Uji kualifikasi dan dokumentasi prosedur',
                 'resource' => '1 Welding Inspector, 1 NDT Technician',
-                'duration' => '1 minggu',
-                'deliverable' => 'Sertifikat welding procedure dan welder qualification',
+                'duration' => '7',
                 'risk_level' => RiskLevel::Low->value,
                 'pricing_baseline' => 15000000,
-                'coe_control_level' => CoEControlLevel::None->value,
                 'is_active' => true,
-            ],
-            [
-                'code' => 'MOD003',
-                'name' => 'Audit Sistem Manajemen Mutu',
-                'scope' => 'Audit ISO 9001 untuk galangan kapal dan industri maritim',
-                'method' => 'Audit dokumen dan implementasi sistem',
-                'resource' => '2 Lead Auditor, 1 Technical Expert',
-                'duration' => '1 bulan',
-                'deliverable' => 'Laporan audit dan rekomendasi perbaikan',
-                'risk_level' => RiskLevel::Medium->value,
-                'pricing_baseline' => 75000000,
-                'coe_control_level' => CoEControlLevel::Standard->value,
-                'is_active' => true,
-            ],
-            [
-                'code' => 'MOD004',
-                'name' => 'Inspeksi Platform Lepas Pantai',
-                'scope' => 'Inspeksi struktur dan fasilitas platform minyak & gas lepas pantai',
-                'method' => 'Underwater inspection, NDT, dan structural assessment',
-                'resource' => '3 Surveyor Senior, 2 Diving Inspector, 1 NDT Level III',
-                'duration' => '3 bulan',
-                'deliverable' => 'Comprehensive inspection report dan integrity assessment',
-                'risk_level' => RiskLevel::High->value,
-                'pricing_baseline' => 250000000,
-                'coe_control_level' => CoEControlLevel::Full->value,
-                'is_active' => true,
-                'notes' => 'Memerlukan koordinasi dengan operator platform dan persetujuan CoE',
-            ],
-            [
-                'code' => 'MOD005',
-                'name' => 'Sertifikasi Alat Angkat',
-                'scope' => 'Inspeksi dan sertifikasi crane, hoist, dan lifting equipment',
-                'method' => 'Load test dan visual inspection',
-                'resource' => '1 Mechanical Inspector, 1 Technician',
-                'duration' => '3 hari',
-                'deliverable' => 'Sertifikat kelayakan alat angkat',
-                'risk_level' => RiskLevel::Low->value,
-                'pricing_baseline' => 8000000,
-                'coe_control_level' => CoEControlLevel::None->value,
-                'is_active' => true,
-            ],
-            [
-                'code' => 'MOD006',
-                'name' => 'Konsultasi Desain Kapal',
-                'scope' => 'Review dan konsultasi desain kapal baru sesuai regulasi internasional',
-                'method' => 'Technical review dan calculation verification',
-                'resource' => '2 Naval Architect, 1 Structural Engineer',
-                'duration' => '2 bulan',
-                'deliverable' => 'Design approval dan technical report',
-                'risk_level' => RiskLevel::High->value,
-                'pricing_baseline' => 150000000,
-                'coe_control_level' => CoEControlLevel::Enhanced->value,
-                'is_active' => true,
-                'notes' => 'Proyek kompleks memerlukan review CoE untuk approval',
+                'work_order_items' => [
+                    [
+                        'order' => 1,
+                        'name' => 'WPS Review',
+                        'description' => 'Review Welding Procedure Specification',
+                        'nature' => 'mandatory',
+                        'is_active' => true,
+                        'subitems' => [],
+                    ],
+                    [
+                        'order' => 2,
+                        'name' => 'Welder Qualification Test',
+                        'description' => 'Uji kualifikasi welder',
+                        'nature' => 'mandatory',
+                        'is_active' => true,
+                        'subitems' => [],
+                    ],
+                ],
+                'work_order_references' => [
+                    ['document_name' => 'AWS D1.1', 'document_id' => 'AWS-D1.1'],
+                ],
+                'teams' => [
+                    ['position_name' => 'Welding Inspector', 'quantity' => 1, 'nature' => 'mandatory', 'competencies' => $competencies->take(1)->pluck('id')->toArray()],
+                ],
+                'tools' => [
+                    ['name' => 'Welding Inspection Gauge', 'requires_calibration' => true, 'quantity' => 1],
+                ],
+                'deliverables' => [
+                    ['order' => 1, 'name' => 'WPS Certificate', 'description' => 'Sertifikat prosedur welding', 'nature' => 'mandatory', 'is_active' => true],
+                    ['order' => 2, 'name' => 'Welder Qualification', 'description' => 'Sertifikat kualifikasi welder', 'nature' => 'mandatory', 'is_active' => true],
+                ],
             ],
         ];
 
-        foreach ($modules as $module) {
-            Module::create($module);
+        foreach ($modules as $moduleData) {
+            $module = Module::create([
+                'code' => $moduleData['code'],
+                'name' => $moduleData['name'],
+                'scope' => $moduleData['scope'],
+                'method' => $moduleData['method'],
+                'resource' => $moduleData['resource'],
+                'duration' => $moduleData['duration'],
+                'risk_level' => $moduleData['risk_level'],
+                'pricing_baseline' => $moduleData['pricing_baseline'],
+                'is_active' => $moduleData['is_active'],
+            ]);
+
+            // Create work order items with subitems
+            if (isset($moduleData['work_order_items'])) {
+                foreach ($moduleData['work_order_items'] as $itemData) {
+                    $item = $module->workOrderItems()->create([
+                        'order' => $itemData['order'],
+                        'name' => $itemData['name'],
+                        'description' => $itemData['description'],
+                        'nature' => $itemData['nature'],
+                        'is_active' => $itemData['is_active'],
+                    ]);
+
+                    if (isset($itemData['subitems'])) {
+                        foreach ($itemData['subitems'] as $subitemData) {
+                            $item->subitems()->create([
+                                'order' => $subitemData['order'],
+                                'name' => $subitemData['name'],
+                                'description' => $subitemData['description'],
+                                'nature' => $subitemData['nature'],
+                                'is_active' => $subitemData['is_active'],
+                            ]);
+                        }
+                    }
+                }
+            }
+
+            // Create work order references
+            if (isset($moduleData['work_order_references'])) {
+                foreach ($moduleData['work_order_references'] as $refData) {
+                    $module->workOrderReferences()->create($refData);
+                }
+            }
+
+            // Create teams with competencies
+            if (isset($moduleData['teams'])) {
+                foreach ($moduleData['teams'] as $teamData) {
+                    $team = $module->teams()->create([
+                        'position_name' => $teamData['position_name'],
+                        'quantity' => $teamData['quantity'],
+                        'nature' => $teamData['nature'],
+                    ]);
+                    $team->competencies()->sync($teamData['competencies']);
+                }
+            }
+
+            // Create tools
+            if (isset($moduleData['tools'])) {
+                foreach ($moduleData['tools'] as $toolData) {
+                    $module->tools()->create($toolData);
+                }
+            }
+
+            // Create deliverables
+            if (isset($moduleData['deliverables'])) {
+                foreach ($moduleData['deliverables'] as $delData) {
+                    $module->deliverables()->create($delData);
+                }
+            }
         }
     }
 }

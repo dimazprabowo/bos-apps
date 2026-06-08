@@ -14,6 +14,7 @@
 
 @php
     $componentId = $id ?? 'multi-searchable-select-' . uniqid();
+    $wireModel = $attributes->wire('model')->value();
 @endphp
 
 <div 
@@ -21,7 +22,7 @@
         open: false,
         search: '',
         dropUp: false,
-        selectedValues: @entangle($attributes->wire('model')),
+        selectedValues: @entangle($wireModel),
         options: @js($options),
         placeholder: @js($placeholder),
         

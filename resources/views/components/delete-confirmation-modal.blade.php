@@ -1,6 +1,10 @@
 @props(['show' => false, 'confirmAction' => 'delete'])
 
-<div x-data="{ show: @entangle($attributes->wire('model')) }" 
+@php
+    $wireModel = $attributes->wire('model')->value();
+@endphp
+
+<div x-data="{ show: @entangle($wireModel) }" 
      x-show="show"
      x-cloak
      class="fixed inset-0 z-50 overflow-y-auto"

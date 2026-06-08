@@ -53,7 +53,6 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Modul</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Durasi</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Risiko</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">CoE Control</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Harga Baseline</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Projects</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
@@ -85,11 +84,6 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 py-1 text-xs font-medium rounded-full {{ $module->coe_control_level->badgeClass() }}">
-                                    {{ $module->coe_control_level->label() }}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($module->pricing_baseline)
                                     <div class="text-sm font-mono text-gray-900 dark:text-white">Rp {{ number_format($module->pricing_baseline, 0, ',', '.') }}</div>
                                 @else
@@ -97,7 +91,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
                                     {{ $module->projects_count }} project
                                 </span>
                             </td>
@@ -110,7 +104,7 @@
                                             {{ $module->is_active ? 'translate-x-6' : 'translate-x-1' }}"></span>
                                     </button>
                                 @else
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full {{ $module->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400' }}">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full {{ $module->is_active ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300' }}">
                                         {{ $module->is_active ? 'Aktif' : 'Non-Aktif' }}
                                     </span>
                                 @endcan
@@ -172,37 +166,6 @@
             {{ $modules->links() }}
         </div>
     </div>
-
-    @if($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" x-data="{ show: @entangle('showModal') }">
-            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="$wire.closeModal()"></div>
-
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-                    <form wire:submit="save">
-                        <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                                {{ $editMode ? 'Edit Modul' : 'Tambah Modul' }}
-                            </h3>
-
-                            <x-module-form :riskLevels="$riskLevels" :coeLevels="$coeLevels" />
-                        </div>
-
-                        <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                            <x-loading-button type="submit" target="save" variant="primary" size="lg"
-                                loadingText="Menyimpan..." class="w-full sm:w-auto">
-                                {{ $editMode ? 'Update' : 'Simpan' }}
-                            </x-loading-button>
-                            <x-loading-button type="button" @click="$wire.closeModal()" variant="secondary" size="lg"
-                                class="mt-3 sm:mt-0 w-full sm:w-auto">
-                                Batal
-                            </x-loading-button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endif
 
     <!-- Delete Confirmation Modal -->
     <x-delete-modal 

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Data Modul Pengadaan</title>
+    <title>Data Modul</title>
     <style>
         body { font-family: 'DejaVu Sans', sans-serif; font-size: 11px; color: #1f2937; }
         .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 10px; }
@@ -24,21 +24,21 @@
 <body>
     <div class="header">
         <h1>{{ config('app.name', 'Boilerplate') }}</h1>
-        <p>Laporan Data Modul Pengadaan &mdash; {{ now()->format('d F Y, H:i') }}</p>
+        <p>Laporan Data Modul &mdash; {{ now()->format('d F Y, H:i') }}</p>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="width: 4%;">No</th>
-                <th style="width: 8%;">Kode</th>
-                <th style="width: 20%;">Nama Modul</th>
-                <th style="width: 15%;">Scope</th>
-                <th style="width: 10%;">Durasi</th>
-                <th style="width: 8%;">Risk</th>
-                <th style="width: 12%;">Pricing</th>
-                <th style="width: 10%;">CoE Control</th>
-                <th style="width: 6%;">Projects</th>
+                <th style="width: 3%;">No</th>
+                <th style="width: 7%;">Kode</th>
+                <th style="width: 18%;">Nama Modul</th>
+                <th style="width: 13%;">Scope</th>
+                <th style="width: 12%;">Deliverables</th>
+                <th style="width: 7%;">Durasi</th>
+                <th style="width: 7%;">Risk</th>
+                <th style="width: 11%;">Pricing</th>
+                <th style="width: 5%;">Projects</th>
                 <th style="width: 7%;">Status</th>
             </tr>
         </thead>
@@ -48,7 +48,8 @@
                     <td>{{ $index + 1 }}</td>
                     <td><strong>{{ $module->code }}</strong></td>
                     <td>{{ $module->name }}</td>
-                    <td>{{ Str::limit($module->scope ?? '-', 50) }}</td>
+                    <td>{{ Str::limit($module->scope ?? '-', 40) }}</td>
+                    <td>{{ $module->deliverables->pluck('name')->join(', ') ?: '-' }}</td>
                     <td>{{ $module->duration ?? '-' }}</td>
                     <td>
                         @php
@@ -64,7 +65,6 @@
                         </span>
                     </td>
                     <td>{{ $module->pricing_baseline ? 'Rp ' . number_format($module->pricing_baseline, 0, ',', '.') : '-' }}</td>
-                    <td>{{ $module->coe_control_level->label() }}</td>
                     <td>{{ $module->projects_count }}</td>
                     <td>
                         <span class="badge {{ $module->is_active ? 'badge-active' : 'badge-inactive' }}">
