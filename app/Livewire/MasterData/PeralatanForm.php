@@ -29,8 +29,10 @@ class PeralatanForm extends Component
     public $evidences = [];
 
     public $showDeleteEvidenceModal = false;
-    public $evidenceToDelete;
-    public $deletingEvidenceId;
+    public $deletingEvidenceIndex = null;
+
+    // Track deleted IDs to exclude from wire:poll reload
+    public $deletedEvidenceIds = [];
 
     public function mount($peralatan = null)
     {
@@ -60,19 +62,23 @@ class PeralatanForm extends Component
             return isset($item['id']) && str_starts_with($item['id'], 'temp_');
         })->toArray();
 
-        // Load existing items from database
-        $existingItems = $peralatan->evidences->map(function ($evidence) {
-            return [
-                'id' => $evidence->id,
-                'name' => $evidence->name,
-                'file' => null,
-                'file_name' => $evidence->file_name,
-                'file_path' => $evidence->file_path,
-                'file_size' => $evidence->file_size,
-                'file_status' => $evidence->file_status,
-                'file_error' => $evidence->file_error,
-            ];
-        })->toArray();
+        // Load existing items from database, excluding deleted ones
+        $existingItems = $peralatan->evidences
+            ->reject(function ($evidence) {
+                return in_array($evidence->id, $this->deletedEvidenceIds);
+            })
+            ->map(function ($evidence) {
+                return [
+                    'id' => $evidence->id,
+                    'name' => $evidence->name,
+                    'file' => null,
+                    'file_name' => $evidence->file_name,
+                    'file_path' => $evidence->file_path,
+                    'file_size' => $evidence->file_size,
+                    'file_status' => $evidence->file_status,
+                    'file_error' => $evidence->file_error,
+                ];
+            })->toArray();
 
         // Merge existing items with new items
         $this->evidences = array_merge($existingItems, $newItems);
@@ -143,57 +149,32 @@ class PeralatanForm extends Component
         }
     }
 
-    public function removeEvidence($tempId)
+    public function removeEvidence($index)
     {
-        // If it's an existing record (numeric ID), delete from database
-        if (is_numeric($tempId)) {
-            $existingRecord = \App\Models\PeralatanEvidence::find($tempId);
-            if ($existingRecord) {
-                if (\Storage::disk('local')->exists($existingRecord->file_path)) {
-                    \Storage::disk('local')->delete($existingRecord->file_path);
-                }
-                $existingRecord->delete();
-            }
-        }
-
-        // Remove from array by filtering out the item with matching ID
-        $this->evidences = array_values(array_filter($this->evidences, function ($item) use ($tempId) {
-            return ($item['id'] ?? '') !== $tempId;
-        }));
-    }
-
-    public function confirmDeleteEvidence(string $tempId): void
-    {
-        $this->evidenceToDelete = $tempId;
-        $this->deletingEvidenceId = $tempId;
+        $this->deletingEvidenceIndex = $index;
         $this->showDeleteEvidenceModal = true;
     }
 
-    public function deleteEvidence(): void
+    public function confirmDeleteEvidence()
     {
-        if ($this->evidenceToDelete) {
-            $isExistingRecord = is_numeric($this->evidenceToDelete);
-            $this->removeEvidence($this->evidenceToDelete);
-
-            // Only refresh from database if we deleted an existing record
-            if ($isExistingRecord && $this->peralatanId) {
-                $peralatan = Peralatan::find($this->peralatanId);
-                if ($peralatan) {
-                    $this->loadEvidencesFromDatabase($peralatan);
-                }
+        if ($this->deletingEvidenceIndex !== null) {
+            $item = $this->evidences[$this->deletingEvidenceIndex] ?? null;
+            
+            // If it's an existing record (numeric ID), track it for deletion on save
+            if ($item && isset($item['id']) && is_numeric($item['id'])) {
+                $this->deletedEvidenceIds[] = $item['id'];
             }
-
-            $this->evidenceToDelete = null;
-            $this->deletingEvidenceId = null;
+            
+            unset($this->evidences[$this->deletingEvidenceIndex]);
+            $this->evidences = array_values($this->evidences);
+            $this->deletingEvidenceIndex = null;
             $this->showDeleteEvidenceModal = false;
-            $this->notifySuccess('Evidence berhasil dihapus.');
         }
     }
 
-    public function cancelDeleteEvidence(): void
+    public function cancelDeleteEvidence()
     {
-        $this->evidenceToDelete = null;
-        $this->deletingEvidenceId = null;
+        $this->deletingEvidenceIndex = null;
         $this->showDeleteEvidenceModal = false;
     }
 
@@ -236,7 +217,12 @@ class PeralatanForm extends Component
 
     public function refreshEvidenceFileStatus(): void
     {
-        $this->refreshEvidences();
+        if ($this->peralatanId) {
+            $peralatan = Peralatan::find($this->peralatanId);
+            if ($peralatan) {
+                $this->loadEvidencesFromDatabase($peralatan);
+            }
+        }
     }
 
     protected function refreshEvidences(): void

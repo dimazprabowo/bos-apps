@@ -25,8 +25,10 @@ class PersonelForm extends Component
     public $competencyOptions = [];
 
     public $showDeleteCompetencyModal = false;
-    public $competencyToDelete;
-    public $deletingCompetencyId;
+    public $deletingCompetencyIndex = null;
+
+    // Track deleted IDs to exclude from wire:poll reload
+    public $deletedCompetencyIds = [];
 
     public function mount($personel = null)
     {
@@ -52,21 +54,25 @@ class PersonelForm extends Component
             return isset($item['id']) && str_starts_with($item['id'], 'temp_');
         })->toArray();
 
-        // Load existing items from database
-        $existingItems = $personel->competencies->map(function ($competency) {
-            return [
-                'id' => $competency->pivot->id,
-                'competency_id' => $competency->id,
-                'certificate_file' => null,
-                'certificate_file_name' => $competency->pivot->certificate_file_name,
-                'certificate_file_path' => $competency->pivot->certificate_file_path,
-                'certificate_file_size' => $competency->pivot->certificate_file_size,
-                'certificate_file_status' => $competency->pivot->certificate_file_status,
-                'certificate_file_error' => $competency->pivot->certificate_file_error,
-                'issuer' => $competency->pivot->issuer,
-                'expired_date' => $competency->pivot->expired_date,
-            ];
-        })->toArray();
+        // Load existing items from database, excluding deleted ones
+        $existingItems = $personel->competencies
+            ->reject(function ($competency) {
+                return in_array($competency->pivot->id, $this->deletedCompetencyIds);
+            })
+            ->map(function ($competency) {
+                return [
+                    'id' => $competency->pivot->id,
+                    'competency_id' => $competency->id,
+                    'certificate_file' => null,
+                    'certificate_file_name' => $competency->pivot->certificate_file_name,
+                    'certificate_file_path' => $competency->pivot->certificate_file_path,
+                    'certificate_file_size' => $competency->pivot->certificate_file_size,
+                    'certificate_file_status' => $competency->pivot->certificate_file_status,
+                    'certificate_file_error' => $competency->pivot->certificate_file_error,
+                    'issuer' => $competency->pivot->issuer,
+                    'expired_date' => $competency->pivot->expired_date,
+                ];
+            })->toArray();
 
         // Merge existing items with new items
         $this->competencies = array_merge($existingItems, $newItems);
@@ -133,57 +139,32 @@ class PersonelForm extends Component
         }
     }
 
-    public function removeCompetency($tempId)
+    public function removeCompetency($index)
     {
-        // If it's an existing record (numeric ID), delete from database
-        if (is_numeric($tempId)) {
-            $existingRecord = \DB::table('personel_competency')->where('id', $tempId)->first();
-            if ($existingRecord) {
-                if ($existingRecord->certificate_file_path && \Storage::disk('local')->exists($existingRecord->certificate_file_path)) {
-                    \Storage::disk('local')->delete($existingRecord->certificate_file_path);
-                }
-                \DB::table('personel_competency')->where('id', $tempId)->delete();
-            }
-        }
-
-        // Remove from array by filtering out the item with matching ID
-        $this->competencies = array_values(array_filter($this->competencies, function ($item) use ($tempId) {
-            return ($item['id'] ?? '') !== $tempId;
-        }));
-    }
-
-    public function confirmDeleteCompetency(string $tempId): void
-    {
-        $this->competencyToDelete = $tempId;
-        $this->deletingCompetencyId = $tempId;
+        $this->deletingCompetencyIndex = $index;
         $this->showDeleteCompetencyModal = true;
     }
 
-    public function deleteCompetency(): void
+    public function confirmDeleteCompetency()
     {
-        if ($this->competencyToDelete) {
-            $isExistingRecord = is_numeric($this->competencyToDelete);
-            $this->removeCompetency($this->competencyToDelete);
-
-            // Only refresh from database if we deleted an existing record
-            if ($isExistingRecord && $this->personelId) {
-                $personel = Personel::find($this->personelId);
-                if ($personel) {
-                    $this->loadCompetenciesFromDatabase($personel);
-                }
+        if ($this->deletingCompetencyIndex !== null) {
+            $item = $this->competencies[$this->deletingCompetencyIndex] ?? null;
+            
+            // If it's an existing record (numeric ID), track it for deletion on save
+            if ($item && isset($item['id']) && is_numeric($item['id'])) {
+                $this->deletedCompetencyIds[] = $item['id'];
             }
-
-            $this->competencyToDelete = null;
-            $this->deletingCompetencyId = null;
+            
+            unset($this->competencies[$this->deletingCompetencyIndex]);
+            $this->competencies = array_values($this->competencies);
+            $this->deletingCompetencyIndex = null;
             $this->showDeleteCompetencyModal = false;
-            $this->notifySuccess('Kompetensi berhasil dihapus.');
         }
     }
 
-    public function cancelDeleteCompetency(): void
+    public function cancelDeleteCompetency()
     {
-        $this->competencyToDelete = null;
-        $this->deletingCompetencyId = null;
+        $this->deletingCompetencyIndex = null;
         $this->showDeleteCompetencyModal = false;
     }
 

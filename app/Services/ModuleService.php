@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Module;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ModuleService
 {

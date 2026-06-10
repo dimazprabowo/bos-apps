@@ -33,6 +33,9 @@ class ModuleForm extends Component
     public $deletingToolIndex = null;
     public $deletingDeliverableIndex = null;
 
+    // Track deleted IDs to exclude from wire:poll reload
+    public $deletedWorkOrderReferenceIds = [];
+
     public $code;
     public $name;
     public $duration;
@@ -489,6 +492,13 @@ class ModuleForm extends Component
     public function confirmDeleteWorkOrderReference()
     {
         if ($this->deletingWorkOrderReferenceIndex !== null) {
+            $item = $this->workOrderReferences[$this->deletingWorkOrderReferenceIndex] ?? null;
+            
+            // If it's an existing record (numeric ID), track it for deletion on save
+            if ($item && isset($item['id']) && is_numeric($item['id'])) {
+                $this->deletedWorkOrderReferenceIds[] = $item['id'];
+            }
+            
             unset($this->workOrderReferences[$this->deletingWorkOrderReferenceIndex]);
             $this->workOrderReferences = array_values($this->workOrderReferences);
             $this->deletingWorkOrderReferenceIndex = null;
@@ -739,20 +749,24 @@ class ModuleForm extends Component
             return isset($item['id']) && str_starts_with($item['id'], 'temp_');
         })->toArray();
 
-        // Load existing items from database
-        $existingItems = $module->workOrderReferences->map(function ($ref) {
-            return [
-                'id' => $ref->id,
-                'document_name' => $ref->document_name,
-                'document_id' => $ref->document_id,
-                'file_path' => $ref->file_path,
-                'file_name' => $ref->file_name,
-                'file_size' => $ref->file_size,
-                'file_status' => $ref->file_status,
-                'file_error' => $ref->file_error,
-                'file' => null,
-            ];
-        })->toArray();
+        // Load existing items from database, excluding deleted ones
+        $existingItems = $module->workOrderReferences
+            ->reject(function ($ref) {
+                return in_array($ref->id, $this->deletedWorkOrderReferenceIds);
+            })
+            ->map(function ($ref) {
+                return [
+                    'id' => $ref->id,
+                    'document_name' => $ref->document_name,
+                    'document_id' => $ref->document_id,
+                    'file_path' => $ref->file_path,
+                    'file_name' => $ref->file_name,
+                    'file_size' => $ref->file_size,
+                    'file_status' => $ref->file_status,
+                    'file_error' => $ref->file_error,
+                    'file' => null,
+                ];
+            })->toArray();
 
         // Merge existing items with new items
         $this->workOrderReferences = array_merge($existingItems, $newItems);

@@ -44,7 +44,6 @@
                     <x-personel-competency-section
                         :competencies="$competencies"
                         :competencyOptions="$competencyOptions"
-                        :deletingCompetencyId="$deletingCompetencyId"
                     />
                 </div>
             </div>
@@ -68,6 +67,6 @@
         wire:model="showDeleteCompetencyModal"
         title="Hapus Kompetensi"
         message="Apakah Anda yakin ingin menghapus kompetensi ini?"
-        confirmMethod="deleteCompetency"
+        confirmMethod="confirmDeleteCompetency"
     />
 </div>

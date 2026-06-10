@@ -109,7 +109,6 @@
                     <!-- Evidence Section -->
                     <x-peralatan-evidence-section
                         :evidences="$evidences"
-                        :deletingEvidenceId="$deletingEvidenceId"
                     />
                 </div>
             </div>
@@ -133,6 +132,6 @@
         wire:model="showDeleteEvidenceModal"
         title="Hapus Evidence"
         message="Apakah Anda yakin ingin menghapus evidence ini?"
-        confirmMethod="deleteEvidence"
+        confirmMethod="confirmDeleteEvidence"
     />
 </div>
