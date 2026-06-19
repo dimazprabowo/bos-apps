@@ -1,6 +1,8 @@
 @props(['deliverables' => []])
 
-<div x-data="{ expanded: true }" class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-3">
+<div x-data="{ expanded: true }"
+    @module-validation-failed.window="if (($event.detail.errorKeys || []).some(k => k.startsWith('deliverables'))) expanded = true"
+    class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-3">
     <div class="flex items-center justify-between mb-3">
         <button type="button" @click="expanded = !expanded" class="flex items-center gap-2 group">
             <svg x-show="expanded" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,6 +40,7 @@
             <div wire:key="deliverable-{{ $delIndex }}"
                  data-deliverable-index="{{ $delIndex }}"
                  x-data="{ delIndex: {{ $delIndex }}, expanded: @js($errors->has('deliverables.'.$delIndex.'.name') || $errors->has('deliverables.'.$delIndex.'.nature') || $errors->has('deliverables.'.$delIndex.'.is_active')) }"
+                 @module-validation-failed.window="if (($event.detail.errorKeys || []).some(k => k.startsWith('deliverables.{{ $delIndex }}.'))) expanded = true"
                  class="bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200">
                 <div class="p-4 cursor-move border border-transparent rounded-lg transition-colors"
                      :class="{ 'bg-blue-50 dark:bg-blue-900/20 border-blue-400 dark:border-blue-500': dragOverDeliverableIndex === delIndex && draggedDeliverable !== null && draggedDeliverable !== delIndex, 'hover:border-blue-300 dark:hover:border-blue-600': !(dragOverDeliverableIndex === delIndex && draggedDeliverable !== null && draggedDeliverable !== delIndex) }"

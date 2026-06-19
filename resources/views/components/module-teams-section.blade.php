@@ -1,6 +1,8 @@
 @props(['teams' => [], 'competencies' => []])
 
-<div x-data="{ expanded: true }" class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-3">
+<div x-data="{ expanded: true }"
+    @module-validation-failed.window="if (($event.detail.errorKeys || []).some(k => k.startsWith('teams'))) expanded = true"
+    class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-3">
     <div class="flex items-center justify-between mb-3">
         <button type="button" @click="expanded = !expanded" class="flex items-center gap-2 group">
             <svg x-show="expanded" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

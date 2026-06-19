@@ -650,11 +650,16 @@ class ModuleForm extends Component
     {
         $this->withValidator(function ($validator) {
             if ($validator->fails()) {
-                $errors = $validator->errors()->all();
-                $message = count($errors) > 1 
-                    ? 'Terdapat ' . count($errors) . ' kesalahan validasi' 
-                    : $errors[0];
+                $errors = $validator->errors();
+                $allErrors = $errors->all();
+                $message = count($allErrors) > 1 
+                    ? 'Terdapat ' . count($allErrors) . ' kesalahan validasi' 
+                    : $allErrors[0];
                 $this->dispatch('notify', type: 'error', message: $message);
+
+                // Notify collapsible sections/items so the ones containing
+                // validation errors auto-expand for the user.
+                $this->dispatch('module-validation-failed', errorKeys: array_keys($errors->messages()));
             }
         })->validate();
 

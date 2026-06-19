@@ -1,6 +1,8 @@
 @props(['workOrderItems' => []])
 
-<div x-data="{ expanded: true }" class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-3">
+<div x-data="{ expanded: true }"
+    @module-validation-failed.window="if (($event.detail.errorKeys || []).some(k => k.startsWith('workOrderItems'))) expanded = true"
+    class="border-t border-gray-200 dark:border-gray-700 pt-6 mt-3">
     <div class="flex items-center justify-between mb-3">
         <button type="button" @click="expanded = !expanded" class="flex items-center gap-2 group">
             <svg x-show="expanded" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -38,6 +40,7 @@
             <div wire:key="work-order-item-{{ $itemIndex }}"
                  data-item-index="{{ $itemIndex }}"
                  x-data="{ index: {{ $itemIndex }}, expanded: @js($errors->has('workOrderItems.'.$itemIndex.'.name') || $errors->has('workOrderItems.'.$itemIndex.'.nature') || $errors->has('workOrderItems.'.$itemIndex.'.is_active') || collect($item['subitems'] ?? [])->keys()->contains(fn($key) => $errors->has('workOrderItems.'.$itemIndex.'.subitems.'.$key.'.name') || $errors->has('workOrderItems.'.$itemIndex.'.subitems.'.$key.'.nature') || $errors->has('workOrderItems.'.$itemIndex.'.subitems.'.$key.'.is_active'))) }"
+                 @module-validation-failed.window="if (($event.detail.errorKeys || []).some(k => k.startsWith('workOrderItems.{{ $itemIndex }}.'))) expanded = true"
                  class="bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700 transition-all duration-200">
                 <div class="p-4 cursor-move border border-transparent rounded-lg transition-colors"
                      :class="{ 'bg-blue-50 dark:bg-blue-900/20 border-blue-400 dark:border-blue-500': dragOverIndex === index && draggedItem !== null && draggedItem !== index, 'hover:border-blue-300 dark:hover:border-blue-600': !(dragOverIndex === index && draggedItem !== null && draggedItem !== index) }"
@@ -157,6 +160,7 @@
                                 <div wire:key="subitem-{{ $itemIndex }}-{{ $subitemIndex }}"
                                      data-subitem-index="{{ $subitemIndex }}"
                                      x-data="{ subitemIndex: {{ $subitemIndex }}, expanded: @js($errors->has('workOrderItems.'.$itemIndex.'.subitems.'.$subitemIndex.'.name') || $errors->has('workOrderItems.'.$itemIndex.'.subitems.'.$subitemIndex.'.nature') || $errors->has('workOrderItems.'.$itemIndex.'.subitems.'.$subitemIndex.'.is_active')) }"
+                                     @module-validation-failed.window="if (($event.detail.errorKeys || []).some(k => k.startsWith('workOrderItems.{{ $itemIndex }}.subitems.{{ $subitemIndex }}.'))) expanded = true"
                                      class="bg-white dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 transition-all duration-200">
                                     <div class="p-3 cursor-move border border-transparent rounded transition-colors"
                                          :class="{ 'bg-green-50 dark:bg-green-900/20 border-green-400 dark:border-green-500': dragOverSubitemIndex === subitemIndex && draggedSubitem !== null && draggedSubitem !== subitemIndex, 'hover:border-green-300 dark:hover:border-green-600': !(dragOverSubitemIndex === subitemIndex && draggedSubitem !== null && draggedSubitem !== subitemIndex) }"
