@@ -100,7 +100,7 @@ class PermissionSeeder extends Seeder
             'peralatan_export_excel',
             'peralatan_export_pdf',
 
-            // Projects (Pengadaan Jasa)
+            // Projects
             'projects_view',
             'projects_create',
             'projects_update',

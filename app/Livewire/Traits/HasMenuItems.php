@@ -106,7 +106,7 @@ trait HasMenuItems
         // Projects
         if ($perms['projects_view']) {
             $items[] = [
-                'name'   => 'Project Pengadaan',
+                'name'   => 'Project',
                 'route'  => 'projects.index',
                 'icon'   => 'briefcase',
                 'active' => $req->routeIs('projects.*'),

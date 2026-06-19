@@ -608,7 +608,7 @@ class ProjectManagement extends Component
         $this->authorize('exportExcel', Project::class);
 
         return (new ProjectsExport($this->search, $this->statusFilter, $this->riskFilter))
-            ->download('project-pengadaan-' . now()->format('Y-m-d-His') . '.xlsx');
+            ->download('project-' . now()->format('Y-m-d-His') . '.xlsx');
     }
 
     public function exportPdf()
@@ -638,7 +638,7 @@ class ProjectManagement extends Component
 
         return response()->streamDownload(
             fn () => print($pdf->output()),
-            'project-pengadaan-' . now()->format('Y-m-d-His') . '.pdf'
+            'project-' . now()->format('Y-m-d-His') . '.pdf'
         );
     }
 

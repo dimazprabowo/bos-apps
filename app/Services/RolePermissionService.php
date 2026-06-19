@@ -149,7 +149,7 @@ class RolePermissionService
                 ['name' => 'peralatan_export_excel', 'label' => 'Export Excel Peralatan'],
                 ['name' => 'peralatan_export_pdf',   'label' => 'Export PDF Peralatan'],
             ],
-            'Project Pengadaan' => [
+            'Project' => [
                 ['name' => 'projects_view',         'label' => 'Lihat Project'],
                 ['name' => 'projects_create',       'label' => 'Buat Project'],
                 ['name' => 'projects_update',       'label' => 'Edit Project'],

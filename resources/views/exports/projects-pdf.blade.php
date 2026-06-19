@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Data Project Pengadaan</title>
+    <title>Data Project</title>
     <style>
         body { font-family: 'DejaVu Sans', sans-serif; font-size: 11px; color: #1f2937; }
         .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #2563eb; padding-bottom: 10px; }
@@ -29,7 +29,7 @@
 <body>
     <div class="header">
         <h1>{{ config('app.name', 'Boilerplate') }}</h1>
-        <p>Laporan Data Project Pengadaan &mdash; {{ now()->format('d F Y, H:i') }}</p>
+        <p>Laporan Data Project &mdash; {{ now()->format('d F Y, H:i') }}</p>
     </div>
 
     <table>
