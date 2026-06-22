@@ -20,8 +20,6 @@
         .badge-submitted { background-color: #dbeafe; color: #1e40af; }
         .badge-coe { background-color: #e9d5ff; color: #6b21a8; }
         .badge-approved { background-color: #dcfce7; color: #166534; }
-        .badge-progress { background-color: #fef3c7; color: #92400e; }
-        .badge-completed { background-color: #d1fae5; color: #065f46; }
         .badge-cancelled { background-color: #fee2e2; color: #991b1b; }
         .footer { text-align: right; margin-top: 15px; font-size: 9px; color: #9ca3af; }
     </style>
@@ -71,8 +69,6 @@
                             $statusBadge = match($project->status->value) {
                                 'draft' => 'badge-draft',
                                 'active' => 'badge-approved',
-                                'on_progress' => 'badge-progress',
-                                'completed' => 'badge-completed',
                                 'closed' => 'badge-cancelled',
                                 default => 'badge-draft',
                             };

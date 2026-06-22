@@ -14,8 +14,8 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            // Lifecycle status (Draft, Aktif, On Progress, Selesai, Ditutup)
-            $table->enum('status', ['draft', 'active', 'on_progress', 'completed', 'closed'])->default('draft');
+            // Lifecycle status (Draft, Aktif, Ditutup)
+            $table->enum('status', ['draft', 'active', 'closed'])->default('draft');
             // Approval / process status (CoE Review flow)
             $table->enum('approval_status', ['none', 'coe_review', 'approved', 'rejected'])->default('none');
             $table->enum('priority', ['low', 'medium', 'high', 'critical'])->default('medium');

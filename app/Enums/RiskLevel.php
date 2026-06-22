@@ -35,6 +35,15 @@ enum RiskLevel: string
         };
     }
 
+    public function description(): string
+    {
+        return match ($this) {
+            self::Low => 'Risiko rendah, tidak memerlukan review CoE',
+            self::Medium => 'Risiko sedang, perlu pertimbangan lebih',
+            self::High => 'Risiko tinggi, wajib melalui review CoE sebelum disetujui',
+        };
+    }
+
     public function requiresCoE(): bool
     {
         return $this === self::High;

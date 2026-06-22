@@ -66,7 +66,7 @@ class ProjectPolicy
     public function close(User $user, Project $project): bool
     {
         return $user->can('projects_approve')
-            && in_array($project->status, [ProjectStatus::Active, ProjectStatus::OnProgress, ProjectStatus::Completed]);
+            && in_array($project->status, [ProjectStatus::Active]);
     }
 
     public function exportExcel(User $user): bool

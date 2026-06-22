@@ -29,6 +29,16 @@ enum ApprovalStatus: string
         };
     }
 
+    public function description(): string
+    {
+        return match ($this) {
+            self::None => 'Project belum diajukan untuk persetujuan',
+            self::CoEReview => 'Project sedang dalam review oleh tim CoE (Center of Excellence)',
+            self::Approved => 'Project telah disetujui dan berstatus aktif',
+            self::Rejected => 'Project ditolak, perlu revisi sebelum diajukan kembali',
+        };
+    }
+
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

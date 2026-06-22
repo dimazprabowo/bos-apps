@@ -224,21 +224,6 @@ class ProjectService
         });
     }
 
-    public function updateStatus(Project $project, ProjectStatus $status): Project
-    {
-        return DB::transaction(function () use ($project, $status) {
-            $data = ['status' => $status->value];
-
-            if ($status === ProjectStatus::Completed) {
-                $data['actual_end_date'] = now();
-            }
-
-            $project->update($data);
-
-            return $project->fresh();
-        });
-    }
-
     protected function determineCoEControlLevel(string $riskLevel): string
     {
         return match ($riskLevel) {

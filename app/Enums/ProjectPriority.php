@@ -29,6 +29,16 @@ enum ProjectPriority: string
         };
     }
 
+    public function description(): string
+    {
+        return match ($this) {
+            self::Low => 'Prioritas rendah, tidak mendesak',
+            self::Medium => 'Prioritas menengah, perlu perhatian',
+            self::High => 'Prioritas tinggi, perlu segera ditindaklanjuti',
+            self::Critical => 'Prioritas kritis, penanganan paling mendesak',
+        };
+    }
+
     public static function values(): array
     {
         return array_column(self::cases(), 'value');

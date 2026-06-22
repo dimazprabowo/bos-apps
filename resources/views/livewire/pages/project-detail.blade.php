@@ -1,10 +1,11 @@
 <div class="space-y-6">
     {{-- Back Button --}}
-    <div>
-        <button type="button" wire:click="goBack" wire:target="goBack"
-            class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors">
-            <svg wire:loading.class.remove="inline" wire:loading.class.add="hidden" wire:target="goBack" class="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <svg wire:loading wire:target="goBack" class="animate-spin w-5 h-5 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <div x-data="{ loading: false }">
+        <button type="button" @click="loading = true; $wire.goBack()"
+            :disabled="loading"
+            class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors disabled:opacity-50">
+            <svg x-show="!loading" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            <svg x-show="loading" x-cloak class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -22,18 +23,65 @@
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ $project->name }}</h2>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{{ $project->code }}</p>
-                    <div class="flex flex-wrap items-center gap-2 mt-3">
-                        <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->status->badgeClass() }}">
-                            {{ $project->status->label() }}
+                    <div class="flex flex-wrap items-center gap-2 mt-3" x-data="{ tooltip: null }" @mouseleave.outside="tooltip = null">
+                        <span class="relative inline-flex"
+                            @mouseenter="tooltip = 'status'"
+                            @mouseleave="tooltip = null">
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->status->badgeClass() }} cursor-help">
+                                Status: {{ $project->status->label() }}
+                            </span>
+                            <template x-if="tooltip === 'status'">
+                                <div class="absolute z-50 bottom-full left-0 mb-2 w-64 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg pointer-events-none whitespace-normal">
+                                    <p class="font-semibold mb-0.5">{{ $project->status->label() }}</p>
+                                    <p class="text-gray-300 dark:text-gray-400 font-normal leading-relaxed">{{ $project->status->description() }}</p>
+                                    <div class="absolute top-full left-3 w-2 h-2 bg-gray-900 dark:bg-gray-700 transform rotate-45 -mt-1"></div>
+                                </div>
+                            </template>
                         </span>
-                        <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->approval_status->badgeClass() }}">
-                            {{ $project->approval_status->label() }}
+
+                        <span class="relative inline-flex"
+                            @mouseenter="tooltip = 'approval'"
+                            @mouseleave="tooltip = null">
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->approval_status->badgeClass() }} cursor-help">
+                                Approval: {{ $project->approval_status->label() }}
+                            </span>
+                            <template x-if="tooltip === 'approval'">
+                                <div class="absolute z-50 bottom-full left-0 mb-2 w-64 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg pointer-events-none whitespace-normal">
+                                    <p class="font-semibold mb-0.5">{{ $project->approval_status->label() }}</p>
+                                    <p class="text-gray-300 dark:text-gray-400 font-normal leading-relaxed">{{ $project->approval_status->description() }}</p>
+                                    <div class="absolute top-full left-3 w-2 h-2 bg-gray-900 dark:bg-gray-700 transform rotate-45 -mt-1"></div>
+                                </div>
+                            </template>
                         </span>
-                        <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->priority->badgeClass() }}">
-                            {{ $project->priority->label() }}
+
+                        <span class="relative inline-flex"
+                            @mouseenter="tooltip = 'priority'"
+                            @mouseleave="tooltip = null">
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->priority->badgeClass() }} cursor-help">
+                                Prioritas: {{ $project->priority->label() }}
+                            </span>
+                            <template x-if="tooltip === 'priority'">
+                                <div class="absolute z-50 bottom-full left-0 mb-2 w-64 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg pointer-events-none whitespace-normal">
+                                    <p class="font-semibold mb-0.5">Prioritas: {{ $project->priority->label() }}</p>
+                                    <p class="text-gray-300 dark:text-gray-400 font-normal leading-relaxed">{{ $project->priority->description() }}</p>
+                                    <div class="absolute top-full left-3 w-2 h-2 bg-gray-900 dark:bg-gray-700 transform rotate-45 -mt-1"></div>
+                                </div>
+                            </template>
                         </span>
-                        <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->risk_level->badgeClass() }}">
-                            {{ $project->risk_level->label() }}
+
+                        <span class="relative inline-flex"
+                            @mouseenter="tooltip = 'risk'"
+                            @mouseleave="tooltip = null">
+                            <span class="px-2.5 py-1 text-xs font-medium rounded-full {{ $project->risk_level->badgeClass() }} cursor-help">
+                                Risiko: {{ $project->risk_level->label() }}
+                            </span>
+                            <template x-if="tooltip === 'risk'">
+                                <div class="absolute z-50 bottom-full left-0 mb-2 w-64 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg shadow-lg pointer-events-none whitespace-normal">
+                                    <p class="font-semibold mb-0.5">Risiko: {{ $project->risk_level->label() }}</p>
+                                    <p class="text-gray-300 dark:text-gray-400 font-normal leading-relaxed">{{ $project->risk_level->description() }}</p>
+                                    <div class="absolute top-full left-3 w-2 h-2 bg-gray-900 dark:bg-gray-700 transform rotate-45 -mt-1"></div>
+                                </div>
+                            </template>
                         </span>
                     </div>
                 </div>
@@ -73,7 +121,7 @@
                 @endcan
 
                 @can('projects_approve')
-                    @if(in_array($project->status->value, ['active', 'on_progress', 'completed']))
+                    @if($project->status->value === 'active')
                         <x-loading-button wire:click="confirmClose" target="confirmClose" variant="danger" size="md"
                             loadingText="Loading...">
                             <x-slot:icon>
@@ -149,6 +197,26 @@
         </dl>
     </div>
 
+    {{-- Additional Costs --}}
+    @if($project->additionalCosts->isNotEmpty())
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Biaya Tambahan ({{ $project->additionalCosts->count() }})</h3>
+            <div class="space-y-2">
+                @foreach($project->additionalCosts as $cost)
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $cost->name }}</p>
+                            @if($cost->notes)
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $cost->notes }}</p>
+                            @endif
+                        </div>
+                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Rp {{ number_format($cost->amount, 0, ',', '.') }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
     {{-- Cost Summary --}}
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Ringkasan Biaya</h3>
@@ -168,7 +236,170 @@
         </div>
     </div>
 
-    {{-- Modules --}}
+    @php
+        $moduleGroups = $project->modules->mapWithKeys(function ($module) use ($project) {
+            $personels = $project->projectPersonels->where('module_id', $module->id);
+            $peralatans = $project->projectPeralatans->where('module_id', $module->id);
+            return [$module->id => ['module' => $module, 'personels' => $personels, 'peralatans' => $peralatans]];
+        });
+    @endphp
+
+    {{-- Personel & Peralatan grouped by Module --}}
+    @if($project->projectPersonels->isNotEmpty() || $project->projectPeralatans->isNotEmpty())
+        <div class="space-y-4">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Penugasan per Modul</h3>
+            @foreach($moduleGroups as $group)
+                @php
+                    $module = $group['module'];
+                    $personels = $group['personels'];
+                    $peralatans = $group['peralatans'];
+                @endphp
+                @if($personels->isNotEmpty() || $peralatans->isNotEmpty())
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        {{-- Module Header --}}
+                        <div class="px-5 py-3 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                            <span class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ $module->name }}</span>
+                            <span class="flex-shrink-0 px-2 py-0.5 text-xs font-medium rounded-full {{ $module->risk_level->badgeClass() }}">
+                                {{ $module->risk_level->label() }}
+                            </span>
+                        </div>
+
+                        <div class="p-5 space-y-4">
+                            {{-- Personels in this module --}}
+                            @if($personels->isNotEmpty())
+                                <div>
+                                    <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Personel ({{ $personels->count() }})</h4>
+                                    <div class="space-y-2">
+                                        @foreach($personels as $pp)
+                                            @php
+                                                $requiredCompetencies = $pp->personelSlot?->competencies ?? collect();
+                                                $personelCompetencies = $pp->personel?->competencies ?? collect();
+                                                $personelCompetencyIds = $personelCompetencies->pluck('id');
+                                            @endphp
+                                            <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                                                <div class="flex items-center gap-3 mb-2">
+                                                    <div class="flex-shrink-0 h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
+                                                        {{ substr($pp->personel?->name ?? '?', 0, 1) }}
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $pp->personel?->name ?? '-' }}</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                            {{ $pp->personelSlot?->position_name ?? '-' }}
+                                                            <span class="ml-1 px-1.5 py-0.5 rounded {{ $pp->personelSlot?->nature === 'mandatory' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' }}">
+                                                                {{ $pp->personelSlot?->nature === 'mandatory' ? 'Wajib' : 'Opsional' }}
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                @if($requiredCompetencies->isNotEmpty())
+                                                    <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                                                        <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">Kompetensi</p>
+                                                        <div class="flex flex-wrap gap-1">
+                                                            @foreach($requiredCompetencies as $reqComp)
+                                                                @php
+                                                                    $fulfilled = $personelCompetencyIds->contains($reqComp->id);
+                                                                @endphp
+                                                                <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full {{ $fulfilled ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' }}">
+                                                                    @if($fulfilled)
+                                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                                    @else
+                                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                                    @endif
+                                                                    {{ $reqComp->name }}
+                                                                </span>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            {{-- Peralatan in this module --}}
+                            @if($peralatans->isNotEmpty())
+                                <div>
+                                    <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Peralatan ({{ $peralatans->count() }})</h4>
+                                    <div class="space-y-2">
+                                        @foreach($peralatans as $pp)
+                                            @php
+                                                $peralatan = $pp->peralatan;
+                                                $requiresCalibration = $pp->tool?->requires_calibration ?? false;
+                                                $calibrationStatus = $peralatan?->calibration_status;
+                                                $isExpired = $peralatan?->calibration_status_expired ?? false;
+                                                $expiredDate = $peralatan?->calibration_expired_date;
+                                            @endphp
+                                            <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                                                <div class="flex items-center gap-3">
+                                                    <div class="flex-shrink-0 h-9 w-9 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                                    </div>
+                                                    <div class="flex-1 min-w-0">
+                                                        <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $peralatan?->name ?? '-' }}</p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">
+                                                            {{ $peralatan?->code ?? '-' }} · Qty: {{ $pp->tool?->quantity ?? 1 }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600 flex flex-wrap items-center gap-2">
+                                                    @if($requiresCalibration)
+                                                        <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                                            Perlu Kalibrasi
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                                            Tidak Perlu Kalibrasi
+                                                        </span>
+                                                    @endif
+                                                    @if($calibrationStatus)
+                                                        @php
+                                                            $statusColor = match($calibrationStatus->value) {
+                                                                'calibrated' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+                                                                'expired' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+                                                                'pending' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
+                                                                'not_required' => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
+                                                                default => 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300',
+                                                            };
+                                                        @endphp
+                                                        <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full {{ $statusColor }}">
+                                                            {{ $calibrationStatus->label() }}
+                                                        </span>
+                                                    @endif
+                                                    @if($expiredDate)
+                                                        <span class="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full {{ $isExpired ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300' }}">
+                                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                                            Exp: {{ $expiredDate->format('d M Y') }}
+                                                            @if($isExpired)
+                                                                <span class="font-semibold">(Expired)</span>
+                                                            @endif
+                                                        </span>
+                                                    @endif
+                                                    @if($peralatan?->condition)
+                                                        <span class="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                                            Kondisi: {{ $peralatan->condition->label() }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($personels->isEmpty() && $peralatans->isEmpty())
+                                <p class="text-sm text-gray-400 dark:text-gray-500 italic">Belum ada penugasan personel atau peralatan pada modul ini.</p>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+    @endif
+
+    {{-- Modules Detail (at bottom) --}}
     @if($project->modules->isNotEmpty())
         <div class="space-y-3">
             <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Detail Modul ({{ $project->modules->count() }})</h3>
@@ -226,114 +457,48 @@
         </div>
     @endif
 
-    {{-- Personels --}}
-    @if($project->projectPersonels->isNotEmpty())
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Personel ({{ $project->projectPersonels->count() }})</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                @foreach($project->projectPersonels as $pp)
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center text-white font-semibold">
-                            {{ substr($pp->personel?->name ?? '?', 0, 1) }}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $pp->personel?->name ?? '-' }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $pp->module?->name ?? '-' }} · {{ $pp->personelSlot?->position_name ?? '-' }}
-                            </p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    {{-- Equipment --}}
-    @if($project->projectPeralatans->isNotEmpty())
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Peralatan ({{ $project->projectPeralatans->count() }})</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                @foreach($project->projectPeralatans as $pp)
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <div class="flex-shrink-0 h-10 w-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate">{{ $pp->peralatan?->name ?? '-' }}</p>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $pp->module?->name ?? '-' }}
-                                @if($pp->tool?->requires_calibration)
-                                    · Perlu Kalibrasi
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
-    {{-- Additional Costs --}}
-    @if($project->additionalCosts->isNotEmpty())
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Biaya Tambahan ({{ $project->additionalCosts->count() }})</h3>
-            <div class="space-y-2">
-                @foreach($project->additionalCosts as $cost)
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <div>
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $cost->name }}</p>
-                            @if($cost->notes)
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ $cost->notes }}</p>
-                            @endif
-                        </div>
-                        <p class="text-sm font-semibold text-gray-900 dark:text-white">Rp {{ number_format($cost->amount, 0, ',', '.') }}</p>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
     {{-- Reject Modal --}}
     @if($showRejectModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="$wire.set('showRejectModal', false)"></div>
-
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 dark:bg-yellow-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                </svg>
-                            </div>
-                            <div class="mt-3 w-full sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Tolak Project</h3>
-                                <div class="mt-4">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Alasan Penolakan <span class="text-red-500">*</span>
-                                    </label>
-                                    <textarea
-                                        wire:model="rejectionReason"
-                                        rows="4"
-                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-yellow-500 dark:bg-gray-700 dark:text-white"
-                                        placeholder="Jelaskan alasan penolakan project ini (minimal 10 karakter)"></textarea>
-                                    @error('rejectionReason')
-                                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+        <div class="fixed inset-0 z-[60] overflow-y-auto">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showRejectModal', false)"></div>
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
+                    <div class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+                        </svg>
                     </div>
-                    <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                        <x-loading-button wire:click="reject" target="reject" variant="warning" size="lg"
-                            loadingText="Menolak..." class="w-full sm:w-auto">
-                            Tolak Project
-                        </x-loading-button>
-                        <x-loading-button type="button" @click="$wire.set('showRejectModal', false)" variant="secondary" size="lg"
-                            class="mt-3 sm:mt-0 w-full sm:w-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Tolak Project</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Jelaskan alasan penolakan project ini.</p>
+                    <div class="mb-6 text-left">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Alasan Penolakan <span class="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            wire:model="rejectionReason"
+                            rows="4"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-yellow-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="Minimal 10 karakter"></textarea>
+                        @error('rejectionReason')
+                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button @click="$wire.set('showRejectModal', false)"
+                            class="px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">
                             Batal
-                        </x-loading-button>
+                        </button>
+                        <button wire:click="reject"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
+                            wire:loading.attr="disabled"
+                            wire:loading.class="opacity-70 cursor-not-allowed"
+                            wire:target="reject">
+                            <svg wire:loading wire:target="reject" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            Tolak Project
+                        </button>
                     </div>
                 </div>
             </div>
@@ -342,46 +507,46 @@
 
     {{-- Close Modal --}}
     @if($showCloseModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="$wire.set('showCloseModal', false)"></div>
-
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/>
-                                </svg>
-                            </div>
-                            <div class="mt-3 w-full sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Tutup Project</h3>
-                                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Project yang ditutup tidak dapat diedit atau diajukan kembali.</p>
-                                <div class="mt-4">
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        Alasan Penutupan <span class="text-red-500">*</span>
-                                    </label>
-                                    <textarea
-                                        wire:model="closeReason"
-                                        rows="4"
-                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-white"
-                                        placeholder="Jelaskan alasan penutupan project ini (minimal 10 karakter)"></textarea>
-                                    @error('closeReason')
-                                        <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+        <div class="fixed inset-0 z-[60] overflow-y-auto">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showCloseModal', false)"></div>
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
+                    <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
+                        </svg>
                     </div>
-                    <div class="bg-gray-50 dark:bg-gray-900 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse gap-2">
-                        <x-loading-button wire:click="closeProject" target="closeProject" variant="danger" size="lg"
-                            loadingText="Menutup..." class="w-full sm:w-auto">
-                            Tutup Project
-                        </x-loading-button>
-                        <x-loading-button type="button" @click="$wire.set('showCloseModal', false)" variant="secondary" size="lg"
-                            class="mt-3 sm:mt-0 w-full sm:w-auto">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Tutup Project</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Project yang ditutup tidak dapat diedit atau diajukan kembali.</p>
+                    <div class="mb-6 text-left">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Alasan Penutupan <span class="text-red-500">*</span>
+                        </label>
+                        <textarea
+                            wire:model="closeReason"
+                            rows="4"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="Minimal 10 karakter"></textarea>
+                        @error('closeReason')
+                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="flex items-center justify-center gap-3">
+                        <button @click="$wire.set('showCloseModal', false)"
+                            class="px-4 py-2.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition">
                             Batal
-                        </x-loading-button>
+                        </button>
+                        <button wire:click="closeProject"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
+                            wire:loading.attr="disabled"
+                            wire:loading.class="opacity-70 cursor-not-allowed"
+                            wire:target="closeProject">
+                            <svg wire:loading wire:target="closeProject" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            Tutup Project
+                        </button>
                     </div>
                 </div>
             </div>

@@ -6,8 +6,6 @@ enum ProjectStatus: string
 {
     case Draft = 'draft';
     case Active = 'active';
-    case OnProgress = 'on_progress';
-    case Completed = 'completed';
     case Closed = 'closed';
 
     public function label(): string
@@ -15,8 +13,6 @@ enum ProjectStatus: string
         return match($this) {
             self::Draft => 'Draft',
             self::Active => 'Aktif',
-            self::OnProgress => 'On Progress',
-            self::Completed => 'Selesai',
             self::Closed => 'Ditutup',
         };
     }
@@ -26,9 +22,16 @@ enum ProjectStatus: string
         return match($this) {
             self::Draft => 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400',
             self::Active => 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
-            self::OnProgress => 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
-            self::Completed => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400',
             self::Closed => 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+        };
+    }
+
+    public function description(): string
+    {
+        return match($this) {
+            self::Draft => 'Project masih dalam tahap penyusunan, dapat diedit dan belum diajukan untuk persetujuan',
+            self::Active => 'Project telah disetujui dan sedang berjalan',
+            self::Closed => 'Project telah ditutup dan tidak dapat diedit atau diajukan kembali',
         };
     }
 
@@ -42,7 +45,7 @@ enum ProjectStatus: string
 
     public function isFinal(): bool
     {
-        return in_array($this, [self::Completed, self::Closed]);
+        return $this === self::Closed;
     }
 
     public static function values(): array
