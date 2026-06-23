@@ -31,38 +31,55 @@ document.addEventListener('alpine:init', () => {
 
     if (!Alpine.store('notification')) {
         Alpine.store('notification', {
-            queue: [],
-            show: false,
-            type: 'success',
-            title: '',
-            message: '',
-            timeout: null,
+            items: [],
+            nextId: 0,
+            maxVisible: 5,
+            duration: 5000,
 
             add(type, message) {
-                this.queue.push({ type, message });
-                this.showNext();
+                const id = this.nextId++;
+                const title = type === 'success' ? 'Berhasil'
+                    : type === 'error' ? 'Error'
+                    : type === 'warning' ? 'Peringatan'
+                    : 'Informasi';
+
+                this.items.push({ id, type, message, title, timeout: null, startTime: 0, remaining: this.duration, paused: false });
+
+                if (this.items.length > this.maxVisible) {
+                    const removed = this.items.shift();
+                    if (removed.timeout) clearTimeout(removed.timeout);
+                }
+
+                this._startTimer(id);
             },
 
-            showNext() {
-                if (this.show || this.queue.length === 0) return;
-
-                const notification = this.queue.shift();
-                this.type = notification.type;
-                this.title = notification.type === 'success' ? 'Berhasil' : notification.type === 'error' ? 'Error' : notification.type === 'warning' ? 'Peringatan' : 'Informasi';
-                this.message = notification.message;
-                this.show = true;
-
-                clearTimeout(this.timeout);
-                this.timeout = setTimeout(() => {
-                    this.show = false;
-                    setTimeout(() => this.showNext(), 300);
-                }, 5000);
+            _startTimer(id) {
+                const item = this.items.find(i => i.id === id);
+                if (!item) return;
+                item.paused = false;
+                item.startTime = Date.now();
+                clearTimeout(item.timeout);
+                item.timeout = setTimeout(() => this.remove(id), item.remaining);
             },
 
-            hide() {
-                this.show = false;
-                clearTimeout(this.timeout);
-                setTimeout(() => this.showNext(), 300);
+            pause(id) {
+                const item = this.items.find(i => i.id === id);
+                if (!item || item.paused) return;
+                item.paused = true;
+                item.remaining -= Date.now() - item.startTime;
+                clearTimeout(item.timeout);
+            },
+
+            resume(id) {
+                const item = this.items.find(i => i.id === id);
+                if (!item || !item.paused) return;
+                this._startTimer(id);
+            },
+
+            remove(id) {
+                const item = this.items.find(i => i.id === id);
+                if (item && item.timeout) clearTimeout(item.timeout);
+                this.items = this.items.filter(i => i.id !== id);
             }
         });
 
