@@ -34,7 +34,7 @@ style="display: none;">
              x-transition:leave="ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
              x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-             class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
+             class="inline-block align-bottom w-full bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full">
             
             <form wire:submit="confirmResetPassword">
                 <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -47,7 +47,7 @@ style="display: none;">
                         </div>
                         
                         <!-- Content -->
-                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-1">
+                        <div class="mt-3 text-left sm:mt-0 sm:ml-4 flex-1">
                             <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                                 Reset Password
                             </h3>
@@ -60,7 +60,6 @@ style="display: none;">
                                     <div class="relative">
                                         <input wire:model="newPassword"
                                                :type="showPassword ? 'text' : 'password'"
-                                               required
                                                class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                                                placeholder="Masukkan password baru">
                                         <button type="button"
@@ -88,7 +87,6 @@ style="display: none;">
                                     <div class="relative">
                                         <input wire:model="newPasswordConfirmation"
                                                :type="showPasswordConfirmation ? 'text' : 'password'"
-                                               required
                                                class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
                                                placeholder="Konfirmasi password baru">
                                         <button type="button"
@@ -123,8 +121,8 @@ style="display: none;">
                         loadingText="Mereset..." class="w-full sm:w-auto sm:ml-3">
                         Reset Password
                     </x-loading-button>
-                    <x-loading-button type="button" @click="$wire.closeResetPasswordModal()" variant="secondary" size="lg"
-                        class="mt-3 sm:mt-0 w-full sm:w-auto sm:ml-3">
+                    <x-loading-button type="button" wire:click="closeResetPasswordModal" target="closeResetPasswordModal" variant="secondary" size="lg"
+                        loadingText="Memuat..." class="mt-3 sm:mt-0 w-full sm:w-auto sm:ml-3">
                         Batal
                     </x-loading-button>
                 </div>

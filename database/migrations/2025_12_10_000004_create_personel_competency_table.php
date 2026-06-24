@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('certificate_file_error')->nullable();
             $table->timestamp('certificate_file_processed_at')->nullable();
             $table->string('issuer')->nullable();
+            $table->date('issue_date')->nullable();
+            $table->boolean('has_no_expiry')->default(false);
             $table->date('expired_date')->nullable();
             $table->timestamps();
 

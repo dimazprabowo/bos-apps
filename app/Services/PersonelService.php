@@ -45,6 +45,8 @@ class PersonelService
                     if (!empty($competencyData['competency_id'])) {
                         $pivotData = [
                             'issuer' => $competencyData['issuer'] ?? null,
+                            'issue_date' => $competencyData['issue_date'] ?? null,
+                            'has_no_expiry' => $competencyData['has_no_expiry'] ?? false,
                             'expired_date' => $competencyData['expired_date'] ?? null,
                             'certificate_file_status' => 'pending',
                         ];
@@ -119,6 +121,8 @@ class PersonelService
 
                     $pivotData = [
                         'issuer' => $competencyData['issuer'] ?? null,
+                        'issue_date' => $competencyData['issue_date'] ?? null,
+                        'has_no_expiry' => $competencyData['has_no_expiry'] ?? false,
                         'expired_date' => $competencyData['expired_date'] ?? null,
                         'certificate_file_status' => 'pending',
                     ];

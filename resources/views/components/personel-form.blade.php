@@ -110,12 +110,33 @@
 
                     <div>
                         <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Tanggal Terbit <span class="text-red-500">*</span>
+                        </label>
+                        <input wire:model="competencies.{{ $index }}.issue_date" type="date"
+                            placeholder="Tanggal terbit sertifikat"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm">
+                        @error("competencies.{$index}.issue_date") <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" wire:model.live="competencies.{{ $index }}.has_no_expiry"
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-700 transition-colors">
+                            <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Sertifikat tidak punya tanggal expired</span>
+                        </label>
+                    </div>
+
+                    @if(empty($competency['has_no_expiry']))
+                    <div>
+                        <label class="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                             Tanggal Expired <span class="text-red-500">*</span>
                         </label>
                         <input wire:model="competencies.{{ $index }}.expired_date" type="date"
+                            placeholder="Tanggal expired sertifikat"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-sm">
                         @error("competencies.{$index}.expired_date") <span class="text-red-500 text-xs mt-1">{{ $message }}</span> @enderror
                     </div>
+                    @endif
                 </div>
             </div>
         @empty

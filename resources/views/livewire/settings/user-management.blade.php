@@ -210,7 +210,7 @@
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="$wire.closeModal()"></div>
 
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="inline-block align-bottom w-full bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                     <form wire:submit="save">
                         <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
@@ -220,14 +220,16 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama Lengkap <span class="text-red-500">*</span></label>
-                                    <input wire:model="name" type="text" required
+                                    <input wire:model="name" type="text"
+                                        placeholder="Masukkan nama lengkap"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     @error('name') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
 
                                 <div class="md:col-span-2">
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email <span class="text-red-500">*</span></label>
-                                    <input wire:model="email" type="email" required
+                                    <input wire:model="email" type="email"
+                                        placeholder="nama@email.com"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -242,7 +244,8 @@
                                     </label>
                                     
                                     <div class="relative">
-                                        <input wire:model="password" :type="showPassword ? 'text' : 'password'" {{ !$editMode ? 'required' : '' }}
+                                        <input wire:model="password" :type="showPassword ? 'text' : 'password'"
+                                            placeholder="{{ $editMode ? 'Kosongkan jika tidak diubah' : 'Masukkan password' }}"
                                             class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                         <button type="button"
                                                 @click="showPassword = !showPassword"
@@ -268,7 +271,8 @@
                                         </span>
                                     </label>
                                     <div class="relative">
-                                        <input wire:model="password_confirmation" :type="showPasswordConfirmation ? 'text' : 'password'" {{ !$editMode ? 'required' : '' }}
+                                        <input wire:model="password_confirmation" :type="showPasswordConfirmation ? 'text' : 'password'"
+                                            placeholder="{{ $editMode ? 'Kosongkan jika tidak diubah' : 'Ulangi password' }}"
                                             class="w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                         <button type="button"
                                                 @click="showPasswordConfirmation = !showPasswordConfirmation"
@@ -312,6 +316,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Telepon</label>
                                     <input wire:model="phone" type="text"
+                                        placeholder="08123456789"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -319,6 +324,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Posisi/Jabatan</label>
                                     <input wire:model="position" type="text"
+                                        placeholder="Contoh: Manager, Staff"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     @error('position') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -337,8 +343,8 @@
                                 loadingText="Menyimpan..." class="w-full sm:w-auto">
                                 {{ $editMode ? 'Update' : 'Simpan' }}
                             </x-loading-button>
-                            <x-loading-button type="button" @click="$wire.closeModal()" variant="secondary" size="lg"
-                                class="mt-3 sm:mt-0 w-full sm:w-auto">
+                            <x-loading-button type="button" wire:click="closeModal" target="closeModal" variant="secondary" size="lg"
+                                loadingText="Memuat..." class="mt-3 sm:mt-0 w-full sm:w-auto">
                                 Batal
                             </x-loading-button>
                         </div>

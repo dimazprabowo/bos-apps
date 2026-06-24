@@ -70,6 +70,8 @@ class PersonelForm extends Component
                     'certificate_file_status' => $competency->pivot->certificate_file_status,
                     'certificate_file_error' => $competency->pivot->certificate_file_error,
                     'issuer' => $competency->pivot->issuer,
+                    'issue_date' => $competency->pivot->issue_date,
+                    'has_no_expiry' => (bool) $competency->pivot->has_no_expiry,
                     'expired_date' => $competency->pivot->expired_date,
                 ];
             })->toArray();
@@ -87,8 +89,17 @@ class PersonelForm extends Component
             'competencies' => 'array',
             'competencies.*.competency_id' => 'required|exists:competencies,id',
             'competencies.*.issuer' => 'required|string|max:255',
-            'competencies.*.expired_date' => 'required|date',
+            'competencies.*.issue_date' => 'required|date',
+            'competencies.*.has_no_expiry' => 'boolean',
+            'competencies.*.expired_date' => 'nullable|date',
         ];
+
+        // expired_date is required only if has_no_expiry is false
+        foreach ($this->competencies as $index => $competency) {
+            if (!isset($competency['has_no_expiry']) || !$competency['has_no_expiry']) {
+                $rules["competencies.{$index}.expired_date"] = 'required|date';
+            }
+        }
 
         // File is required for new competencies (no existing file)
         foreach ($this->competencies as $index => $competency) {
@@ -112,6 +123,8 @@ class PersonelForm extends Component
             'competencies.*.competency_id' => 'kompetensi',
             'competencies.*.certificate_file' => 'file sertifikat',
             'competencies.*.issuer' => 'penerbit',
+            'competencies.*.issue_date' => 'tanggal terbit',
+            'competencies.*.has_no_expiry' => 'sertifikat tidak punya tanggal expired',
             'competencies.*.expired_date' => 'tanggal expired',
         ];
     }
@@ -128,6 +141,8 @@ class PersonelForm extends Component
             'certificate_file_status' => null,
             'certificate_file_error' => null,
             'issuer' => null,
+            'issue_date' => null,
+            'has_no_expiry' => false,
             'expired_date' => null,
         ];
     }
@@ -219,7 +234,15 @@ class PersonelForm extends Component
 
     public function save(PersonelService $service)
     {
-        $this->validate();
+        $this->withValidator(function ($validator) {
+            if ($validator->fails()) {
+                $errors = $validator->errors()->all();
+                $message = count($errors) > 1
+                    ? 'Terdapat ' . count($errors) . ' kesalahan validasi'
+                    : $errors[0];
+                $this->dispatch('notify', type: 'error', message: $message);
+            }
+        })->validate();
 
         try {
             $data = [
@@ -237,7 +260,9 @@ class PersonelForm extends Component
                 $competencyData = [
                     'competency_id' => $competency['competency_id'],
                     'issuer' => $competency['issuer'],
-                    'expired_date' => $competency['expired_date'],
+                    'issue_date' => $competency['issue_date'] ?? null,
+                    'has_no_expiry' => !empty($competency['has_no_expiry']),
+                    'expired_date' => !empty($competency['has_no_expiry']) ? null : ($competency['expired_date'] ?? null),
                 ];
 
                 if (isset($competency['certificate_file']) && $competency['certificate_file'] instanceof \Illuminate\Http\UploadedFile) {

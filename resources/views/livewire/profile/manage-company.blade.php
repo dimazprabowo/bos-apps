@@ -372,7 +372,7 @@
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" wire:click="closeModal"></div>
 
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="inline-block align-bottom w-full bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                     <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="flex items-center justify-between mb-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white">
@@ -390,30 +390,14 @@
 
                             {{-- Buttons --}}
                             <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                                <button type="button" wire:click="closeModal" 
-                                    wire:loading.attr="disabled"
-                                    wire:target="save"
-                                    class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                                <x-loading-button type="button" wire:click="closeModal" target="closeModal" variant="secondary" size="lg"
+                                    loadingText="Memuat...">
                                     Batal
-                                </button>
-                                <button type="submit" 
-                                    wire:loading.attr="disabled"
-                                    wire:target="save"
-                                    class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg transition-colors">
-                                    
-                                    {{-- Loading Icon --}}
-                                    <svg wire:loading wire:target="save" class="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-
-                                    <span wire:loading.remove wire:target="save">
-                                        {{ $isEditMode ? 'Perbarui' : 'Simpan' }}
-                                    </span>
-                                    <span wire:loading wire:target="save">
-                                        {{ $isEditMode ? 'Memperbarui...' : 'Menyimpan...' }}
-                                    </span>
-                                </button>
+                                </x-loading-button>
+                                <x-loading-button type="submit" target="save" variant="primary" size="lg"
+                                    loadingText="Menyimpan...">
+                                    {{ $isEditMode ? 'Update' : 'Simpan' }}
+                                </x-loading-button>
                             </div>
                         </form>
                     </div>

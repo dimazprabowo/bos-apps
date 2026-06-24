@@ -17,7 +17,7 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex items-center gap-2 w-full lg:w-auto">
+        <div class="flex items-center justify-center gap-2 w-full lg:w-auto lg:justify-start">
             @can('companies_export_excel')
                 <x-loading-button wire:click="exportExcel" target="exportExcel" variant="success" size="md" loadingText="Exporting..." title="Export Excel">
                     <x-slot:icon>
@@ -181,7 +181,7 @@
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="$wire.closeModal()"></div>
 
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="inline-block align-bottom w-full bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                     <form wire:submit="save">
                         <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
@@ -196,8 +196,8 @@
                                 loadingText="Menyimpan..." class="w-full sm:w-auto">
                                 {{ $editMode ? 'Update' : 'Simpan' }}
                             </x-loading-button>
-                            <x-loading-button type="button" @click="$wire.closeModal()" variant="secondary" size="lg"
-                                class="mt-3 sm:mt-0 w-full sm:w-auto">
+                            <x-loading-button type="button" wire:click="closeModal" target="closeModal" variant="secondary" size="lg"
+                                loadingText="Memuat..." class="mt-3 sm:mt-0 w-full sm:w-auto">
                                 Batal
                             </x-loading-button>
                         </div>

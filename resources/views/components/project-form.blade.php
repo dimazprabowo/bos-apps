@@ -273,6 +273,7 @@
                                 <div class="col-span-6 md:col-span-2">
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Qty</label>
                                     <input wire:model="selectedEquipments.{{ $index }}.quantity" type="number" min="1"
+                                        placeholder="1"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white">
                                 </div>
                                 <div class="col-span-6 md:col-span-3">
@@ -353,6 +354,7 @@
                                 <div class="col-span-4 md:col-span-2">
                                     <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Qty</label>
                                     <input wire:model="selectedAccommodations.{{ $index }}.quantity" type="number" min="1"
+                                        placeholder="1"
                                         class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white">
                                 </div>
                                 <div class="col-span-4 md:col-span-2">
@@ -471,6 +473,7 @@
                             <div class="col-span-4 md:col-span-3">
                                 <label class="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Qty <span class="text-red-500">*</span></label>
                                 <input wire:model.live="selectedModules.{{ $index }}.quantity" type="number" min="1"
+                                    placeholder="1"
                                     class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                             </div>
 

@@ -75,6 +75,7 @@
                                 Tanggal Expired Kalibrasi
                             </label>
                             <input wire:model="calibration_expired_date" type="date"
+                                placeholder="Tanggal expired kalibrasi"
                                 class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                             @error('calibration_expired_date') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>

@@ -221,15 +221,20 @@ class UserManagement extends Component
 
     public function confirmResetPassword(UserService $service)
     {
-        $this->validate([
-            'newPassword' => 'required|string|min:8|same:newPasswordConfirmation',
-            'newPasswordConfirmation' => 'required',
-        ], [
-            'newPassword.required' => 'Password wajib diisi',
-            'newPassword.min' => 'Password minimal 8 karakter',
-            'newPassword.same' => 'Password tidak cocok',
-            'newPasswordConfirmation.required' => 'Konfirmasi password wajib diisi',
-        ]);
+        try {
+            $this->validate([
+                'newPassword' => 'required|string|min:8|same:newPasswordConfirmation',
+                'newPasswordConfirmation' => 'required',
+            ], [
+                'newPassword.required' => 'Password wajib diisi',
+                'newPassword.min' => 'Password minimal 8 karakter',
+                'newPassword.same' => 'Password tidak cocok',
+                'newPasswordConfirmation.required' => 'Konfirmasi password wajib diisi',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->notifyValidationError($e);
+            throw $e;
+        }
 
         try {
             $user = User::findOrFail($this->resetUserId);

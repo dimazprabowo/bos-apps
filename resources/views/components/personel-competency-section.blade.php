@@ -75,7 +75,12 @@
                                 @if($competency['issuer'])
                                     <p class="text-xs text-gray-500 dark:text-gray-400">Penerbit: {{ $competency['issuer'] }}</p>
                                 @endif
-                                @if($competency['expired_date'])
+                                @if(isset($competency['issue_date']) && $competency['issue_date'])
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Tanggal Terbit: {{ \Carbon\Carbon::parse($competency['issue_date'])->format('d M Y') }}</p>
+                                @endif
+                                @if(!empty($competency['has_no_expiry']))
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Expired: <span class="font-medium">Tidak ada tanggal expired</span></p>
+                                @elseif($competency['expired_date'])
                                     <p class="text-xs text-gray-500 dark:text-gray-400">Expired: {{ \Carbon\Carbon::parse($competency['expired_date'])->format('d M Y') }}</p>
                                 @endif
                                 @if($isProcessing)
@@ -172,12 +177,38 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                Tanggal Terbit Sertifikat <span class="text-red-500">*</span>
+                            </label>
+                            <input type="date" wire:model="competencies.{{ $index }}.issue_date"
+                                placeholder="Tanggal terbit sertifikat"
+                                class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:focus:ring-blue-600 transition-colors">
+                            @error('competencies.'.$index.'.issue_date')
+                                <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" wire:model.live="competencies.{{ $index }}.has_no_expiry"
+                                    class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500/20 dark:border-gray-600 dark:bg-gray-700 transition-colors">
+                                <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Sertifikat tidak punya tanggal expired</span>
+                            </label>
+                        </div>
+
+                        @if(empty($competency['has_no_expiry']))
+                        <div class="mb-3">
+                            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+                                Tanggal Expired Sertifikat <span class="text-red-500">*</span>
+                            </label>
                             <input type="date" wire:model="competencies.{{ $index }}.expired_date"
-                                class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:focus:ring-blue-600 transition-colors">
+                                placeholder="Tanggal expired sertifikat"
+                                class="w-full px-3 py-2 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:focus:ring-blue-600 transition-colors">
                             @error('competencies.'.$index.'.expired_date')
                                 <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
+                        @endif
 
                         {{-- File Upload --}}
                         <div>

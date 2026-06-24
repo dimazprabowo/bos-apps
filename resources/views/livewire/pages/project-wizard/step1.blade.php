@@ -65,6 +65,7 @@
             <input
                 type="date"
                 wire:model="start_date"
+                placeholder="Tanggal mulai project"
                 class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
             @error('start_date') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
         </div>
@@ -74,6 +75,7 @@
             <input
                 type="date"
                 wire:model="end_date"
+                placeholder="Tanggal selesai project"
                 class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100 focus:border-indigo-500 focus:ring-indigo-500">
             @error('end_date') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
         </div>

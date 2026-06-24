@@ -122,7 +122,7 @@
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" @click="$wire.closeModal()"></div>
 
-                <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="inline-block align-bottom w-full bg-white dark:bg-gray-800 rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <form wire:submit="save">
                         <div class="bg-white dark:bg-gray-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
@@ -132,7 +132,8 @@
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Key <span class="text-red-500">*</span></label>
-                                    <input wire:model="key" type="text" required {{ $editMode ? 'readonly' : '' }}
+                                    <input wire:model="key" type="text" {{ $editMode ? 'readonly' : '' }}
+                                        placeholder="Contoh: app_name"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white {{ $editMode ? 'bg-gray-100 dark:bg-gray-900' : '' }}">
                                     @error('key') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -156,16 +157,18 @@
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                         <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Pilih tanggal dan waktu. Kosongkan jika tidak ada batas waktu.</p>
                                     @elseif($data_type === 'boolean')
-                                        <select wire:model="value" required
+                                        <select wire:model="value"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                             <option value="1">Ya (True)</option>
                                             <option value="0">Tidak (False)</option>
                                         </select>
                                     @elseif($data_type === 'integer')
-                                        <input wire:model="value" type="number" required
+                                        <input wire:model="value" type="number"
+                                            placeholder="Masukkan nilai numerik"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     @else
-                                        <input wire:model="value" type="text" required
+                                        <input wire:model="value" type="text"
+                                            placeholder="Masukkan nilai"
                                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
                                     @endif
                                     @error('value') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -186,6 +189,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deskripsi</label>
                                     <textarea wire:model="description" rows="3"
+                                        placeholder="Deskripsi konfigurasi (opsional)"
                                         class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
                                     @error('description') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                                 </div>
@@ -208,8 +212,8 @@
                                 loadingText="Menyimpan..." class="w-full sm:w-auto">
                                 Update
                             </x-loading-button>
-                            <x-loading-button type="button" @click="$wire.closeModal()" variant="secondary" size="lg"
-                                class="mt-3 sm:mt-0 w-full sm:w-auto">
+                            <x-loading-button type="button" wire:click="closeModal" target="closeModal" variant="secondary" size="lg"
+                                loadingText="Memuat..." class="mt-3 sm:mt-0 w-full sm:w-auto">
                                 Batal
                             </x-loading-button>
                         </div>

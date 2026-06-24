@@ -33,6 +33,8 @@ class Personel extends Model
                 'certificate_file_error',
                 'certificate_file_processed_at',
                 'issuer',
+                'issue_date',
+                'has_no_expiry',
                 'expired_date'
             ])
             ->withTimestamps();
