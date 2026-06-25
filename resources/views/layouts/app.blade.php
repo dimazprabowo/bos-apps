@@ -108,6 +108,10 @@
 
         <x-toast />
 
+        @if(session('sso_success'))
+            <div x-data x-init='$nextTick(() => $store.notification.add("success", @json(session("sso_success"))))' class="hidden"></div>
+        @endif
+
         <script>
             document.addEventListener('livewire:navigated', () => {
                 if (window.location.hash) {

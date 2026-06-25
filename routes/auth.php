@@ -23,13 +23,14 @@ Route::middleware('guest')->group(function () {
 
     Route::get('reset-password/{token}', ResetPassword::class)
         ->name('password.reset');
-
-    // SSO OAuth Routes - only register if SSO is enabled
-    if (config('services.sso.enabled')) {
-        Route::get('auth/sso/redirect', [SsoAuthController::class, 'redirect'])->name('sso.redirect');
-        Route::get('auth/callback', [SsoAuthController::class, 'callback'])->name('sso.callback');
-    }
 });
+
+// SSO OAuth Routes - accessible regardless of auth status
+// so re-authentication works when SSO user changes (e.g. impersonation)
+if (config('services.sso.enabled')) {
+    Route::get('auth/sso/redirect', [SsoAuthController::class, 'redirect'])->name('sso.redirect');
+    Route::get('auth/callback', [SsoAuthController::class, 'callback'])->name('sso.callback');
+}
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', VerifyEmail::class)
