@@ -107,5 +107,16 @@
         </div>
 
         <x-toast />
+
+        <script>
+            document.addEventListener('livewire:navigated', () => {
+                if (window.location.hash) {
+                    requestAnimationFrame(() => {
+                        const el = document.querySelector(window.location.hash);
+                        if (el) el.scrollIntoView({ behavior: 'smooth' });
+                    });
+                }
+            });
+        </script>
     </body>
 </html>

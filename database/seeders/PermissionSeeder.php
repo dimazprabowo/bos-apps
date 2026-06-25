@@ -50,6 +50,7 @@ class PermissionSeeder extends Seeder
             'users_delete',
             'users_export_excel',
             'users_export_pdf',
+            'users_impersonate',
 
             // Roles & Permissions
             'roles_view',

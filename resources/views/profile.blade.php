@@ -27,6 +27,12 @@
                     <livewire:profile.delete-user-form />
                 </div>
             </div>
+
+            @can('users_impersonate')
+                <div id="impersonate" class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg scroll-mt-20">
+                    <livewire:profile.impersonate-user />
+                </div>
+            @endcan
         </div>
     </div>
 </x-app-layout>

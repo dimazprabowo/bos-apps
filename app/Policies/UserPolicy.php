@@ -77,4 +77,20 @@ class UserPolicy
     {
         return $user->can('users_export_pdf');
     }
+
+    /**
+     * Determine whether the user can impersonate another user.
+     */
+    public function impersonate(User $user, User $model): bool
+    {
+        if ($user->id === $model->id) {
+            return false;
+        }
+
+        if (session()->has('impersonate_original_id')) {
+            return false;
+        }
+
+        return $user->can('users_impersonate');
+    }
 }
