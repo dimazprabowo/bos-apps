@@ -378,7 +378,7 @@
                     <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Hapus Deliverable</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Apakah Anda yakin ingin menghapus file ini? Aksi ini tidak dapat dibatalkan.</p>
                     <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeDeleteModal" target="closeDeleteModal" />
+                        <x-cancel-button wire:click="closeDeleteModal" target="closeDeleteModal" variant="secondary" />
                         <button wire:click="deleteDeliverable"
                             class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-lg shadow-sm transition-all"
                             wire:loading.attr="disabled"

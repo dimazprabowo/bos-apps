@@ -559,7 +559,7 @@
                         @enderror
                     </div>
                     <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeCloseModal" target="closeCloseModal" />
+                        <x-cancel-button wire:click="closeCloseModal" target="closeCloseModal" variant="secondary" />
                         <button wire:click="closeProject"
                             class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
                             wire:loading.attr="disabled"
