@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\PeralatanReviewStatus;
 use App\Jobs\ProcessPeralatanEvidence;
 use App\Models\Peralatan;
 use App\Models\PeralatanEvidence;
@@ -17,7 +18,8 @@ class PeralatanService
         ?string $calibrationStatus = null,
         ?string $condition = null,
         ?string $ownershipStatus = null,
-        int $perPage = 10
+        int $perPage = 10,
+        ?string $reviewStatus = null
     ): LengthAwarePaginator {
         return Peralatan::query()
             ->when($activeOnly, fn ($q) => $q->active())
@@ -25,6 +27,7 @@ class PeralatanService
             ->byCalibrationStatus($calibrationStatus)
             ->byCondition($condition)
             ->byOwnershipStatus($ownershipStatus)
+            ->byReviewStatus($reviewStatus)
             ->withCount('evidences')
             ->orderBy('name')
             ->paginate($perPage);
@@ -86,7 +89,8 @@ class PeralatanService
     {
         DB::transaction(function () use ($peralatan, $data) {
             $data['code'] = strtoupper($data['code']);
-            $peralatan->update([
+
+            $updateData = [
                 'code' => $data['code'],
                 'name' => $data['name'],
                 'description' => $data['description'] ?? $peralatan->description,
@@ -96,7 +100,14 @@ class PeralatanService
                 'condition' => $data['condition'] ?? $peralatan->condition,
                 'ownership_status' => $data['ownership_status'] ?? $peralatan->ownership_status,
                 'is_active' => $data['is_active'] ?? $peralatan->is_active,
-            ]);
+            ];
+
+            if ($peralatan->isRejected()) {
+                $updateData['review_status'] = PeralatanReviewStatus::Pending->value;
+                $updateData['rejection_reason'] = null;
+            }
+
+            $peralatan->update($updateData);
 
             if (isset($data['evidences']) && is_array($data['evidences'])) {
                 // Get existing evidence IDs
@@ -190,6 +201,35 @@ class PeralatanService
         });
 
         return $peralatan->fresh();
+    }
+
+    public function approveReview(Peralatan $peralatan, int $reviewerId, ?string $note = null): Peralatan
+    {
+        return DB::transaction(function () use ($peralatan, $reviewerId, $note) {
+            $peralatan->update([
+                'review_status' => PeralatanReviewStatus::Approved->value,
+                'reviewed_by' => $reviewerId,
+                'reviewed_at' => now(),
+                'rejection_reason' => null,
+                'approval_note' => $note,
+            ]);
+
+            return $peralatan->fresh();
+        });
+    }
+
+    public function rejectReview(Peralatan $peralatan, int $reviewerId, string $reason): Peralatan
+    {
+        return DB::transaction(function () use ($peralatan, $reviewerId, $reason) {
+            $peralatan->update([
+                'review_status' => PeralatanReviewStatus::Rejected->value,
+                'reviewed_by' => $reviewerId,
+                'reviewed_at' => now(),
+                'rejection_reason' => $reason,
+            ]);
+
+            return $peralatan->fresh();
+        });
     }
 
     public function getActivePeralatan()

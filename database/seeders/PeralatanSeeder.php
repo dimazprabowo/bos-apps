@@ -4,12 +4,15 @@ namespace Database\Seeders;
 
 use App\Models\Peralatan;
 use App\Models\PeralatanEvidence;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class PeralatanSeeder extends Seeder
 {
     public function run(): void
     {
+        $reviewer = User::first();
+
         $peralatanData = [
             [
                 'code' => 'EQ001',
@@ -21,6 +24,10 @@ class PeralatanSeeder extends Seeder
                 'condition' => 'suitable',
                 'ownership_status' => 'owned',
                 'is_active' => true,
+                'review_status' => 'approved',
+                'reviewed_by' => $reviewer?->id,
+                'reviewed_at' => now(),
+                'approval_note' => 'Peralatan layak digunakan untuk kegiatan inspeksi.',
                 'evidences' => [
                     ['name' => 'Sertifikat Kalibrasi', 'file_name' => 'kalibrasi_eq001.pdf'],
                     ['name' => 'Manual Book', 'file_name' => 'manual_eq001.pdf'],
@@ -36,6 +43,10 @@ class PeralatanSeeder extends Seeder
                 'condition' => 'suitable',
                 'ownership_status' => 'owned',
                 'is_active' => true,
+                'review_status' => 'approved',
+                'reviewed_by' => $reviewer?->id,
+                'reviewed_at' => now()->subDays(2),
+                'approval_note' => 'Alat dalam kondisi baik dan siap pakai.',
                 'evidences' => [
                     ['name' => 'Sertifikat Kalibrasi', 'file_name' => 'kalibrasi_eq002.pdf'],
                 ],
@@ -50,6 +61,7 @@ class PeralatanSeeder extends Seeder
                 'condition' => 'suitable',
                 'ownership_status' => 'rented',
                 'is_active' => true,
+                'review_status' => 'pending',
                 'evidences' => [
                     ['name' => 'Kontrak Sewa', 'file_name' => 'sewa_eq003.pdf'],
                 ],
@@ -64,6 +76,10 @@ class PeralatanSeeder extends Seeder
                 'condition' => 'not_suitable',
                 'ownership_status' => 'owned',
                 'is_active' => false,
+                'review_status' => 'rejected',
+                'reviewed_by' => $reviewer?->id,
+                'reviewed_at' => now()->subDays(5),
+                'rejection_reason' => 'Kalibrasi sudah expired dan kondisi alat tidak layak. Mohon lakukan kalibrasi ulang sebelum diajukan kembali.',
                 'evidences' => [
                     ['name' => 'Sertifikat Kalibrasi Expired', 'file_name' => 'kalibrasi_eq004.pdf'],
                 ],
@@ -78,6 +94,7 @@ class PeralatanSeeder extends Seeder
                 'condition' => 'suitable',
                 'ownership_status' => 'owned',
                 'is_active' => true,
+                'review_status' => 'pending',
                 'evidences' => [
                     ['name' => 'Spesifikasi Alat', 'file_name' => 'spesifikasi_eq005.pdf'],
                 ],

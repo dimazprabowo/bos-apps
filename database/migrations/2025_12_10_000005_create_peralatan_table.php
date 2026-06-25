@@ -19,6 +19,14 @@ return new class extends Migration
             $table->enum('condition', ['suitable', 'not_suitable'])->default('suitable');
             $table->enum('ownership_status', ['owned', 'rented', 'borrowed', 'leased'])->default('owned');
             $table->boolean('is_active')->default(true);
+
+            // Peralatan Review
+            $table->enum('review_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->text('approval_note')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 
@@ -27,6 +35,7 @@ return new class extends Migration
             $table->index('calibration_status');
             $table->index('condition');
             $table->index('ownership_status');
+            $table->index('review_status');
         });
     }
 

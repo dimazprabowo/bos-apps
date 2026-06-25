@@ -14,7 +14,7 @@ class PeralatanPolicy
 
     public function view(User $user, Peralatan $peralatan): bool
     {
-        return $user->can('peralatan_view');
+        return $user->can('peralatan_show');
     }
 
     public function create(User $user): bool
@@ -45,5 +45,11 @@ class PeralatanPolicy
     public function exportPdf(User $user): bool
     {
         return $user->can('peralatan_export_pdf');
+    }
+
+    public function reviewPeralatan(User $user, Peralatan $peralatan): bool
+    {
+        return $user->can('peralatan_review')
+            && $peralatan->review_status === \App\Enums\PeralatanReviewStatus::Pending;
     }
 }

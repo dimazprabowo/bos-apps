@@ -145,9 +145,11 @@ class RolePermissionService
             ],
             'Peralatan' => [
                 ['name' => 'peralatan_view',         'label' => 'Lihat Peralatan'],
+                ['name' => 'peralatan_show',         'label' => 'Detail Peralatan'],
                 ['name' => 'peralatan_create',       'label' => 'Tambah Peralatan'],
                 ['name' => 'peralatan_update',       'label' => 'Edit Peralatan'],
                 ['name' => 'peralatan_delete',       'label' => 'Hapus Peralatan'],
+                ['name' => 'peralatan_review',       'label' => 'Review Peralatan'],
                 ['name' => 'peralatan_export_excel', 'label' => 'Export Excel Peralatan'],
                 ['name' => 'peralatan_export_pdf',   'label' => 'Export PDF Peralatan'],
             ],

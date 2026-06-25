@@ -5,10 +5,13 @@ namespace App\Models;
 use App\Enums\CalibrationStatus;
 use App\Enums\EquipmentCondition;
 use App\Enums\OwnershipStatus;
+use App\Enums\PeralatanReviewStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Crypt;
 
 class Peralatan extends Model
 {
@@ -26,14 +29,21 @@ class Peralatan extends Model
         'condition',
         'ownership_status',
         'is_active',
+        'review_status',
+        'reviewed_by',
+        'reviewed_at',
+        'rejection_reason',
+        'approval_note',
     ];
 
     protected $casts = [
         'calibration_status' => CalibrationStatus::class,
         'condition' => EquipmentCondition::class,
         'ownership_status' => OwnershipStatus::class,
+        'review_status' => PeralatanReviewStatus::class,
         'calibration_expired_date' => 'date',
         'is_active' => 'boolean',
+        'reviewed_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
         'deleted_at' => 'datetime',
@@ -43,6 +53,11 @@ class Peralatan extends Model
     public function evidences(): HasMany
     {
         return $this->hasMany(PeralatanEvidence::class);
+    }
+
+    public function reviewer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 
     // Scopes
@@ -87,6 +102,19 @@ class Peralatan extends Model
         return $query;
     }
 
+    public function scopeByReviewStatus($query, $reviewStatus)
+    {
+        if ($reviewStatus) {
+            return $query->where('review_status', $reviewStatus);
+        }
+        return $query;
+    }
+
+    public function scopeReviewed($query)
+    {
+        return $query->where('review_status', PeralatanReviewStatus::Approved->value);
+    }
+
     // Accessors
     public function getIsActiveAttribute(): bool
     {
@@ -101,8 +129,33 @@ class Peralatan extends Model
         return $this->calibration_expired_date->isPast();
     }
 
-    public function getRouteKeyName(): string
+    public function isPendingReview(): bool
     {
-        return 'code';
+        return $this->review_status === PeralatanReviewStatus::Pending;
+    }
+
+    public function isReviewed(): bool
+    {
+        return $this->review_status === PeralatanReviewStatus::Approved;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->review_status === PeralatanReviewStatus::Rejected;
+    }
+
+    public function getRouteKey()
+    {
+        return Crypt::encryptString($this->getKey());
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        try {
+            $decryptedId = Crypt::decryptString($value);
+            return $this->where($this->getRouteKeyName(), $decryptedId)->firstOrFail();
+        } catch (\Exception $e) {
+            abort(404);
+        }
     }
 }

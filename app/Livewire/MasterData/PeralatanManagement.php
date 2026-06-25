@@ -23,6 +23,18 @@ class PeralatanManagement extends Component
     public $deletingPeralatanId;
     public $deletingPeralatanName;
 
+    public $showRejectReviewModal = false;
+    public $rejectingPeralatanId;
+    public $rejectingPeralatanName;
+    public $rejectionReason = '';
+
+    public $showApproveReviewModal = false;
+    public $approvingPeralatanId;
+    public $approvingPeralatanName;
+    public $approvalNote = '';
+
+    public $reviewStatusFilter = '';
+
     public function mount()
     {
         $this->authorize('viewAny', Peralatan::class);
@@ -44,6 +56,11 @@ class PeralatanManagement extends Component
     }
 
     public function updatedOwnershipStatusFilter()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedReviewStatusFilter()
     {
         $this->resetPage();
     }
@@ -97,6 +114,92 @@ class PeralatanManagement extends Component
             $this->notifySuccess("Status peralatan berhasil diubah menjadi {$status}!");
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             $this->notifyError('Anda tidak memiliki izin untuk mengubah status peralatan.');
+        } catch (\Exception $e) {
+            $this->notifyError('Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function confirmApproveReview($id)
+    {
+        $peralatan = Peralatan::findOrFail($id);
+        $this->approvingPeralatanId = $peralatan->id;
+        $this->approvingPeralatanName = $peralatan->name;
+        $this->approvalNote = '';
+        $this->showApproveReviewModal = true;
+    }
+
+    public function closeApproveReviewModal()
+    {
+        $this->showApproveReviewModal = false;
+        $this->approvingPeralatanId = null;
+        $this->approvingPeralatanName = null;
+        $this->approvalNote = '';
+    }
+
+    public function approveReview(PeralatanService $service)
+    {
+        try {
+            $this->validate([
+                'approvalNote' => 'nullable|string|max:500',
+            ], [
+                'approvalNote.max' => 'Catatan persetujuan maksimal 500 karakter.',
+            ]);
+
+            $peralatan = Peralatan::findOrFail($this->approvingPeralatanId);
+            $this->authorize('reviewPeralatan', $peralatan);
+
+            $service->approveReview($peralatan, auth()->id(), $this->approvalNote ?: null);
+            $this->notifySuccess('Peralatan berhasil disetujui!');
+            $this->closeApproveReviewModal();
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            $this->notifyError('Anda tidak memiliki izin untuk melakukan review peralatan.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->setErrorBag($e->validator->errors()->toArray());
+            $this->notifyValidationError($e);
+        } catch (\Exception $e) {
+            $this->notifyError('Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function confirmRejectReview($id)
+    {
+        $peralatan = Peralatan::findOrFail($id);
+        $this->rejectingPeralatanId = $peralatan->id;
+        $this->rejectingPeralatanName = $peralatan->name;
+        $this->rejectionReason = '';
+        $this->showRejectReviewModal = true;
+    }
+
+    public function closeRejectReviewModal()
+    {
+        $this->showRejectReviewModal = false;
+        $this->rejectingPeralatanId = null;
+        $this->rejectingPeralatanName = null;
+        $this->rejectionReason = '';
+    }
+
+    public function rejectReview(PeralatanService $service)
+    {
+        try {
+            $this->validate([
+                'rejectionReason' => 'required|string|min:10|max:500',
+            ], [
+                'rejectionReason.required' => 'Alasan penolakan harus diisi.',
+                'rejectionReason.min' => 'Alasan penolakan minimal 10 karakter.',
+                'rejectionReason.max' => 'Alasan penolakan maksimal 500 karakter.',
+            ]);
+
+            $peralatan = Peralatan::findOrFail($this->rejectingPeralatanId);
+            $this->authorize('reviewPeralatan', $peralatan);
+
+            $service->rejectReview($peralatan, auth()->id(), $this->rejectionReason);
+            $this->notifySuccess('Peralatan berhasil ditolak!');
+            $this->closeRejectReviewModal();
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            $this->notifyError('Anda tidak memiliki izin untuk melakukan review peralatan.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->setErrorBag($e->validator->errors()->toArray());
+            $this->notifyValidationError($e);
         } catch (\Exception $e) {
             $this->notifyError('Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -182,8 +285,11 @@ class PeralatanManagement extends Component
                 false,
                 $this->calibrationStatusFilter ?: null,
                 $this->conditionFilter ?: null,
-                $this->ownershipStatusFilter ?: null
+                $this->ownershipStatusFilter ?: null,
+                10,
+                $this->reviewStatusFilter ?: null
             ),
+            'reviewStatuses' => \App\Enums\PeralatanReviewStatus::cases(),
         ]);
     }
 }

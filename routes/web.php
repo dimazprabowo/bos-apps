@@ -81,6 +81,10 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
             Route::get('/{peralatan}/edit', function (\App\Models\Peralatan $peralatan) {
                 return view('master-data.peralatan-edit', ['peralatan' => $peralatan]);
             })->middleware('can:peralatan_update')->name('edit');
+
+            Route::get('/{peralatan}', function (\App\Models\Peralatan $peralatan) {
+                return view('master-data.peralatan-show', ['peralatan' => $peralatan]);
+            })->middleware('can:peralatan_show')->name('show');
         });
     });
 

@@ -96,9 +96,11 @@ class PermissionSeeder extends Seeder
 
             // Master Data — Peralatan
             'peralatan_view',
+            'peralatan_show',
             'peralatan_create',
             'peralatan_update',
             'peralatan_delete',
+            'peralatan_review',
             'peralatan_export_excel',
             'peralatan_export_pdf',
 
