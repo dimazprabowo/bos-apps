@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ModuleReviewStatus;
 use App\Enums\RiskLevel;
 use App\Models\Module;
 use App\Models\Competency;
 use App\Models\Peralatan;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class ModuleSeeder extends Seeder
@@ -14,6 +16,7 @@ class ModuleSeeder extends Seeder
     {
         $competencies = Competency::all();
         $peralatans = Peralatan::all();
+        $reviewer = User::first();
 
         $modules = [
             [
@@ -304,6 +307,9 @@ class ModuleSeeder extends Seeder
                 'risk_level' => $moduleData['risk_level'],
                 'pricing_baseline' => $moduleData['pricing_baseline'],
                 'is_active' => $moduleData['is_active'],
+                'review_status' => ModuleReviewStatus::Approved->value,
+                'reviewed_by' => $reviewer?->id,
+                'reviewed_at' => now(),
             ]);
 
             // Create work order items with subitems

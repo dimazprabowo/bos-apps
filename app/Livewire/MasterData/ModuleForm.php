@@ -783,6 +783,7 @@ class ModuleForm extends Component
             'riskLevels' => RiskLevel::cases(),
             'competencies' => Competency::active()->get(),
             'peralatans' => Peralatan::active()->orderBy('name')->get(),
+            'module' => $this->editMode ? Module::find($this->moduleId) : null,
         ]);
     }
 }

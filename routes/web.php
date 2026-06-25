@@ -42,6 +42,10 @@ Route::middleware(['auth', 'verified', 'active'])->group(function () {
             Route::get('/{module}/edit', function (\App\Models\Module $module) {
                 return view('master-data.module-edit', ['module' => $module]);
             })->middleware('can:modules_update')->name('edit');
+
+            Route::get('/{module}', function (\App\Models\Module $module) {
+                return view('master-data.module-show', ['module' => $module]);
+            })->middleware('can:modules_show')->name('show');
         });
 
         // Competencies

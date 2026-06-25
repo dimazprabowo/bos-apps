@@ -17,12 +17,21 @@ return new class extends Migration
             $table->decimal('pricing_baseline', 15, 2)->nullable();
             $table->boolean('is_active')->default(true);
             $table->text('notes')->nullable();
+
+            // Module Review
+            $table->enum('review_status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->text('approval_note')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 
             $table->index('code');
             $table->index('risk_level');
             $table->index('is_active');
+            $table->index('review_status');
         });
     }
 

@@ -39,6 +39,10 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
             $query->where('risk_level', $this->riskFilter);
         }
 
+        if ($this->reviewStatusFilter !== null && $this->reviewStatusFilter !== '') {
+            $query->where('review_status', $this->reviewStatusFilter);
+        }
+
         return $query->orderBy('name');
     }
 
@@ -75,6 +79,7 @@ class ModulesExport implements FromQuery, WithHeadings, WithMapping, WithStyles,
             $module->risk_level->label(),
             $module->pricing_baseline ? 'Rp ' . number_format($module->pricing_baseline, 0, ',', '.') : '-',
             $module->projects_count,
+            $module->review_status->label(),
             $module->is_active ? 'Aktif' : 'Non-Aktif',
             $module->created_at->format('d/m/Y H:i'),
         ];

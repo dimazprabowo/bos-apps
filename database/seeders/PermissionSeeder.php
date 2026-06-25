@@ -70,9 +70,11 @@ class PermissionSeeder extends Seeder
 
             // Master Data — Modules
             'modules_view',
+            'modules_show',
             'modules_create',
             'modules_update',
             'modules_delete',
+            'modules_review',
             'modules_export_excel',
             'modules_export_pdf',
 

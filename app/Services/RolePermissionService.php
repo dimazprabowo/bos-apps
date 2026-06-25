@@ -119,9 +119,11 @@ class RolePermissionService
             ],
             'Modul' => [
                 ['name' => 'modules_view',         'label' => 'Lihat Modul'],
+                ['name' => 'modules_show',         'label' => 'Detail Modul'],
                 ['name' => 'modules_create',       'label' => 'Tambah Modul'],
                 ['name' => 'modules_update',       'label' => 'Edit Modul'],
                 ['name' => 'modules_delete',       'label' => 'Hapus Modul'],
+                ['name' => 'modules_review',       'label' => 'Review Modul'],
                 ['name' => 'modules_export_excel', 'label' => 'Export Excel Modul'],
                 ['name' => 'modules_export_pdf',   'label' => 'Export PDF Modul'],
             ],

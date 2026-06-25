@@ -25,6 +25,77 @@
 
                 </div>
 
+                @if($editMode)
+                    @php
+                        $reviewIcon = match($module->review_status->value) {
+                            'pending' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+                            'approved' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z',
+                            'rejected' => 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z',
+                            default => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+                        };
+                        $reviewBorder = match($module->review_status->value) {
+                            'pending' => 'border-purple-200 dark:border-purple-800/50',
+                            'approved' => 'border-green-200 dark:border-green-800/50',
+                            'rejected' => 'border-red-200 dark:border-red-800/50',
+                            default => 'border-gray-200 dark:border-gray-700',
+                        };
+                        $reviewIconBg = match($module->review_status->value) {
+                            'pending' => 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400',
+                            'approved' => 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400',
+                            'rejected' => 'bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400',
+                            default => 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400',
+                        };
+                    @endphp
+                    <div class="mt-6 border {{ $reviewBorder }} rounded-xl overflow-hidden">
+                        <div class="flex items-start gap-4 p-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-lg {{ $reviewIconBg }} flex items-center justify-center">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="{{ $reviewIcon }}"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-sm font-semibold text-gray-800 dark:text-white">Status Review Modul</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $module->review_status->badgeClass() }}">
+                                        {{ $module->review_status->label() }}
+                                    </span>
+                                </div>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $module->review_status->description() }}</p>
+                                @if($module->reviewer)
+                                    <div class="flex items-center gap-4 mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                        <span class="flex items-center gap-1">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                            </svg>
+                                            {{ $module->reviewer->name }}
+                                        </span>
+                                        @if($module->reviewed_at)
+                                            <span class="flex items-center gap-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                {{ $module->reviewed_at->format('d M Y, H:i') }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                @endif
+                                @if($module->isRejected() && $module->rejection_reason)
+                                    <div class="mt-3 p-3 bg-red-50 dark:bg-red-900/10 rounded-lg">
+                                        <p class="text-xs font-medium text-red-700 dark:text-red-400">Alasan Penolakan:</p>
+                                        <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ $module->rejection_reason }}</p>
+                                    </div>
+                                @endif
+                                @if($module->isReviewed() && $module->approval_note)
+                                    <div class="mt-3 p-3 bg-green-50 dark:bg-green-900/10 rounded-lg">
+                                        <p class="text-xs font-medium text-green-700 dark:text-green-400">Catatan Persetujuan:</p>
+                                        <p class="text-xs text-green-600 dark:text-green-400 mt-1">{{ $module->approval_note }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Work Order References -->
                 <x-module-reference-section :workOrderReferences="$workOrderReferences" />
 

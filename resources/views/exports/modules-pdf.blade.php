@@ -18,6 +18,9 @@
         .badge-high { background-color: #fee2e2; color: #991b1b; }
         .badge-active { background-color: #dcfce7; color: #166534; }
         .badge-inactive { background-color: #f3f4f6; color: #374151; }
+        .badge-pending { background-color: #e9d5ff; color: #6b21a8; }
+        .badge-approved { background-color: #dcfce7; color: #166534; }
+        .badge-rejected { background-color: #fee2e2; color: #991b1b; }
         .footer { text-align: right; margin-top: 15px; font-size: 9px; color: #9ca3af; }
     </style>
 </head>
@@ -38,6 +41,7 @@
                 <th style="width: 7%;">Risk</th>
                 <th style="width: 11%;">Pricing</th>
                 <th style="width: 5%;">Projects</th>
+                <th style="width: 8%;">Review Modul</th>
                 <th style="width: 7%;">Status</th>
             </tr>
         </thead>
@@ -64,6 +68,19 @@
                     </td>
                     <td>{{ $module->pricing_baseline ? 'Rp ' . number_format($module->pricing_baseline, 0, ',', '.') : '-' }}</td>
                     <td>{{ $module->projects_count }}</td>
+                    <td>
+                        @php
+                            $reviewBadge = match($module->review_status->value) {
+                                'pending' => 'badge-pending',
+                                'approved' => 'badge-approved',
+                                'rejected' => 'badge-rejected',
+                                default => 'badge-pending',
+                            };
+                        @endphp
+                        <span class="badge {{ $reviewBadge }}">
+                            {{ $module->review_status->label() }}
+                        </span>
+                    </td>
                     <td>
                         <span class="badge {{ $module->is_active ? 'badge-active' : 'badge-inactive' }}">
                             {{ $module->is_active ? 'Aktif' : 'Non-Aktif' }}

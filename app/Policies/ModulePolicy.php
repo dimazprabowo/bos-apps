@@ -42,6 +42,12 @@ class ModulePolicy
         return $user->can('modules_export_excel');
     }
 
+    public function reviewModule(User $user, Module $module): bool
+    {
+        return $user->can('modules_review')
+            && $module->review_status === \App\Enums\ModuleReviewStatus::Pending;
+    }
+
     public function exportPdf(User $user): bool
     {
         return $user->can('modules_export_pdf');

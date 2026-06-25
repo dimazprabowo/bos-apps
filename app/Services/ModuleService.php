@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\ModuleReviewStatus;
 use App\Models\Module;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class ModuleService
     public function getFiltered(
         ?string $search = null,
         ?string $riskLevel = null,
+        ?string $reviewStatus = null,
         ?bool $activeOnly = true,
         int $perPage = 10
     ): LengthAwarePaginator {
@@ -19,6 +21,7 @@ class ModuleService
             ->when($activeOnly, fn ($q) => $q->active())
             ->search($search)
             ->byRiskLevel($riskLevel)
+            ->byReviewStatus($reviewStatus)
             ->withCount('projects')
             ->orderBy('name')
             ->paginate($perPage);
@@ -115,6 +118,13 @@ class ModuleService
     {
         DB::transaction(function () use ($module, $data) {
             $data['code'] = strtoupper($data['code']);
+
+            // If module was rejected, reset review status to pending on update
+            if ($module->isRejected()) {
+                $data['review_status'] = ModuleReviewStatus::Pending->value;
+                $data['rejection_reason'] = null;
+            }
+
             $module->update($data);
 
             // Handle work order items with subitems
@@ -274,6 +284,35 @@ class ModuleService
         });
 
         return $module->fresh();
+    }
+
+    public function approveReview(Module $module, int $reviewerId, ?string $note = null): Module
+    {
+        return DB::transaction(function () use ($module, $reviewerId, $note) {
+            $module->update([
+                'review_status' => ModuleReviewStatus::Approved->value,
+                'reviewed_by' => $reviewerId,
+                'reviewed_at' => now(),
+                'rejection_reason' => null,
+                'approval_note' => $note,
+            ]);
+
+            return $module->fresh();
+        });
+    }
+
+    public function rejectReview(Module $module, int $reviewerId, string $reason): Module
+    {
+        return DB::transaction(function () use ($module, $reviewerId, $reason) {
+            $module->update([
+                'review_status' => ModuleReviewStatus::Rejected->value,
+                'reviewed_by' => $reviewerId,
+                'reviewed_at' => now(),
+                'rejection_reason' => $reason,
+            ]);
+
+            return $module->fresh();
+        });
     }
 
     public function getActiveModules()
