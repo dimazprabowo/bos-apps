@@ -12,6 +12,10 @@ class ImpersonateService
 
     public function start(User $target): void
     {
+        if (!Auth::check() || $this->isImpersonating() || Auth::id() === $target->id) {
+            abort(403, 'Tidak dapat memulai impersonate.');
+        }
+
         Session::put(self::SESSION_KEY, Auth::id());
         Auth::loginUsingId($target->id);
     }

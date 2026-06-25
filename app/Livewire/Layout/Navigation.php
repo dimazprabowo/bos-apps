@@ -27,6 +27,8 @@ class Navigation extends Component
 
     public function stopImpersonating(ImpersonateService $service): void
     {
+        abort_unless($service->isImpersonating(), 403, 'Tidak ada sesi impersonate yang aktif.');
+
         $service->stop();
         $this->notifySuccess('Berhasil kembali ke akun Anda.');
         $this->redirect(route('dashboard'), navigate: true);

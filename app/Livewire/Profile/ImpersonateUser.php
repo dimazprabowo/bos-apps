@@ -31,6 +31,9 @@ class ImpersonateUser extends Component
 
     public function startImpersonate($userId, ImpersonateService $service)
     {
+        abort_unless(auth()->user()->can('users_impersonate'), 403);
+        abort_if($service->isImpersonating(), 403, 'Anda sedang dalam sesi impersonate.');
+
         $target = User::findOrFail($userId);
         $this->authorize('impersonate', $target);
 
@@ -42,6 +45,8 @@ class ImpersonateUser extends Component
 
     public function render()
     {
+        abort_unless(auth()->user()->can('users_impersonate'), 403);
+
         $query = User::query()
             ->when($this->search, fn($q) => $q->where('name', 'like', "%{$this->search}%")
                 ->orWhere('email', 'like', "%{$this->search}%"))
