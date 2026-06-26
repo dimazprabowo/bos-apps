@@ -33,7 +33,9 @@ class Project extends Model
         'submitted_at',
         'approved_at',
         'notes',
+        'approval_note',
         'rejection_reason',
+        'close_reason',
     ];
 
     protected $casts = [

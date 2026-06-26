@@ -19,6 +19,9 @@ class ProjectDeliverables extends Component
     public array $uploads = [];
     public array $notes = [];
 
+    public $actualEndDate;
+    public $projectNotes;
+
     public $showDeleteModal = false;
     public $deletingDeliverableId = null;
 
@@ -29,6 +32,8 @@ class ProjectDeliverables extends Component
             'modules.deliverables',
             'projectDeliverables.uploader',
         ]);
+        $this->actualEndDate = $this->project->actual_end_date?->format('Y-m-d');
+        $this->projectNotes = $this->project->notes;
     }
 
     protected function rules(): array
@@ -253,6 +258,37 @@ class ProjectDeliverables extends Component
         }
 
         return $groups;
+    }
+
+    public function saveProjectCompletion(): void
+    {
+        $this->authorize('manageDeliverables', $this->project);
+
+        try {
+            $this->validate([
+                'actualEndDate' => 'required|date|after_or_equal:' . $this->project->start_date?->format('Y-m-d'),
+                'projectNotes' => 'nullable|string|max:1000',
+            ], [
+                'actualEndDate.required' => 'Tanggal selesai aktual wajib diisi.',
+                'actualEndDate.date' => 'Format tanggal tidak valid.',
+                'actualEndDate.after_or_equal' => 'Tanggal selesai aktual tidak boleh sebelum tanggal mulai project.',
+                'projectNotes.max' => 'Catatan project maksimal 1000 karakter.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            foreach ($e->validator->errors()->messages() as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            $this->notifyValidationError($e);
+            return;
+        }
+
+        $this->project->update([
+            'actual_end_date' => $this->actualEndDate,
+            'notes' => $this->projectNotes ?: null,
+        ]);
+
+        $this->project = $this->project->fresh(['modules.deliverables', 'projectDeliverables.uploader']);
+        $this->notifySuccess('Data completion project berhasil disimpan.');
     }
 
     public function goBack()

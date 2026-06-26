@@ -103,8 +103,8 @@
 
                 @can('projects_approve')
                     @if($project->approval_status->value === 'coe_review')
-                        <x-loading-button wire:click="approve" target="approve" variant="success" size="md"
-                            loadingText="Menyetujui...">
+                        <x-loading-button wire:click="confirmApprove" target="confirmApprove" variant="success" size="md"
+                            loadingText="Loading...">
                             <x-slot:icon>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                             </x-slot:icon>
@@ -204,6 +204,40 @@
         </div>
     @endif
 
+    {{-- Close Reason --}}
+    @if($project->status->value === 'closed' && $project->close_reason)
+        <div class="p-4 rounded-xl bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800">
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-semibold text-red-800 dark:text-red-300 mb-1">Alasan Penutupan</h4>
+                    <p class="text-sm text-red-700 dark:text-red-400">{{ $project->close_reason }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Approval Note --}}
+    @if($project->approval_status->value === 'approved' && $project->approval_note)
+        <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-200 dark:border-emerald-800">
+            <div class="flex items-start gap-3">
+                <div class="flex-shrink-0">
+                    <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div class="flex-1">
+                    <h4 class="text-sm font-semibold text-emerald-800 dark:text-emerald-300 mb-1">Catatan Persetujuan</h4>
+                    <p class="text-sm text-emerald-700 dark:text-emerald-400">{{ $project->approval_note }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Project Info Grid --}}
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
         <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Informasi Project</h3>
@@ -217,6 +251,10 @@
                 <dd class="font-medium text-gray-900 dark:text-white mt-0.5">{{ $project->end_date?->format('d M Y') ?? '-' }}</dd>
             </div>
             <div>
+                <dt class="text-xs text-gray-500 dark:text-gray-400">Tanggal Selesai Aktual</dt>
+                <dd class="font-medium text-gray-900 dark:text-white mt-0.5">{{ $project->actual_end_date?->format('d M Y') ?? '-' }}</dd>
+            </div>
+            <div>
                 <dt class="text-xs text-gray-500 dark:text-gray-400">Dibuat Oleh</dt>
                 <dd class="font-medium text-gray-900 dark:text-white mt-0.5">{{ $project->creator?->name ?? '-' }}</dd>
             </div>
@@ -225,6 +263,12 @@
                 <dd class="font-medium text-gray-900 dark:text-white mt-0.5">{{ $project->approver?->name ?? '-' }}</dd>
             </div>
         </dl>
+        @if($project->notes)
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <dt class="text-xs text-gray-500 dark:text-gray-400 mb-1">Catatan Project</dt>
+                <p class="text-sm text-gray-700 dark:text-gray-300">{{ $project->notes }}</p>
+            </div>
+        @endif
     </div>
 
     {{-- Additional Costs --}}
@@ -570,6 +614,51 @@
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                             </svg>
                             Tutup Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Approve Confirmation Modal --}}
+    @if($showApproveModal)
+        <div class="fixed inset-0 z-[60] overflow-y-auto">
+            <div class="flex items-center justify-center min-h-screen px-4 py-6">
+                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showApproveModal', false)"></div>
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
+                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Setujui Project</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Apakah Anda yakin ingin menyetujui project ini? Project yang disetujui akan berstatus aktif.</p>
+                    <div class="mb-6 text-left">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Catatan Persetujuan <span class="text-gray-400 text-xs">(opsional)</span>
+                        </label>
+                        <textarea
+                            wire:model="approvalNote"
+                            rows="3"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="Catatan tambahan untuk persetujuan (opsional)"></textarea>
+                        @error('approvalNote')
+                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="flex items-center justify-center gap-3">
+                        <x-cancel-button wire:click="closeApproveModal" target="closeApproveModal" variant="secondary" />
+                        <button wire:click="approve"
+                            class="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
+                            wire:loading.attr="disabled"
+                            wire:loading.class="opacity-70 cursor-not-allowed"
+                            wire:target="approve">
+                            <svg wire:loading wire:target="approve" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                            </svg>
+                            Ya, Setujui
                         </button>
                     </div>
                 </div>

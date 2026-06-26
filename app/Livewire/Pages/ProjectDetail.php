@@ -20,6 +20,9 @@ class ProjectDetail extends Component
     public $showCloseModal = false;
     public $closeReason = '';
 
+    public $showApproveModal = false;
+    public $approvalNote = '';
+
     public function mount(Project $project): void
     {
         $this->authorize('view', $project);
@@ -81,12 +84,40 @@ class ProjectDetail extends Component
         }
     }
 
+    public function confirmApprove()
+    {
+        $this->approvalNote = '';
+        $this->showApproveModal = true;
+    }
+
+    public function closeApproveModal()
+    {
+        $this->showApproveModal = false;
+        $this->approvalNote = '';
+    }
+
     public function approve(ProjectService $service)
     {
         try {
+            $this->validate([
+                'approvalNote' => 'nullable|string|max:500',
+            ], [
+                'approvalNote.max' => 'Catatan persetujuan maksimal 500 karakter.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            foreach ($e->validator->errors()->messages() as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            $this->notifyValidationError($e);
+            return;
+        }
+
+        try {
             $this->authorize('approve', $this->project);
-            $service->approve($this->project, auth()->id());
+            $service->approve($this->project, auth()->id(), $this->approvalNote ?: null);
             $this->notifySuccess('Project berhasil disetujui!');
+            $this->showApproveModal = false;
+            $this->approvalNote = '';
             $this->project = $this->project->fresh()->load([
                 'creator',
                 'approver',
@@ -130,13 +161,21 @@ class ProjectDetail extends Component
 
     public function reject(ProjectService $service)
     {
-        $this->validate([
-            'rejectionReason' => 'required|string|min:10|max:500',
-        ], [
-            'rejectionReason.required' => 'Alasan penolakan harus diisi.',
-            'rejectionReason.min' => 'Alasan penolakan minimal 10 karakter.',
-            'rejectionReason.max' => 'Alasan penolakan maksimal 500 karakter.',
-        ]);
+        try {
+            $this->validate([
+                'rejectionReason' => 'required|string|min:10|max:500',
+            ], [
+                'rejectionReason.required' => 'Alasan penolakan harus diisi.',
+                'rejectionReason.min' => 'Alasan penolakan minimal 10 karakter.',
+                'rejectionReason.max' => 'Alasan penolakan maksimal 500 karakter.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            foreach ($e->validator->errors()->messages() as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            $this->notifyValidationError($e);
+            return;
+        }
 
         try {
             $this->authorize('reject', $this->project);
@@ -170,13 +209,21 @@ class ProjectDetail extends Component
 
     public function closeProject(ProjectService $service)
     {
-        $this->validate([
-            'closeReason' => 'required|string|min:10|max:500',
-        ], [
-            'closeReason.required' => 'Alasan penutupan harus diisi.',
-            'closeReason.min' => 'Alasan penutupan minimal 10 karakter.',
-            'closeReason.max' => 'Alasan penutupan maksimal 500 karakter.',
-        ]);
+        try {
+            $this->validate([
+                'closeReason' => 'required|string|min:10|max:500',
+            ], [
+                'closeReason.required' => 'Alasan penutupan harus diisi.',
+                'closeReason.min' => 'Alasan penutupan minimal 10 karakter.',
+                'closeReason.max' => 'Alasan penutupan maksimal 500 karakter.',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            foreach ($e->validator->errors()->messages() as $field => $messages) {
+                $this->addError($field, $messages[0]);
+            }
+            $this->notifyValidationError($e);
+            return;
+        }
 
         try {
             $this->authorize('close', $this->project);

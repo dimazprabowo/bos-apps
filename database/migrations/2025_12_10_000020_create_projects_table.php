@@ -33,7 +33,9 @@ return new class extends Migration
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->text('notes')->nullable();
+            $table->text('approval_note')->nullable();
             $table->text('rejection_reason')->nullable();
+            $table->text('close_reason')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -859,8 +859,6 @@ class ProjectWizard extends Component
     public function saveDraft(): void
     {
         try {
-            $project = $this->ensureDraftProject();
-
             match ($this->currentStep) {
                 1 => $this->autosaveStep1(),
                 2 => $this->autosaveStep2(),
@@ -872,7 +870,7 @@ class ProjectWizard extends Component
 
             $this->notifySuccess('Draft berhasil disimpan.');
 
-            $this->js("window.history.pushState({}, '', '" . route('projects.edit', $project) . "?step=" . $this->currentStep . "')");
+            $this->js("window.history.pushState({}, '', '" . route('projects.edit', $this->project) . "?step=" . $this->currentStep . "')");
         } catch (\Illuminate\Validation\ValidationException $e) {
             throw $e;
         } catch (\Exception $e) {

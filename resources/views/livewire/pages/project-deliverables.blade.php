@@ -53,6 +53,115 @@
         </div>
     </div>
 
+    {{-- Project Completion --}}
+    @can('manageDeliverables', $project)
+        <div x-data="{
+            plannedEnd: @js($project->end_date?->format('Y-m-d')),
+            actualEnd: @js($actualEndDate),
+            get diffDays() {
+                if (!this.actualEnd || !this.plannedEnd) return null;
+                const actual = new Date(this.actualEnd);
+                const planned = new Date(this.plannedEnd);
+                return Math.round((actual - planned) / (1000 * 60 * 60 * 24));
+            },
+            formatDate(dateStr) {
+                if (!dateStr) return null;
+                const d = new Date(dateStr);
+                return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+        }" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+            {{-- Header with date info --}}
+            <div class="px-5 py-4 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center gap-3 mb-3">
+                    <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Completion Project</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Tanggal selesai aktual dan catatan project</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                        <span class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Mulai</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $project->start_date?->format('d M Y') ?? '-' }}</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                        <span class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Selesai</span>
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">{{ $project->end_date?->format('d M Y') ?? '-' }}</span>
+                    </div>
+                    <div class="flex flex-col items-center justify-center px-3 py-2.5 rounded-lg border transition-colors"
+                        :class="diffDays === null ? 'bg-gray-50 dark:bg-gray-700/50 border-gray-200 dark:border-gray-700' : (diffDays < 0 ? 'bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800' : (diffDays === 0 ? 'bg-blue-50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800' : 'bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-800'))">
+                        <span class="text-[10px] font-semibold uppercase tracking-wider mb-1"
+                            :class="diffDays === null ? 'text-gray-400 dark:text-gray-500' : (diffDays < 0 ? 'text-emerald-500 dark:text-emerald-400' : (diffDays === 0 ? 'text-blue-500 dark:text-blue-400' : 'text-red-500 dark:text-red-400'))">Selesai Aktual</span>
+                        <span class="text-sm font-medium"
+                            :class="diffDays === null ? 'text-gray-400 dark:text-gray-500' : (diffDays < 0 ? 'text-emerald-700 dark:text-emerald-300' : (diffDays === 0 ? 'text-blue-700 dark:text-blue-300' : 'text-red-700 dark:text-red-300'))"
+                            x-text="actualEnd ? formatDate(actualEnd) : 'Belum diisi'"></span>
+                        <span x-show="diffDays !== null" x-cloak class="mt-1 inline-flex items-center gap-1 text-[10px] font-semibold"
+                            :class="diffDays < 0 ? 'text-emerald-600 dark:text-emerald-400' : (diffDays === 0 ? 'text-blue-600 dark:text-blue-400' : 'text-red-600 dark:text-red-400')">
+                            <template x-if="diffDays < 0">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                            </template>
+                            <template x-if="diffDays === 0">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                            </template>
+                            <template x-if="diffDays > 0">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                            </template>
+                            <span x-text="diffDays < 0 ? Math.abs(diffDays) + ' hari lebih cepat' : (diffDays === 0 ? 'Tepat waktu' : diffDays + ' hari lebih lambat')"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {{-- Form --}}
+            <div class="p-5 space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                        Tanggal Selesai Aktual <span class="text-red-500">*</span>
+                    </label>
+                    <input type="date"
+                        x-model="actualEnd"
+                        wire:model.blur="actualEndDate"
+                        class="w-full px-3 py-2 text-sm border rounded-lg transition-all {{ $errors->has('actualEndDate') ? 'border-red-400 dark:border-red-500 focus:ring-red-500/20' : 'border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400' }} dark:bg-gray-700 dark:text-white">
+                    @error('actualEndDate')
+                        <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div x-data="{ height: null, autoGrow(el) { el.style.height = 'auto'; const h = Math.max(el.scrollHeight, 76); el.style.height = h + 'px'; this.height = h + 'px'; } }">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                        Catatan Project <span class="text-gray-400 text-xs">(opsional)</span>
+                    </label>
+                    <textarea
+                        x-init="if ($el.value) autoGrow($el)"
+                        x-on:input="autoGrow($el)"
+                        :style="height ? 'height: ' + height : ''"
+                        wire:model.blur="projectNotes"
+                        placeholder="Catatan tambahan untuk project ini"
+                        rows="3"
+                        class="w-full px-3 py-2 text-sm border rounded-lg transition-colors resize-none {{ $errors->has('projectNotes') ? 'border-red-400 dark:border-red-500 focus:ring-red-500/20' : 'border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400' }} dark:bg-gray-700 dark:text-white"></textarea>
+                    @error('projectNotes')
+                        <p class="mt-1.5 text-xs text-red-500 font-medium">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="flex justify-end pt-1">
+                    <button type="button"
+                        wire:click="saveProjectCompletion"
+                        wire:loading.attr="disabled"
+                        wire:target="saveProjectCompletion"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap">
+                        <svg wire:loading.class.remove="inline-block" wire:loading.class.add="hidden" wire:target="saveProjectCompletion" class="w-4 h-4 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        <svg wire:loading wire:target="saveProjectCompletion" class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span wire:loading.class.remove="inline-block" wire:loading.class.add="hidden" wire:target="saveProjectCompletion" class="inline-block">Simpan</span>
+                        <span wire:loading wire:target="saveProjectCompletion">Menyimpan...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endcan
+
     @if(empty($groups))
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-16 text-center">
             <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-700 mb-4">

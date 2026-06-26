@@ -196,14 +196,15 @@ class ProjectService
         });
     }
 
-    public function approve(Project $project, int $approverId): Project
+    public function approve(Project $project, int $approverId, ?string $note = null): Project
     {
-        return DB::transaction(function () use ($project, $approverId) {
+        return DB::transaction(function () use ($project, $approverId, $note) {
             $project->update([
                 'status' => ProjectStatus::Active->value,
                 'approval_status' => ApprovalStatus::Approved->value,
                 'approved_by' => $approverId,
                 'approved_at' => now(),
+                'approval_note' => $note,
                 'rejection_reason' => null,
             ]);
 
@@ -228,7 +229,7 @@ class ProjectService
         return DB::transaction(function () use ($project, $reason) {
             $project->update([
                 'status' => ProjectStatus::Closed->value,
-                'rejection_reason' => $reason,
+                'close_reason' => $reason,
             ]);
 
             return $project->fresh();

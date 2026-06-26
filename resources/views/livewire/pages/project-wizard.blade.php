@@ -99,6 +99,7 @@
 
             @if($currentStep < $totalSteps)
                 <x-loading-button
+                    wire:key="wizard-next-btn"
                     type="button"
                     wire:click="nextStep"
                     target="nextStep"
@@ -110,6 +111,7 @@
                 </x-loading-button>
             @else
                 <x-loading-button
+                    wire:key="wizard-submit-btn"
                     type="button"
                     wire:click="submitProject"
                     target="submitProject"
