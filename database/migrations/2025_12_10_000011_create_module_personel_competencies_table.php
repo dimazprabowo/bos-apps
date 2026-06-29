@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('competency_id')->constrained()->onDelete('cascade');
             $table->timestamps();
 
-            $table->unique(['module_personel_id', 'competency_id']);
+            $table->unique(['module_personel_id', 'competency_id'], 'mpc_personel_competency_unique');
             $table->index('module_personel_id');
             $table->index('competency_id');
         });
