@@ -104,12 +104,12 @@
                 ($disabled ? ' opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800' : ' hover:border-gray-400 dark:hover:border-gray-500')
         ]) }}
     >
-        <div class="flex items-center gap-1.5 min-w-0">
-            <div class="flex items-center gap-1.5 min-w-0">
+        <div class="flex items-center gap-1.5 min-w-0 leading-none">
+            <div class="flex items-center gap-1.5 min-w-0 leading-none">
                 <template x-if="selectedOption && selectedOption.sublabel">
-                    <span class="flex-shrink-0 truncate text-base font-extrabold text-gray-600 dark:text-gray-300">
+                    <span class="flex-shrink-0 truncate text-sm font-extrabold leading-none text-gray-600 dark:text-gray-300">
                         <span x-text="selectedOption.sublabel"></span>
-                        <span class="text-lg font-bold mx-0.5">·</span>
+                        <span class="text-base font-bold leading-none mx-0.5">·</span>
                     </span>
                 </template>
                 <span
