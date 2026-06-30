@@ -1,0 +1,629 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<meta name="ProgId" content="Word.Document">
+<title>Business Requirements Document - BKI Innovation 2026</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+<w:DoNotOptimizeForBrowser/>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+@page Section1 {
+    size: 21.0cm 29.7cm;
+    margin: 2.5cm 2.5cm 2.5cm 2.5cm;
+    mso-header-margin: 1.25cm;
+    mso-footer-margin: 1.25cm;
+    mso-paper-source: 0;
+}
+div.Section1 { page: Section1; }
+body {
+    font-family: "Calibri", "Segoe UI", sans-serif;
+    font-size: 11.0pt;
+    color: #1f2937;
+    line-height: 1.45;
+}
+h1 {
+    font-family: "Calibri", sans-serif;
+    font-size: 20pt;
+    color: #1e3a8a;
+    border-bottom: 2.5pt solid #1e3a8a;
+    padding-bottom: 4pt;
+    margin-top: 22pt;
+    margin-bottom: 10pt;
+    page-break-after: avoid;
+}
+h2 {
+    font-size: 14pt;
+    color: #1d4ed8;
+    margin-top: 16pt;
+    margin-bottom: 6pt;
+    page-break-after: avoid;
+}
+h3 {
+    font-size: 12pt;
+    color: #1f2937;
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+    page-break-after: avoid;
+}
+p { margin: 4pt 0 6pt 0; text-align: justify; }
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 8pt 0 12pt 0;
+    font-size: 10pt;
+}
+th {
+    background: #1e3a8a;
+    color: #ffffff;
+    border: 0.75pt solid #1e3a8a;
+    padding: 5pt 7pt;
+    text-align: left;
+    vertical-align: top;
+}
+td {
+    border: 0.75pt solid #cbd5e1;
+    padding: 5pt 7pt;
+    vertical-align: top;
+}
+tr:nth-child(even) td { background: #f1f5f9; }
+ul, ol { margin: 4pt 0 8pt 0; }
+li { margin: 2pt 0; }
+.cover {
+    text-align: center;
+    margin-top: 120pt;
+}
+.cover-badge {
+    color: #1e3a8a;
+    font-size: 13pt;
+    letter-spacing: 3pt;
+    font-weight: bold;
+}
+.cover-title {
+    font-size: 34pt;
+    color: #1e3a8a;
+    font-weight: bold;
+    margin: 18pt 0 6pt 0;
+}
+.cover-sub {
+    font-size: 16pt;
+    color: #374151;
+    margin-bottom: 50pt;
+}
+.cover-meta {
+    font-size: 12pt;
+    color: #4b5563;
+}
+.tag {
+    display: inline-block;
+    background: #dbeafe;
+    color: #1e3a8a;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    font-size: 9pt;
+    font-weight: bold;
+}
+.muted { color: #64748b; font-size: 9.5pt; }
+.req-id { font-weight: bold; color: #1d4ed8; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="Section1">
+
+<!-- ===================== COVER ===================== -->
+<div class="cover">
+    <div class="cover-badge">PT BIRO KLASIFIKASI INDONESIA</div>
+    <div class="cover-title">Business Requirements Document</div>
+    <div class="cover-sub">BKI Innovation 2026<br/>Sistem Manajemen &amp; Estimasi Biaya Project Berbasis Modul</div>
+    <table style="width:60%; margin:0 auto; font-size:11pt;">
+        <tr><td style="background:#f1f5f9; font-weight:bold; width:40%;">Dokumen</td><td>Business Requirements Document (BRD)</td></tr>
+        <tr><td style="font-weight:bold;">Versi</td><td>1.0</td></tr>
+        <tr><td style="font-weight:bold;">Status</td><td>Draft for Review</td></tr>
+        <tr><td style="font-weight:bold;">Tanggal</td><td>Juni 2026</td></tr>
+        <tr><td style="font-weight:bold;">Klasifikasi</td><td>Internal / Confidential</td></tr>
+        <tr><td style="font-weight:bold;">Pemilik</td><td>Tim Pengembangan PT BKI</td></tr>
+    </table>
+</div>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== DOCUMENT CONTROL ===================== -->
+<h1>Kontrol Dokumen</h1>
+
+<h2>Riwayat Revisi</h2>
+<table>
+<tr><th style="width:10%">Versi</th><th style="width:18%">Tanggal</th><th style="width:27%">Penulis</th><th style="width:45%">Deskripsi Perubahan</th></tr>
+<tr><td>0.1</td><td>Juni 2026</td><td>Tim Analis</td><td>Kerangka awal dan pengumpulan kebutuhan.</td></tr>
+<tr><td>1.0</td><td>Juni 2026</td><td>Tim Analis</td><td>Penyusunan BRD lengkap berdasarkan analisis sistem aktual.</td></tr>
+</table>
+
+<h2>Persetujuan Dokumen</h2>
+<table>
+<tr><th style="width:30%">Peran</th><th style="width:30%">Nama</th><th style="width:20%">Tanda Tangan</th><th style="width:20%">Tanggal</th></tr>
+<tr><td>Project Sponsor</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Business Owner</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>System Analyst</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>Technical Lead</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+
+<h2>Distribusi</h2>
+<p>Dokumen ini didistribusikan kepada para pemangku kepentingan proyek di lingkungan PT Biro Klasifikasi Indonesia untuk keperluan kajian kebutuhan, pengembangan, dan penerimaan sistem (UAT).</p>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== DAFTAR ISI ===================== -->
+<h1>Daftar Isi</h1>
+<ol>
+<li>Ringkasan Eksekutif</li>
+<li>Pendahuluan
+    <ul>
+    <li>2.1 Tujuan Dokumen</li>
+    <li>2.2 Ruang Lingkup</li>
+    <li>2.3 Definisi, Akronim, dan Singkatan</li>
+    <li>2.4 Referensi</li>
+    </ul>
+</li>
+<li>Tujuan Bisnis &amp; Sasaran</li>
+<li>Pemangku Kepentingan &amp; Peran Pengguna</li>
+<li>Latar Belakang &amp; Pernyataan Masalah</li>
+<li>Ikhtisar Solusi</li>
+<li>Kebutuhan Fungsional
+    <ul>
+    <li>7.1 Autentikasi &amp; Kontrol Akses</li>
+    <li>7.2 Dashboard</li>
+    <li>7.3 Master Data</li>
+    <li>7.4 Manajemen Project (Inti)</li>
+    <li>7.5 Notifikasi</li>
+    <li>7.6 Chat / Komunikasi</li>
+    <li>7.7 Manajemen User, Role &amp; Permission</li>
+    <li>7.8 Konfigurasi Sistem</li>
+    <li>7.9 Pelaporan &amp; Ekspor</li>
+    </ul>
+</li>
+<li>Aturan Bisnis</li>
+<li>Alur Proses Bisnis</li>
+<li>Kebutuhan Non-Fungsional</li>
+<li>Model Data &amp; Entitas</li>
+<li>Matriks Hak Akses (Permission)</li>
+<li>Asumsi, Batasan &amp; Ketergantungan</li>
+<li>Di Luar Ruang Lingkup (Out of Scope)</li>
+<li>Kriteria Penerimaan (Acceptance Criteria)</li>
+</ol>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== 1. RINGKASAN EKSEKUTIF ===================== -->
+<h1>1. Ringkasan Eksekutif</h1>
+<p><b>BKI Innovation 2026</b> adalah aplikasi web internal PT Biro Klasifikasi Indonesia (BKI) yang dirancang untuk merencanakan, menyusun, dan mengestimasi biaya <i>project</i> jasa secara terstruktur, terstandardisasi, dan dapat diaudit. Sistem mengadopsi konsep <b>Modul</b> sebagai komponen kerja yang dapat digunakan ulang (reusable), di mana setiap modul telah mendefinisikan rincian lingkup kerja (work order), kebutuhan personel beserta kompetensinya, kebutuhan peralatan, serta <i>deliverables</i>.</p>
+<p>Sebuah project dibangun melalui <b>wizard 5 langkah</b> yang memandu pengguna memilih modul, menugaskan personel dan peralatan yang sesuai, menambahkan biaya tambahan, dan meninjau total estimasi biaya. Tingkat risiko project ditentukan secara otomatis dari modul berisiko tertinggi, dan project berisiko tinggi wajib melalui <b>alur persetujuan Center of Excellence (CoE)</b> sebelum menjadi aktif.</p>
+<p>Aplikasi dilengkapi manajemen master data yang lengkap, sistem hak akses berbasis peran (RBAC), notifikasi, komunikasi internal (chat real-time), pelaporan/ekspor (Excel &amp; PDF), serta dukungan integrasi <i>Single Sign-On</i> (SSO) opsional. Sistem dibangun dengan prinsip <i>permission-first</i>, <i>clean architecture</i>, dan antarmuka yang konsisten, responsif, serta mendukung mode gelap.</p>
+
+<table>
+<tr><th colspan="2">Sekilas Sistem</th></tr>
+<tr><td style="width:30%; font-weight:bold;">Nama Sistem</td><td>BKI Innovation 2026</td></tr>
+<tr><td style="font-weight:bold;">Jenis</td><td>Aplikasi Web Internal (Enterprise)</td></tr>
+<tr><td style="font-weight:bold;">Domain Bisnis</td><td>Perencanaan &amp; Estimasi Biaya Project Jasa Klasifikasi/Inspeksi</td></tr>
+<tr><td style="font-weight:bold;">Teknologi Inti</td><td>Laravel 12, Livewire 4, TailwindCSS 3, Alpine.js 3, Spatie Permission, Laravel Reverb</td></tr>
+<tr><td style="font-weight:bold;">Pengguna</td><td>Pembuat Project, Reviewer CoE, Administrator, Pengelola Master Data</td></tr>
+<tr><td style="font-weight:bold;">Nilai Utama</td><td>Standardisasi lingkup kerja, estimasi biaya konsisten, kontrol risiko &amp; persetujuan, jejak audit</td></tr>
+</table>
+
+<!-- ===================== 2. PENDAHULUAN ===================== -->
+<h1>2. Pendahuluan</h1>
+
+<h2>2.1 Tujuan Dokumen</h2>
+<p>Dokumen ini bertujuan mendefinisikan kebutuhan bisnis dan fungsional sistem BKI Innovation 2026 secara menyeluruh sebagai acuan bersama antara pemangku kepentingan bisnis dan tim pengembang. Dokumen ini menjadi dasar untuk perancangan teknis, pengembangan, pengujian, dan penerimaan sistem.</p>
+
+<h2>2.2 Ruang Lingkup</h2>
+<p>Ruang lingkup sistem mencakup modul-modul berikut:</p>
+<ul>
+<li><b>Manajemen Master Data:</b> Perusahaan, Modul, Kompetensi, Personel, dan Peralatan.</li>
+<li><b>Manajemen Project:</b> Pembuatan project melalui wizard, penugasan sumber daya, estimasi biaya, siklus hidup status, dan alur persetujuan CoE.</li>
+<li><b>Dashboard:</b> Ringkasan statistik dan informasi pengguna.</li>
+<li><b>Kolaborasi:</b> Notifikasi internal dan chat real-time.</li>
+<li><b>Administrasi:</b> Manajemen user, role &amp; permission, serta konfigurasi sistem.</li>
+<li><b>Pelaporan:</b> Ekspor data ke Excel dan PDF.</li>
+<li><b>Keamanan &amp; Integrasi:</b> RBAC, verifikasi email, reCAPTCHA, dan SSO (OAuth 2.0) opsional.</li>
+</ul>
+
+<h2>2.3 Definisi, Akronim, dan Singkatan</h2>
+<table>
+<tr><th style="width:22%">Istilah</th><th>Definisi</th></tr>
+<tr><td><b>BKI</b></td><td>PT Biro Klasifikasi Indonesia.</td></tr>
+<tr><td><b>Modul</b></td><td>Komponen kerja standar yang dapat digunakan ulang; berisi work order, personel, peralatan, dan deliverable beserta baseline harga.</td></tr>
+<tr><td><b>Project</b></td><td>Pekerjaan yang disusun dari satu atau lebih modul, lengkap dengan penugasan sumber daya dan estimasi biaya.</td></tr>
+<tr><td><b>CoE</b></td><td>Center of Excellence — unit yang melakukan review dan persetujuan project berisiko tinggi.</td></tr>
+<tr><td><b>Work Order</b></td><td>Rincian item pekerjaan (beserta sub-item) yang harus dilaksanakan dalam sebuah modul.</td></tr>
+<tr><td><b>Deliverable</b></td><td>Keluaran/hasil yang harus diserahkan dari pelaksanaan modul.</td></tr>
+<tr><td><b>Personel</b></td><td>Sumber daya manusia yang memiliki kompetensi tertentu dan ditugaskan pada posisi modul.</td></tr>
+<tr><td><b>Peralatan</b></td><td>Aset/alat (dengan status kalibrasi &amp; kondisi) yang dibutuhkan untuk pelaksanaan modul.</td></tr>
+<tr><td><b>Kompetensi</b></td><td>Sertifikasi/keahlian yang dimiliki personel dan disyaratkan oleh posisi modul.</td></tr>
+<tr><td><b>RBAC</b></td><td>Role-Based Access Control — kontrol akses berbasis peran &amp; permission.</td></tr>
+<tr><td><b>SSO</b></td><td>Single Sign-On — autentikasi terpusat via OAuth 2.0 (opsional).</td></tr>
+<tr><td><b>Draft</b></td><td>Status awal project yang masih dapat diubah dan belum diajukan.</td></tr>
+</table>
+
+<h2>2.4 Referensi</h2>
+<ul>
+<li>Kode sumber aplikasi BKI Innovation 2026 (Laravel 12 / Livewire 4).</li>
+<li>Spatie Laravel Permission — dokumentasi RBAC.</li>
+<li>Standar internal PT BKI terkait klasifikasi risiko dan tata kelola CoE.</li>
+</ul>
+
+<!-- ===================== 3. TUJUAN BISNIS ===================== -->
+<h1>3. Tujuan Bisnis &amp; Sasaran</h1>
+<table>
+<tr><th style="width:10%">Kode</th><th style="width:45%">Tujuan Bisnis</th><th>Indikator Keberhasilan</th></tr>
+<tr><td class="req-id">OBJ-01</td><td>Menstandardisasi penyusunan project melalui komponen modul yang dapat digunakan ulang.</td><td>Seluruh project baru disusun dari katalog modul terstandar.</td></tr>
+<tr><td class="req-id">OBJ-02</td><td>Menghasilkan estimasi biaya project yang konsisten dan transparan.</td><td>Total biaya terhitung otomatis (biaya modul + biaya tambahan) tanpa perhitungan manual.</td></tr>
+<tr><td class="req-id">OBJ-03</td><td>Menerapkan kontrol risiko dan tata kelola persetujuan yang jelas.</td><td>Project berisiko tinggi tidak dapat aktif tanpa persetujuan CoE.</td></tr>
+<tr><td class="req-id">OBJ-04</td><td>Memastikan penugasan personel &amp; peralatan sesuai kompetensi dan kelaikan.</td><td>Hanya personel berkompetensi sesuai dan peralatan laik yang dapat ditugaskan.</td></tr>
+<tr><td class="req-id">OBJ-05</td><td>Menyediakan kontrol akses yang aman berbasis peran.</td><td>Setiap fitur dilindungi permission; tidak ada akses tanpa otorisasi.</td></tr>
+<tr><td class="req-id">OBJ-06</td><td>Mendukung pelaporan dan jejak audit.</td><td>Data dapat diekspor (Excel/PDF) dan aktivitas tercatat.</td></tr>
+</table>
+
+<!-- ===================== 4. STAKEHOLDER ===================== -->
+<h1>4. Pemangku Kepentingan &amp; Peran Pengguna</h1>
+<p>Sistem menggunakan peran (role) yang fleksibel melalui RBAC. Tiga peran dasar disediakan secara default dan dapat diperluas melalui menu Roles &amp; Permissions.</p>
+<table>
+<tr><th style="width:22%">Peran</th><th style="width:38%">Tanggung Jawab</th><th>Hak Akses Utama</th></tr>
+<tr><td><b>Super Admin</b></td><td>Akses penuh ke seluruh sistem (bypass otorisasi).</td><td>Seluruh permission.</td></tr>
+<tr><td><b>Admin</b></td><td>Mengelola master data, user, konfigurasi, dan operasional.</td><td>Seluruh permission (eksplisit).</td></tr>
+<tr><td><b>User</b></td><td>Pengguna operasional; hak akses diberikan secara eksplisit oleh Admin.</td><td>Tanpa permission default (least privilege).</td></tr>
+<tr><td><b>Pembuat Project</b></td><td>Menyusun dan mengajukan project.</td><td>projects_create, projects_update, projects_view.</td></tr>
+<tr><td><b>Reviewer CoE</b></td><td>Meninjau, menyetujui/menolak, dan menutup project.</td><td>projects_approve, projects_view.</td></tr>
+<tr><td><b>Pengelola Master Data</b></td><td>Mengelola modul, personel, peralatan, kompetensi, perusahaan.</td><td>Permission terkait master data (view/create/update/delete).</td></tr>
+</table>
+<p class="muted">Catatan: Peran tambahan dapat dibuat sewaktu-waktu. Sidebar dan menu ditampilkan secara dinamis sesuai permission pengguna.</p>
+
+<!-- ===================== 5. LATAR BELAKANG ===================== -->
+<h1>5. Latar Belakang &amp; Pernyataan Masalah</h1>
+<p>Penyusunan project jasa di lingkungan BKI sebelumnya berisiko tidak konsisten apabila dilakukan secara manual: lingkup kerja dapat berbeda antar penyusun, estimasi biaya rawan kesalahan hitung, penugasan personel belum tentu sesuai kompetensi, dan kelaikan peralatan (mis. status kalibrasi) tidak selalu terverifikasi. Selain itu, kontrol persetujuan untuk pekerjaan berisiko tinggi memerlukan mekanisme yang baku dan terdokumentasi.</p>
+<p>BKI Innovation 2026 menjawab permasalahan tersebut dengan menstandardisasi komponen kerja menjadi modul, mengotomasi perhitungan biaya dan penentuan tingkat risiko, membatasi penugasan sumber daya sesuai aturan, serta menegakkan alur persetujuan CoE berbasis risiko.</p>
+
+<!-- ===================== 6. IKHTISAR SOLUSI ===================== -->
+<h1>6. Ikhtisar Solusi</h1>
+<p>Solusi terdiri atas lapisan-lapisan berikut:</p>
+<ul>
+<li><b>Master Data</b> sebagai fondasi: katalog modul, kompetensi, personel, peralatan, dan perusahaan.</li>
+<li><b>Mesin Penyusun Project</b> berupa wizard 5 langkah yang mengikat master data menjadi project konkret dengan estimasi biaya.</li>
+<li><b>Tata Kelola</b> berupa siklus hidup status dan alur persetujuan CoE berbasis tingkat risiko.</li>
+<li><b>Kolaborasi &amp; Notifikasi</b> untuk komunikasi internal dan pemberitahuan.</li>
+<li><b>Administrasi &amp; Keamanan</b> berupa RBAC, konfigurasi sistem, dan integrasi SSO opsional.</li>
+<li><b>Pelaporan</b> melalui ekspor Excel dan PDF.</li>
+</ul>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== 7. KEBUTUHAN FUNGSIONAL ===================== -->
+<h1>7. Kebutuhan Fungsional</h1>
+<p>Setiap kebutuhan diberi kode unik (FR-XX). Tingkat prioritas: <span class="tag">Wajib</span> (Must), <span class="tag">Penting</span> (Should), <span class="tag">Opsional</span> (Could).</p>
+
+<h2>7.1 Autentikasi &amp; Kontrol Akses</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-01</td><td>Pengguna dapat masuk (login) menggunakan email dan kata sandi.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-02</td><td>Sistem mendukung login via SSO (OAuth 2.0) yang dapat diaktif/nonaktifkan melalui konfigurasi <code>IS_USING_SSO</code>.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-03</td><td>Pengguna dapat mendaftar, memverifikasi email, serta melakukan reset kata sandi melalui email.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-04</td><td>Halaman login dilindungi Google reCAPTCHA v2.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-05</td><td>Hanya pengguna berstatus aktif yang dapat mengakses sistem (middleware <code>active</code>).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-06</td><td>Setiap menu &amp; aksi dibatasi oleh permission; menu sidebar tampil dinamis sesuai hak akses pengguna.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-07</td><td>Super Admin memiliki bypass otorisasi terhadap seluruh permission.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-08</td><td>Pengguna dapat mengelola profil, mengganti kata sandi, dan mengubah email (dengan verifikasi).</td><td>Wajib</td></tr>
+</table>
+
+<h2>7.2 Dashboard</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-10</td><td>Menampilkan sambutan dan informasi ringkas pengguna (nama, peran, tanggal bergabung).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-11</td><td>Bagi pengguna ber-permission, menampilkan statistik ringkas (total user, perusahaan, role).</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-12</td><td>Akses statistik dashboard dilindungi oleh otorisasi (<code>viewStats</code>).</td><td>Wajib</td></tr>
+</table>
+
+<h2>7.3 Master Data</h2>
+
+<h3>7.3.1 Perusahaan (Companies)</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-20</td><td>CRUD data perusahaan (kode, nama, email, telepon, alamat, PIC, status).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-21</td><td>Pencarian, penyaringan, dan paginasi data perusahaan.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-22</td><td>Ekspor data perusahaan ke Excel dan PDF.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-23</td><td>Penghapusan menggunakan soft delete.</td><td>Wajib</td></tr>
+</table>
+
+<h3>7.3.2 Modul (Modules)</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-30</td><td>CRUD modul dengan atribut: kode (unik, otomatis kapital), nama, durasi, tingkat risiko (rendah/sedang/tinggi), baseline harga, status aktif, dan catatan.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-31</td><td>Modul memiliki <b>Work Order Items</b> berurutan, masing-masing dapat memiliki <b>sub-item</b>; setiap item bersifat wajib/opsional.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-32</td><td>Modul memiliki <b>Referensi Dokumen Work Order</b> dengan unggah berkas; pemrosesan berkas dilakukan secara asinkron (queue) dengan status (pending/processing/completed).</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-33</td><td>Modul mendefinisikan kebutuhan <b>Personel</b> per posisi (nama posisi, jumlah, sifat wajib/opsional) beserta <b>kompetensi</b> yang disyaratkan.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-34</td><td>Modul mendefinisikan kebutuhan <b>Peralatan/Tools</b> (jenis peralatan, perlu kalibrasi atau tidak, jumlah).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-35</td><td>Modul mendefinisikan <b>Deliverables</b> berurutan (wajib/opsional).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-36</td><td>Modul tidak dapat dihapus jika masih digunakan oleh project.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-37</td><td>Status modul dapat diaktif/nonaktifkan (toggle); hanya modul aktif yang dapat dipilih pada project.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-38</td><td>Pencarian, penyaringan (risiko/status), paginasi, serta ekspor Excel/PDF.</td><td>Penting</td></tr>
+</table>
+
+<h3>7.3.3 Kompetensi (Competencies)</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-40</td><td>CRUD kompetensi (kode, nama, level, deskripsi, status aktif).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-41</td><td>Kompetensi dapat dikaitkan ke personel dan disyaratkan oleh posisi modul.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-42</td><td>Pencarian, penyaringan, paginasi, dan ekspor.</td><td>Penting</td></tr>
+</table>
+
+<h3>7.3.4 Personel (Personels)</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-50</td><td>CRUD personel (kode, nama, status aktif) beserta daftar kompetensi yang dimiliki.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-51</td><td>Setiap kompetensi personel dapat menyertakan unggahan berkas sertifikat.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-52</td><td>Pencarian, penyaringan, paginasi, dan ekspor.</td><td>Penting</td></tr>
+</table>
+
+<h3>7.3.5 Peralatan (Peralatan)</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-60</td><td>CRUD peralatan (kode, nama, deskripsi, lokasi).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-61</td><td>Pelacakan status kalibrasi (terkalibrasi/kedaluwarsa/menunggu/tidak diperlukan) beserta tanggal kedaluwarsa kalibrasi.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-62</td><td>Pencatatan kondisi (laik/tidak laik) dan status kepemilikan (milik/sewa/pinjam/lease).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-63</td><td>Peralatan dapat menyertakan bukti/evidence (unggahan berkas).</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-64</td><td>Pencarian, penyaringan (status kalibrasi/kondisi/kepemilikan), paginasi, dan ekspor.</td><td>Penting</td></tr>
+</table>
+
+<h2>7.4 Manajemen Project (Inti)</h2>
+<p>Project disusun melalui <b>wizard 5 langkah</b>. Data hanya tersimpan ke basis data ketika pengguna menekan "Simpan ke Draft" atau menyelesaikan pengajuan; pada mode pembuatan, perpindahan antar langkah hanya memvalidasi tanpa menyimpan.</p>
+
+<h3>7.4.1 Wizard Penyusunan Project</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-70</td><td><b>Langkah 1 — Informasi Project:</b> input kode, nama, deskripsi, prioritas (rendah/sedang/tinggi/kritis), tanggal mulai &amp; selesai. Tingkat risiko ditampilkan otomatis.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-71</td><td><b>Langkah 2 — Pemilihan Modul:</b> memilih satu atau lebih modul (minimal 1), menetapkan kuantitas dan harga satuan; subtotal per modul dihitung otomatis.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-72</td><td>Tingkat risiko project dihitung ulang otomatis berdasarkan modul berisiko tertinggi yang dipilih.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-73</td><td><b>Langkah 3 — Penugasan Personel:</b> sistem menghasilkan slot personel sesuai kebutuhan posisi modul; hanya personel dengan kompetensi sesuai yang dapat dipilih.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-74</td><td><b>Langkah 4 — Penugasan Peralatan:</b> sistem menghasilkan kebutuhan peralatan sesuai modul; hanya peralatan yang sesuai jenis dan laik yang dapat dipilih.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-75</td><td><b>Langkah 5 — Biaya Tambahan &amp; Review:</b> menambah/menghapus biaya tambahan (nama, jumlah, catatan) dan meninjau ringkasan lengkap project.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-76</td><td>Ringkasan biaya menampilkan Biaya Modul, Biaya Tambahan, dan Total secara real-time.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-77</td><td>Validasi setiap langkah menampilkan pesan kesalahan pada field terkait dan satu notifikasi ringkas (konsisten dengan form master data).</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-78</td><td>Pengguna dapat menyimpan project sebagai Draft kapan saja dan melanjutkan pengeditan kemudian.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-79</td><td>Setiap tombol aksi menampilkan indikator loading saat diklik.</td><td>Wajib</td></tr>
+</table>
+
+<h3>7.4.2 Siklus Hidup, Persetujuan &amp; Biaya</h3>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-80</td><td>Status project mengikuti siklus: <b>Draft → Aktif → On Progress → Selesai / Ditutup</b>.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-81</td><td>Project hanya dapat diedit saat berstatus Draft.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-82</td><td>Saat diajukan: jika risiko <b>Tinggi</b>, status persetujuan menjadi <b>Review CoE</b>; jika tidak, project langsung <b>Aktif</b> dan <b>Disetujui</b> otomatis.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-83</td><td>Tingkat kontrol CoE ditentukan dari risiko: Tinggi → Full, Sedang → Standar, lainnya → Tidak Ada.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-84</td><td>Reviewer CoE dapat <b>menyetujui</b> atau <b>menolak</b> (dengan alasan) project yang berstatus Review CoE.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-85</td><td>Project yang ditolak dapat diajukan ulang oleh pembuatnya.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-86</td><td>Reviewer berwenang dapat <b>menutup</b> (close) project yang Aktif/On Progress/Selesai disertai alasan.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-87</td><td>Total biaya project = jumlah subtotal modul + jumlah biaya tambahan, dihitung otomatis.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-88</td><td>Halaman detail project menampilkan ringkasan lengkap (informasi, modul, personel, peralatan, biaya, status) beserta tombol aksi sesuai hak akses.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-89</td><td>Daftar project mendukung pencarian dan penyaringan (status, status persetujuan, risiko, prioritas) serta paginasi.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-90</td><td>Project dapat dihapus (soft delete) dengan melepas seluruh relasi terkait.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-91</td><td>Ekspor daftar project ke Excel dan PDF.</td><td>Penting</td></tr>
+</table>
+
+<h2>7.5 Notifikasi</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-100</td><td>Pengguna dapat melihat kotak masuk notifikasi dan menandainya sebagai sudah dibaca.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-101</td><td>Pengguna ber-permission dapat mengirim notifikasi ke seluruh user atau user terpilih (judul, pesan, tautan aksi, tipe).</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-102</td><td>Lonceng notifikasi menampilkan indikator jumlah belum dibaca dan navigasi SPA tanpa hard refresh.</td><td>Penting</td></tr>
+</table>
+
+<h2>7.6 Chat / Komunikasi</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-110</td><td>Pengguna ber-permission dapat melakukan percakapan internal secara real-time (Laravel Reverb/WebSocket).</td><td>Opsional</td></tr>
+<tr><td class="req-id">FR-111</td><td>Pelacakan partisipan dan status terbaca pesan.</td><td>Opsional</td></tr>
+</table>
+
+<h2>7.7 Manajemen User, Role &amp; Permission</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-120</td><td>CRUD user, penetapan satu atau lebih role per user, serta toggle status aktif/nonaktif.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-121</td><td>CRUD role dan pengelolaan permission per role, dengan pengelompokan permission per modul.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-122</td><td>Role yang masih memiliki user terkait tidak dapat dihapus.</td><td>Wajib</td></tr>
+<tr><td class="req-id">FR-123</td><td>Ekspor data user/role ke Excel dan PDF.</td><td>Penting</td></tr>
+</table>
+
+<h2>7.8 Konfigurasi Sistem</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-130</td><td>Pengelolaan konfigurasi berbasis key-value melalui antarmuka (mis. nama aplikasi, zona waktu).</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-131</td><td>Konfigurasi dapat di-override saat runtime tanpa mengubah berkas .env.</td><td>Penting</td></tr>
+</table>
+
+<h2>7.9 Pelaporan &amp; Ekspor</h2>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:58%">Kebutuhan</th><th style="width:15%">Prioritas</th></tr>
+<tr><td class="req-id">FR-140</td><td>Seluruh modul data utama menyediakan ekspor Excel (.xlsx) dengan penghormatan terhadap filter aktif.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-141</td><td>Seluruh modul data utama menyediakan ekspor PDF dengan tata letak rapi.</td><td>Penting</td></tr>
+<tr><td class="req-id">FR-142</td><td>Aksi ekspor dilindungi permission khusus (mis. <code>projects_export_excel</code>, <code>projects_export_pdf</code>).</td><td>Wajib</td></tr>
+</table>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== 8. ATURAN BISNIS ===================== -->
+<h1>8. Aturan Bisnis</h1>
+<table>
+<tr><th style="width:12%">Kode</th><th>Aturan Bisnis</th></tr>
+<tr><td class="req-id">BR-01</td><td>Kode pada Modul, Project, Personel, Peralatan, dan Kompetensi bersifat unik. Kode Modul dan Project otomatis dikapitalisasi.</td></tr>
+<tr><td class="req-id">BR-02</td><td>Tingkat risiko project selalu mengikuti tingkat risiko tertinggi dari modul-modul yang dipilih (tidak diinput manual).</td></tr>
+<tr><td class="req-id">BR-03</td><td>Project berisiko Tinggi wajib melalui Review CoE sebelum menjadi Aktif. Project non-Tinggi langsung Aktif &amp; Disetujui saat diajukan.</td></tr>
+<tr><td class="req-id">BR-04</td><td>Tingkat kontrol CoE: Risiko Tinggi → Full Control; Sedang → Standar; Rendah → Tidak Ada.</td></tr>
+<tr><td class="req-id">BR-05</td><td>Project hanya dapat diedit saat berstatus Draft.</td></tr>
+<tr><td class="req-id">BR-06</td><td>Hanya pembuat project yang dapat mengajukan project miliknya, dan hanya ketika status persetujuan = Belum Diajukan atau Ditolak.</td></tr>
+<tr><td class="req-id">BR-07</td><td>Aksi Approve/Reject hanya berlaku untuk project berstatus persetujuan "Review CoE" dan memerlukan permission <code>projects_approve</code>.</td></tr>
+<tr><td class="req-id">BR-08</td><td>Penolakan project wajib menyertakan alasan; alasan penolakan direset saat project diajukan ulang/disetujui.</td></tr>
+<tr><td class="req-id">BR-09</td><td>Hanya personel dengan kompetensi yang disyaratkan posisi modul yang dapat ditugaskan pada slot tersebut.</td></tr>
+<tr><td class="req-id">BR-10</td><td>Hanya peralatan yang sesuai jenis kebutuhan modul dan berstatus laik yang dapat ditugaskan.</td></tr>
+<tr><td class="req-id">BR-11</td><td>Modul yang sedang digunakan oleh project tidak dapat dihapus. Hanya modul aktif yang dapat dipilih dalam project.</td></tr>
+<tr><td class="req-id">BR-12</td><td>Total biaya = Σ(kuantitas × harga satuan) seluruh modul + Σ biaya tambahan.</td></tr>
+<tr><td class="req-id">BR-13</td><td>Pada mode pembuatan, data tidak disimpan ke basis data hingga "Simpan ke Draft" atau pengajuan dilakukan.</td></tr>
+<tr><td class="req-id">BR-14</td><td>Role yang masih memiliki user tidak dapat dihapus.</td></tr>
+<tr><td class="req-id">BR-15</td><td>Penghapusan data utama menggunakan soft delete sehingga dapat diaudit/dipulihkan.</td></tr>
+</table>
+
+<!-- ===================== 9. ALUR PROSES ===================== -->
+<h1>9. Alur Proses Bisnis</h1>
+
+<h2>9.1 Alur Penyusunan &amp; Persetujuan Project</h2>
+<ol>
+<li>Pembuat Project membuka wizard dan mengisi <b>Informasi Project</b> (Langkah 1).</li>
+<li>Memilih <b>Modul</b> beserta kuantitas &amp; harga (Langkah 2); sistem menghitung subtotal dan menentukan tingkat risiko.</li>
+<li>Menugaskan <b>Personel</b> sesuai kompetensi (Langkah 3) dan <b>Peralatan</b> yang laik (Langkah 4).</li>
+<li>Menambahkan <b>Biaya Tambahan</b> dan meninjau ringkasan &amp; total biaya (Langkah 5).</li>
+<li>Pengguna menyimpan sebagai <b>Draft</b> atau langsung <b>mengajukan</b> project.</li>
+<li>Saat diajukan:
+    <ul>
+    <li>Jika risiko <b>Tinggi</b> → status persetujuan menjadi <b>Review CoE</b> dan menunggu keputusan Reviewer.</li>
+    <li>Jika risiko <b>Sedang/Rendah</b> → project langsung <b>Aktif</b> &amp; <b>Disetujui</b>.</li>
+    </ul>
+</li>
+<li>Reviewer CoE <b>menyetujui</b> (project menjadi Aktif) atau <b>menolak</b> (dengan alasan; project dapat diajukan ulang).</li>
+<li>Selama pelaksanaan, status dapat berlanjut ke <b>On Progress</b>, lalu <b>Selesai</b>, atau <b>Ditutup</b> oleh pihak berwenang.</li>
+</ol>
+
+<h2>9.2 Status Project &amp; Status Persetujuan</h2>
+<table>
+<tr><th style="width:50%">Status Siklus Hidup</th><th style="width:50%">Status Persetujuan</th></tr>
+<tr><td>Draft (awal, dapat diedit)</td><td>Belum Diajukan (none)</td></tr>
+<tr><td>Aktif</td><td>Review CoE (menunggu keputusan)</td></tr>
+<tr><td>On Progress</td><td>Disetujui</td></tr>
+<tr><td>Selesai</td><td>Ditolak (dapat diajukan ulang)</td></tr>
+<tr><td>Ditutup</td><td>&nbsp;</td></tr>
+</table>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== 10. NON-FUNGSIONAL ===================== -->
+<h1>10. Kebutuhan Non-Fungsional</h1>
+<table>
+<tr><th style="width:12%">Kode</th><th style="width:25%">Kategori</th><th>Kebutuhan</th></tr>
+<tr><td class="req-id">NFR-01</td><td>Keamanan</td><td>Kontrol akses berbasis peran (RBAC) dengan model permission-first; setiap rute dan aksi dilindungi otorisasi (Policy/Gate).</td></tr>
+<tr><td class="req-id">NFR-02</td><td>Keamanan</td><td>ID entitas sensitif (Project, Modul) dienkripsi pada URL melalui route key terenkripsi untuk mencegah enumerasi.</td></tr>
+<tr><td class="req-id">NFR-03</td><td>Keamanan</td><td>Proteksi reCAPTCHA pada login; verifikasi email; manajemen sesi; hanya user aktif yang dapat mengakses.</td></tr>
+<tr><td class="req-id">NFR-04</td><td>Keterpakaian (Usability)</td><td>Antarmuka konsisten, profesional, responsif (mobile &amp; desktop), mendukung mode gelap, serta indikator loading pada setiap aksi.</td></tr>
+<tr><td class="req-id">NFR-05</td><td>Keterpakaian</td><td>Notifikasi toast yang ringkas dan tidak duplikatif; umpan balik validasi yang jelas di tiap field.</td></tr>
+<tr><td class="req-id">NFR-06</td><td>Kinerja</td><td>Navigasi SPA (tanpa hard refresh) melalui Livewire; paginasi pada seluruh daftar data; pemrosesan berkas berat dilakukan asinkron via queue.</td></tr>
+<tr><td class="req-id">NFR-07</td><td>Keterpeliharaan</td><td>Arsitektur bersih (Service layer, Single Responsibility, DRY), penamaan konsisten, tanpa logika berat di Blade, tanpa duplikasi komponen.</td></tr>
+<tr><td class="req-id">NFR-08</td><td>Auditabilitas</td><td>Pencatatan aktivitas (activity log) dan soft delete untuk jejak audit serta pemulihan data.</td></tr>
+<tr><td class="req-id">NFR-09</td><td>Portabilitas</td><td>Mendukung basis data PostgreSQL/MySQL/SQLite; dapat berjalan mode SSO maupun standalone.</td></tr>
+<tr><td class="req-id">NFR-10</td><td>Ketersediaan</td><td>Halaman kesalahan kustom (400–504) dan penanganan kesalahan yang ramah pengguna.</td></tr>
+<tr><td class="req-id">NFR-11</td><td>Lokalitas</td><td>Antarmuka berbahasa Indonesia dan format mata uang lokal (Rupiah).</td></tr>
+</table>
+
+<!-- ===================== 11. MODEL DATA ===================== -->
+<h1>11. Model Data &amp; Entitas</h1>
+<p>Berikut entitas utama beserta ringkasan relasinya.</p>
+<table>
+<tr><th style="width:24%">Entitas</th><th style="width:40%">Atribut Kunci</th><th>Relasi Utama</th></tr>
+<tr><td><b>User</b></td><td>name, email, password, position, is_active</td><td>Memiliki banyak Role (Spatie); membuat &amp; menyetujui Project.</td></tr>
+<tr><td><b>Company</b></td><td>code, name, email, phone, status</td><td>Master data independen.</td></tr>
+<tr><td><b>Module</b></td><td>code, name, duration, risk_level, pricing_baseline, is_active</td><td>Memiliki WorkOrderItems (+subitems), WorkOrderReferences, ModulePersonels (+competencies), ModuleTools, Deliverables; many-to-many ke Project.</td></tr>
+<tr><td><b>WorkOrderItem / Subitem</b></td><td>order, name, description, nature</td><td>Milik Module; item memiliki banyak subitem.</td></tr>
+<tr><td><b>WorkOrderReference</b></td><td>document_name, file_path, file_status</td><td>Milik Module; berkas diproses via queue.</td></tr>
+<tr><td><b>ModulePersonel</b></td><td>position_name, quantity, nature</td><td>Milik Module; many-to-many ke Competency.</td></tr>
+<tr><td><b>ModuleTool</b></td><td>peralatan_id, requires_calibration, quantity</td><td>Milik Module; merujuk jenis Peralatan.</td></tr>
+<tr><td><b>ModuleDeliverable</b></td><td>order, name, description, nature</td><td>Milik Module.</td></tr>
+<tr><td><b>Competency</b></td><td>code, name, level, description, is_active</td><td>Many-to-many ke Personel &amp; ModulePersonel.</td></tr>
+<tr><td><b>Personel</b></td><td>code, name, is_active</td><td>Many-to-many ke Competency (dengan berkas sertifikat).</td></tr>
+<tr><td><b>Peralatan</b></td><td>code, name, location, calibration_status, calibration_expired_date, condition, ownership_status, is_active</td><td>Memiliki Evidence; ditugaskan ke Project.</td></tr>
+<tr><td><b>Project</b></td><td>code, name, status, approval_status, priority, risk_level, coe_control_level, start/end_date, created_by, approved_by</td><td>Many-to-many ke Module (pivot: quantity, unit_price, subtotal); memiliki ProjectPersonels, ProjectPeralatans, AdditionalCosts.</td></tr>
+<tr><td><b>ProjectModule (pivot)</b></td><td>quantity, unit_price, subtotal, notes</td><td>Menghubungkan Project &amp; Module.</td></tr>
+<tr><td><b>ProjectPersonel</b></td><td>project_id, module_id, module_personel_id, personel_id</td><td>Penugasan personel pada slot modul project.</td></tr>
+<tr><td><b>ProjectPeralatan</b></td><td>project_id, module_id, module_tool_id, peralatan_id</td><td>Penugasan peralatan pada kebutuhan modul project.</td></tr>
+<tr><td><b>ProjectAdditionalCost</b></td><td>name, amount, notes</td><td>Milik Project.</td></tr>
+<tr><td><b>Role / Permission</b></td><td>name, guard_name</td><td>Spatie RBAC; Role memiliki banyak Permission.</td></tr>
+<tr><td><b>Notification</b></td><td>user_id, title, message, action_url, read_at</td><td>Milik User.</td></tr>
+<tr><td><b>SystemConfiguration</b></td><td>key, value, type</td><td>Konfigurasi runtime key-value.</td></tr>
+</table>
+
+<br clear="all" style="page-break-before:always" />
+
+<!-- ===================== 12. MATRIKS PERMISSION ===================== -->
+<h1>12. Matriks Hak Akses (Permission)</h1>
+<p>Permission dikelompokkan per modul. Operasi standar: <i>view, create, update, delete, export_excel, export_pdf</i>. Modul Project memiliki tambahan <i>approve</i>.</p>
+<table>
+<tr><th style="width:24%">Kelompok</th><th>Permission</th></tr>
+<tr><td><b>Dashboard</b></td><td>dashboard_view, manage_own_company</td></tr>
+<tr><td><b>Perusahaan</b></td><td>companies_view, companies_create, companies_update, companies_delete, companies_export_excel, companies_export_pdf</td></tr>
+<tr><td><b>Modul</b></td><td>modules_view, modules_create, modules_update, modules_delete, modules_export_excel, modules_export_pdf</td></tr>
+<tr><td><b>Kompetensi</b></td><td>competencies_view, competencies_create, competencies_update, competencies_delete, competencies_export_excel, competencies_export_pdf</td></tr>
+<tr><td><b>Personel</b></td><td>personels_view, personels_create, personels_update, personels_delete, personels_export_excel, personels_export_pdf</td></tr>
+<tr><td><b>Peralatan</b></td><td>peralatan_view, peralatan_create, peralatan_update, peralatan_delete, peralatan_export_excel, peralatan_export_pdf</td></tr>
+<tr><td><b>Project</b></td><td>projects_view, projects_create, projects_update, projects_delete, <b>projects_approve</b>, projects_export_excel, projects_export_pdf</td></tr>
+<tr><td><b>Notifikasi</b></td><td>notifications_view, notifications_send</td></tr>
+<tr><td><b>Chat</b></td><td>chat_view, chat_create, chat_delete</td></tr>
+<tr><td><b>Konfigurasi Sistem</b></td><td>configuration_view, configuration_update, configuration_export_excel, configuration_export_pdf</td></tr>
+<tr><td><b>Manajemen User</b></td><td>users_view, users_create, users_update, users_delete, users_export_excel, users_export_pdf</td></tr>
+<tr><td><b>Roles &amp; Permissions</b></td><td>roles_view, roles_create, roles_update, roles_delete, roles_export_excel, roles_export_pdf</td></tr>
+</table>
+
+<!-- ===================== 13. ASUMSI ===================== -->
+<h1>13. Asumsi, Batasan &amp; Ketergantungan</h1>
+<h2>13.1 Asumsi</h2>
+<ul>
+<li>Data master (modul, kompetensi, personel, peralatan) telah tersedia/diinput sebelum penyusunan project.</li>
+<li>Pengguna telah memiliki akun dan peran yang sesuai.</li>
+<li>Klasifikasi tingkat risiko modul ditetapkan oleh pihak berwenang sesuai standar internal BKI.</li>
+</ul>
+<h2>13.2 Batasan</h2>
+<ul>
+<li>Sistem berbasis web dan memerlukan koneksi jaringan.</li>
+<li>Fitur chat real-time memerlukan server WebSocket (Laravel Reverb) yang berjalan.</li>
+<li>Pemrosesan unggahan berkas memerlukan queue worker aktif.</li>
+</ul>
+<h2>13.3 Ketergantungan</h2>
+<ul>
+<li>Server SSO (OAuth 2.0) apabila mode SSO diaktifkan.</li>
+<li>Layanan email (SMTP) untuk verifikasi &amp; reset kata sandi.</li>
+<li>Kredensial Google reCAPTCHA untuk proteksi login.</li>
+</ul>
+
+<!-- ===================== 14. OUT OF SCOPE ===================== -->
+<h1>14. Di Luar Ruang Lingkup (Out of Scope)</h1>
+<ul>
+<li>Integrasi penagihan/invoicing dan akuntansi eksternal.</li>
+<li>Penjadwalan sumber daya tingkat lanjut (kalender ketersediaan personel/peralatan).</li>
+<li>Manajemen pelaksanaan lapangan dan pelaporan progres harian.</li>
+<li>Aplikasi mobile native (sistem bersifat web responsif).</li>
+<li>Analitik/Business Intelligence lanjutan di luar statistik dashboard dasar.</li>
+</ul>
+
+<!-- ===================== 15. ACCEPTANCE ===================== -->
+<h1>15. Kriteria Penerimaan (Acceptance Criteria)</h1>
+<table>
+<tr><th style="width:12%">Kode</th><th>Kriteria</th></tr>
+<tr><td class="req-id">AC-01</td><td>Pengguna dapat menyusun project melalui kelima langkah wizard dan menyimpannya sebagai Draft.</td></tr>
+<tr><td class="req-id">AC-02</td><td>Tingkat risiko project terisi otomatis sesuai modul berisiko tertinggi.</td></tr>
+<tr><td class="req-id">AC-03</td><td>Total biaya terhitung otomatis dan akurat (modul + biaya tambahan) secara real-time.</td></tr>
+<tr><td class="req-id">AC-04</td><td>Project berisiko Tinggi masuk ke Review CoE; project lain langsung Aktif &amp; Disetujui saat diajukan.</td></tr>
+<tr><td class="req-id">AC-05</td><td>Reviewer dapat menyetujui/menolak (dengan alasan) hanya pada project Review CoE.</td></tr>
+<tr><td class="req-id">AC-06</td><td>Penugasan personel/peralatan dibatasi pada yang sesuai kompetensi/kelaikan.</td></tr>
+<tr><td class="req-id">AC-07</td><td>Setiap rute &amp; aksi menolak akses pengguna tanpa permission yang sesuai.</td></tr>
+<tr><td class="req-id">AC-08</td><td>Validasi form menampilkan pesan kesalahan per field dengan satu notifikasi ringkas.</td></tr>
+<tr><td class="req-id">AC-09</td><td>Ekspor Excel &amp; PDF tersedia dan menghormati filter yang aktif.</td></tr>
+<tr><td class="req-id">AC-10</td><td>Antarmuka responsif, mendukung mode gelap, dan menampilkan indikator loading pada aksi.</td></tr>
+</table>
+
+<br/><br/>
+<p class="muted" style="text-align:center; border-top:0.75pt solid #cbd5e1; padding-top:8pt;">
+— Akhir Dokumen —<br/>
+Business Requirements Document &middot; BKI Innovation 2026 &middot; PT Biro Klasifikasi Indonesia &middot; Versi 1.0
+</p>
+
+</div>
+</body>
+</html>
