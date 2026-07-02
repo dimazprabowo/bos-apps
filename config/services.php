@@ -48,6 +48,7 @@ return [
         'base_url' => env('SSO_BASE_URL', 'http://localhost:8111'),
         'redirect_uri' => env('SSO_REDIRECT_URI', 'http://localhost:8999/auth/callback'),
         'api_secret' => env('SSO_API_SECRET'),
+        'verify_ssl' => env('SSO_VERIFY_SSL', true),
     ],
 
 ];

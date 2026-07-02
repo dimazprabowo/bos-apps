@@ -108,7 +108,12 @@ class SsoAuthController extends Controller
             // Exchange authorization code for access token
             Log::info('SSO exchanging code for token');
 
-            $tokenResponse = Http::asForm()->post(config('services.sso.base_url') . '/oauth/token', [
+            $http = Http::asForm();
+            if (!config('services.sso.verify_ssl', true)) {
+                $http = $http->withoutVerifying();
+            }
+
+            $tokenResponse = $http->post(config('services.sso.base_url') . '/oauth/token', [
                 'grant_type' => 'authorization_code',
                 'client_id' => config('services.sso.client_id'),
                 'client_secret' => config('services.sso.client_secret'),
@@ -138,8 +143,12 @@ class SsoAuthController extends Controller
             Log::info('SSO token obtained, fetching user info');
 
             // Fetch user info from SSO Server
-            $userResponse = Http::withToken($accessToken)
-                ->get(config('services.sso.base_url') . '/api/user');
+            $userHttp = Http::withToken($accessToken);
+            if (!config('services.sso.verify_ssl', true)) {
+                $userHttp = $userHttp->withoutVerifying();
+            }
+
+            $userResponse = $userHttp->get(config('services.sso.base_url') . '/api/user');
 
             if ($userResponse->failed()) {
                 Log::error('SSO user fetch failed', [
