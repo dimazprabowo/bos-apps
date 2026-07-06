@@ -59,7 +59,7 @@ class ModuleManagement extends Component
         $this->filterChanged = true;
     }
 
-    public function updatedIsActiveFilter()
+    public function updatingIsActiveFilter()
     {
         $this->resetPage();
         $this->filterChanged = true;

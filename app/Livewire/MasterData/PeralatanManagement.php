@@ -48,31 +48,31 @@ class PeralatanManagement extends Component
         $this->filterChanged = true;
     }
 
-    public function updatedCalibrationStatusFilter()
+    public function updatingCalibrationStatusFilter()
     {
         $this->resetPage();
         $this->filterChanged = true;
     }
 
-    public function updatedConditionFilter()
+    public function updatingConditionFilter()
     {
         $this->resetPage();
         $this->filterChanged = true;
     }
 
-    public function updatedOwnershipStatusFilter()
+    public function updatingOwnershipStatusFilter()
     {
         $this->resetPage();
         $this->filterChanged = true;
     }
 
-    public function updatedReviewStatusFilter()
+    public function updatingReviewStatusFilter()
     {
         $this->resetPage();
         $this->filterChanged = true;
     }
 
-    public function updatedIsActiveFilter()
+    public function updatingIsActiveFilter()
     {
         $this->resetPage();
         $this->filterChanged = true;
@@ -84,6 +84,7 @@ class PeralatanManagement extends Component
         $this->conditionFilter = '';
         $this->ownershipStatusFilter = '';
         $this->reviewStatusFilter = '';
+        $this->isActiveFilter = '';
         $this->resetPage();
         $this->filterChanged = true;
         $this->notifySuccess('Filter berhasil direset.');

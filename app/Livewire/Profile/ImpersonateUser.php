@@ -29,6 +29,12 @@ class ImpersonateUser extends Component
         $this->resetPage();
     }
 
+    public function resetFilters()
+    {
+        $this->roleFilter = '';
+        $this->resetPage();
+    }
+
     public function startImpersonate($userId, ImpersonateService $service)
     {
         abort_unless(auth()->user()->can('users_impersonate'), 403);
