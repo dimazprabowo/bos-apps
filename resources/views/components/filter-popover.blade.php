@@ -2,8 +2,24 @@
     'filters' => [],
 ])
 
-<div class="relative w-full md:w-auto" x-data="{ filterOpen: false, dropUp: false }" @click.outside="filterOpen = false">
-    <button @click="filterOpen = !filterOpen; $nextTick(() => { dropUp = filterOpen && ($el.getBoundingClientRect().bottom + 320 > window.innerHeight) })" type="button"
+<div class="relative w-full md:w-auto" x-data="{ filterOpen: false, dropUp: false,
+        checkPosition() {
+            const trigger = this.$refs.trigger;
+            if (!trigger) return;
+            const rect = trigger.getBoundingClientRect();
+            const spaceBelow = window.innerHeight - rect.bottom;
+            const spaceAbove = rect.top;
+            const popoverHeight = 320;
+            this.dropUp = spaceBelow < popoverHeight && spaceAbove > spaceBelow;
+        },
+        toggleFilter() {
+            this.filterOpen = !this.filterOpen;
+            if (this.filterOpen) {
+                this.$nextTick(() => this.checkPosition());
+            }
+        }
+    }" @click.outside="filterOpen = false" @scroll.window="filterOpen && checkPosition()">
+    <button x-ref="trigger" @click="toggleFilter()" type="button"
         class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors w-full md:w-auto">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/></svg>
         <span>Filter</span>

@@ -33,6 +33,7 @@ class ImpersonateUser extends Component
     {
         $this->roleFilter = '';
         $this->resetPage();
+        $this->notifySuccess('Filter berhasil direset.');
     }
 
     public function startImpersonate($userId, ImpersonateService $service)
