@@ -18,21 +18,25 @@ class ImpersonateUser extends Component
 
     public $search = '';
     public $roleFilter = '';
+    public $filterChanged = false;
 
     public function updatingSearch()
     {
         $this->resetPage();
+        $this->filterChanged = true;
     }
 
     public function updatingRoleFilter()
     {
         $this->resetPage();
+        $this->filterChanged = true;
     }
 
     public function resetFilters()
     {
         $this->roleFilter = '';
         $this->resetPage();
+        $this->filterChanged = true;
         $this->notifySuccess('Filter berhasil direset.');
     }
 
@@ -61,8 +65,15 @@ class ImpersonateUser extends Component
             ->where('id', '!=', auth()->id())
             ->orderBy('name');
 
+        $users = $query->paginate(8);
+
+        if ($this->filterChanged) {
+            $this->notifySuccess("Ditemukan {$users->total()} data user.");
+            $this->filterChanged = false;
+        }
+
         return view('livewire.profile.impersonate-user', [
-            'users' => $query->paginate(8),
+            'users' => $users,
             'roles' => Role::orderBy('name')->get(),
         ]);
     }
