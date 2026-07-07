@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Work Order Checklist">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             Work Order Checklist

@@ -5,12 +5,8 @@ namespace App\Livewire\Pages\Auth;
 use App\Livewire\Traits\HasNotification;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Layout('layouts.guest')]
-#[Title('Forgot Password')]
 class ForgotPassword extends Component
 {
     use HasNotification;

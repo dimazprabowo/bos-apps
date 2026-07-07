@@ -5,12 +5,8 @@ namespace App\Livewire\Pages\Auth;
 use App\Livewire\Forms\LoginForm;
 use App\Livewire\Traits\HasNotification;
 use Illuminate\Support\Facades\Session;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Layout('layouts.guest')]
-#[Title('Login')]
 class Login extends Component
 {
     use HasNotification;

@@ -5,13 +5,9 @@ namespace App\Livewire\Pages;
 use App\Models\Company;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
-use Livewire\Attributes\Layout;
-use Livewire\Attributes\Title;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
 
-#[Layout('layouts.app', ['title' => 'Dashboard'])]
-#[Title('Dashboard')]
 class Dashboard extends Component
 {
     public function render()
