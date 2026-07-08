@@ -1,6 +1,6 @@
 @props(['title' => null])
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data="{ darkMode: localStorage.getItem('darkMode') === 'true' || localStorage.getItem('darkMode') === null && window.matchMedia('(prefers-color-scheme: dark)').matches }" x-init="$watch('darkMode', val => localStorage.setItem('darkMode', val)); if (localStorage.getItem('darkMode') === null) { localStorage.setItem('darkMode', darkMode) }" :class="{ 'dark': darkMode }">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" x-data :class="{ 'dark': $store.darkMode.dark }">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

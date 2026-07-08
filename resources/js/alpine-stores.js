@@ -89,13 +89,25 @@ document.addEventListener('alpine:init', () => {
             Alpine.store('notification').add(notification.type || 'success', notification.message || '');
         });
     }
+
+    if (!Alpine.store('darkMode')) {
+        const stored = localStorage.getItem('darkMode');
+        Alpine.store('darkMode', {
+            dark: stored === 'true' || (stored === null && window.matchMedia('(prefers-color-scheme: dark)').matches),
+            toggle() {
+                this.dark = !this.dark;
+                localStorage.setItem('darkMode', this.dark);
+            },
+        });
+    }
 });
 
 /**
  * Dark mode sync — keeps <html> class in sync with localStorage.
  */
 function syncDarkMode() {
-    const dark = localStorage.getItem('darkMode') === 'true';
+    const stored = localStorage.getItem('darkMode');
+    const dark = stored === 'true' || (stored === null && window.matchMedia('(prefers-color-scheme: dark)').matches);
     document.documentElement.classList.toggle('dark', dark);
 }
 
