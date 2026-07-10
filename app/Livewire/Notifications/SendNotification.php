@@ -92,33 +92,45 @@ class SendNotification extends Component
     public function send(): void
     {
         $this->authorize('notifications_send');
-        $this->validate();
 
-        if ($this->target === 'all') {
-            NotificationService::sendToAll(
-                title: $this->title,
-                message: $this->notifMessage,
-                type: $this->type,
-                actionUrl: $this->actionUrl ?: null,
-            );
-
-            $recipientCount = User::active()->count();
-            $this->notifySuccess("Notifikasi berhasil dikirim ke {$recipientCount} pengguna.");
-        } else {
-            NotificationService::sendToMany(
-                userIds: $this->selectedUserIds,
-                title: $this->title,
-                message: $this->notifMessage,
-                type: $this->type,
-                actionUrl: $this->actionUrl ?: null,
-            );
-
-            $recipientCount = count($this->selectedUserIds);
-            $this->notifySuccess("Notifikasi berhasil dikirim ke {$recipientCount} pengguna.");
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->notifyValidationError($e);
+            throw $e;
         }
 
-        $this->resetForm();
-        $this->activeTab = 'history';
+        try {
+            if ($this->target === 'all') {
+                NotificationService::sendToAll(
+                    title: $this->title,
+                    message: $this->notifMessage,
+                    type: $this->type,
+                    actionUrl: $this->actionUrl ?: null,
+                );
+
+                $recipientCount = User::active()->count();
+                $this->notifySuccess("Notifikasi berhasil dikirim ke {$recipientCount} pengguna.");
+            } else {
+                NotificationService::sendToMany(
+                    userIds: $this->selectedUserIds,
+                    title: $this->title,
+                    message: $this->notifMessage,
+                    type: $this->type,
+                    actionUrl: $this->actionUrl ?: null,
+                );
+
+                $recipientCount = count($this->selectedUserIds);
+                $this->notifySuccess("Notifikasi berhasil dikirim ke {$recipientCount} pengguna.");
+            }
+
+            $this->resetForm();
+            $this->activeTab = 'history';
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            $this->notifyError('Anda tidak memiliki izin untuk melakukan aksi ini.');
+        } catch (\Exception $e) {
+            $this->notifyError('Terjadi kesalahan sistem. Silakan coba lagi.');
+        }
     }
 
     public function resetForm(): void

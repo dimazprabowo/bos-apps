@@ -319,10 +319,14 @@
                     Kirim Notifikasi
                 </x-loading-button>
 
-                <button wire:click="resetForm" type="button"
-                        class="w-full px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <x-loading-button
+                    wire:click="resetForm"
+                    target="resetForm"
+                    variant="secondary"
+                    size="md"
+                    loadingText="Meresset...">
                     Reset Form
-                </button>
+                </x-loading-button>
             </div>
         </div>
     </div>

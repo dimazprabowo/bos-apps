@@ -14,6 +14,14 @@ class NotificationIndex extends Component
 
     public string $filter = 'all'; // all, unread, read
 
+    // Delete Modal
+    public bool $showDeleteModal = false;
+    public ?int $deletingNotificationId = null;
+    public ?string $deletingNotificationTitle = null;
+
+    // Delete All Read Modal
+    public bool $showDeleteAllModal = false;
+
     public function mount(): void
     {
         $this->authorize('viewAny', Notification::class);
@@ -45,13 +53,34 @@ class NotificationIndex extends Component
         $this->dispatch('notifications-read');
     }
 
-    public function deleteNotification(int $notificationId): void
+    public function confirmDeleteNotification(int $notificationId): void
     {
-        Notification::where('id', $notificationId)
+        $notification = Notification::where('id', $notificationId)
+            ->where('user_id', Auth::id())
+            ->first();
+
+        if ($notification) {
+            $this->deletingNotificationId = $notification->id;
+            $this->deletingNotificationTitle = $notification->title;
+            $this->showDeleteModal = true;
+        }
+    }
+
+    public function deleteNotification(): void
+    {
+        Notification::where('id', $this->deletingNotificationId)
             ->where('user_id', Auth::id())
             ->delete();
 
+        $this->showDeleteModal = false;
+        $this->deletingNotificationId = null;
+        $this->deletingNotificationTitle = null;
         $this->dispatch('notifications-read');
+    }
+
+    public function confirmDeleteAllRead(): void
+    {
+        $this->showDeleteAllModal = true;
     }
 
     public function deleteAllRead(): void
@@ -60,6 +89,7 @@ class NotificationIndex extends Component
             ->read()
             ->delete();
 
+        $this->showDeleteAllModal = false;
         $this->dispatch('notifications-read');
     }
 
