@@ -9,6 +9,8 @@ use Livewire\Component;
 class NotificationBell extends Component
 {
     public int $unreadCount = 0;
+    public ?int $loadingNotifId = null;
+    public bool $isOpen = false;
 
     public function mount(): void
     {
@@ -26,6 +28,16 @@ class NotificationBell extends Component
         $this->unreadCount = Notification::forUser(Auth::id())->unread()->count();
     }
 
+    public function toggleOpen(): void
+    {
+        $this->isOpen = !$this->isOpen;
+    }
+
+    public function closeDropdown(): void
+    {
+        $this->isOpen = false;
+    }
+
     public function markAllAsRead(): void
     {
         Notification::forUser(Auth::id())
@@ -38,6 +50,8 @@ class NotificationBell extends Component
 
     public function markAsRead(int $notificationId): void
     {
+        $this->loadingNotifId = $notificationId;
+
         $notification = Notification::where('id', $notificationId)
             ->where('user_id', Auth::id())
             ->first();
@@ -46,7 +60,15 @@ class NotificationBell extends Component
             $notification->markAsRead();
             $this->loadUnreadCount();
             $this->dispatch('notifications-read');
+            $this->isOpen = false;
+
+            if ($notification->action_url) {
+                $this->redirect($notification->action_url, navigate: true);
+                return;
+            }
         }
+
+        $this->loadingNotifId = null;
     }
 
     public function getListeners(): array
