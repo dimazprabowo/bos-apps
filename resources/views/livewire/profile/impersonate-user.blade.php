@@ -53,7 +53,7 @@
                             <td class="px-4 py-2 whitespace-nowrap">
                                 @if($user->roles->isNotEmpty())
                                     @foreach($user->roles as $role)
-                                        <span class="inline-flex items-center whitespace-nowrap px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                        <span wire:key="imp-role-{{ $user->id }}-{{ $role->id }}" class="inline-flex items-center whitespace-nowrap px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                                             {{ ucfirst($role->name) }}
                                         </span>
                                     @endforeach

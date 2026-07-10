@@ -41,7 +41,7 @@
             @forelse($notifications as $notification)
                 <div wire:key="notif-{{ $notification->id }}"
                      class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer {{ is_null($notification->read_at) ? 'bg-blue-50/50 dark:bg-blue-900/10' : '' }}"
-                     @click="await $wire.markAsRead({{ $notification->id }}); @if($notification->action_url) window.location.href='{{ $notification->action_url }}'; @endif">
+                     @click="await $wire.markAsRead({{ $notification->id }}); @if($notification->action_url) Livewire.navigate('{{ $notification->action_url }}'); @endif">
                     <div class="flex items-start space-x-3">
                         {{-- Icon --}}
                         <div class="flex-shrink-0 mt-0.5">

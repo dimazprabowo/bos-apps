@@ -23,7 +23,7 @@
 
         <div class="space-y-3">
             @forelse($additionalCosts as $index => $cost)
-                <div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3 sm:p-4 border border-gray-200 dark:border-gray-700">
+                <div wire:key="pac-{{ $index }}" class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-3 sm:p-4 border border-gray-200 dark:border-gray-700">
                     <div class="flex flex-col sm:flex-row sm:items-start gap-3">
                         <div class="flex-1 space-y-3">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">

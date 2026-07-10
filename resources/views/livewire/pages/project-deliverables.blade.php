@@ -207,7 +207,7 @@
                         ? $moduleHasUpload
                         : $mandatoryDeliverables->every(fn ($d) => $uploadedFiles->has($d->id));
                 @endphp
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-shadow hover:shadow-md"
+                <div wire:key="deliv-group-{{ $module->id }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden transition-shadow hover:shadow-md"
                      x-data="{ open: true }">
                     {{-- Module Header --}}
                     <div class="px-5 py-4 cursor-pointer select-none transition-colors {{ $moduleComplete ? 'bg-emerald-50/50 dark:bg-emerald-900/10' : 'bg-gray-50 dark:bg-gray-900/50 hover:bg-gray-100 dark:hover:bg-gray-900/70' }} border-b border-gray-200 dark:border-gray-700"
@@ -250,7 +250,7 @@
                                     $isMandatory = $deliverable->nature === 'mandatory';
                                     $hasFiles = $files->isNotEmpty();
                                 @endphp
-                                <div class="px-5 py-4 {{ $isMandatory && !$hasFiles ? 'bg-red-50/20 dark:bg-red-900/5' : '' }}">
+                                <div wire:key="deliv-{{ $deliverable->id }}" class="px-5 py-4 {{ $isMandatory && !$hasFiles ? 'bg-red-50/20 dark:bg-red-900/5' : '' }}">
                                     {{-- Deliverable Info --}}
                                     <div class="flex items-start justify-between gap-3 mb-3">
                                         <div class="flex items-start gap-3 min-w-0">
@@ -290,7 +290,7 @@
                                                     $isProcessing = $file->file_status === 'processing';
                                                     $isFailed = $file->file_status === 'failed';
                                                 @endphp
-                                                <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors {{ $isProcessing ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : ($isFailed ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' : 'bg-gray-50 dark:bg-gray-700/40 border-gray-200 dark:border-gray-600/50 hover:border-gray-300 dark:hover:border-gray-600') }}">
+                                                <div wire:key="file-{{ $file->id }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg border transition-colors {{ $isProcessing ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : ($isFailed ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' : 'bg-gray-50 dark:bg-gray-700/40 border-gray-200 dark:border-gray-600/50 hover:border-gray-300 dark:hover:border-gray-600') }}">
                                                     <div class="flex-shrink-0 w-8 h-8 rounded-md flex items-center justify-center {{ $isProcessing ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-500' : ($isFailed ? 'bg-red-100 dark:bg-red-900/30 text-red-500' : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400') }}">
                                                         @if($isProcessing)
                                                             <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">

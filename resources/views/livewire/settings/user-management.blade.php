@@ -148,7 +148,7 @@
                                     <div class="flex flex-wrap gap-1">
                                         @foreach($user->roles as $role)
                                             @php $colorClass = $roleColors[$role->name] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'; @endphp
-                                            <span class="inline-flex items-center whitespace-nowrap px-2 py-1 text-xs font-medium rounded-full {{ $colorClass }}">
+                                            <span wire:key="user-role-{{ $user->id }}-{{ $role->id }}" class="inline-flex items-center whitespace-nowrap px-2 py-1 text-xs font-medium rounded-full {{ $colorClass }}">
                                                 {{ ucfirst($role->name) }}
                                             </span>
                                         @endforeach

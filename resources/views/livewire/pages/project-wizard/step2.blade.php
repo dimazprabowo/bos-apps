@@ -39,7 +39,7 @@
             $subtotal = (float)($item['quantity'] ?? 0) * (float)($item['unit_price'] ?? 0);
             $hasError = $errors->has('selectedModules.'.$index.'.module_id') || $errors->has('selectedModules.'.$index.'.quantity');
         @endphp
-        <div x-data="{ expanded: {{ $hasError ? 'true' : 'true' }} }"
+        <div wire:key="pwm-{{ $index }}" x-data="{ expanded: {{ $hasError ? 'true' : 'true' }} }"
              class="rounded-xl border border-gray-200 dark:border-gray-700 overflow-visible">
             {{-- Header --}}
             <button type="button" @click="expanded = !expanded"

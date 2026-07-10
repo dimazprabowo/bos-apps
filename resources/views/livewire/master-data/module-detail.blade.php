@@ -78,7 +78,7 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Referensi Dokumen</h3>
             <div class="space-y-3">
                 @foreach($module->workOrderReferences as $ref)
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div wire:key="ref-{{ $ref->id }}" class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
@@ -104,7 +104,7 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Work Order Items</h3>
             <div class="space-y-3">
                 @foreach($module->workOrderItems as $item)
-                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                    <div wire:key="woi-{{ $item->id }}" class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                         <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50">
                             <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-sm font-bold">{{ $item->order }}</span>
                             <div class="flex-1 min-w-0">
@@ -118,7 +118,7 @@
                         @if($item->subitems->isNotEmpty())
                             <div class="divide-y divide-gray-100 dark:divide-gray-700">
                                 @foreach($item->subitems as $subitem)
-                                    <div class="flex items-center gap-3 px-3 py-2 pl-11">
+                                    <div wire:key="wos-{{ $subitem->id }}" class="flex items-center gap-3 px-3 py-2 pl-11">
                                         <span class="flex-shrink-0 text-xs font-semibold text-gray-400 dark:text-gray-500">{{ $item->order }}.{{ $subitem->order }}</span>
                                         <div class="flex-1 min-w-0">
                                             <p class="text-sm text-gray-700 dark:text-gray-300">{{ $subitem->name }}</p>
@@ -143,7 +143,7 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Personel</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 @foreach($module->personels as $personel)
-                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div wire:key="personel-{{ $personel->id }}" class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <div class="flex items-start gap-3">
                             <div class="flex-shrink-0 w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -158,7 +158,7 @@
                                         <p class="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Kompetensi:</p>
                                         <div class="flex flex-wrap gap-1">
                                             @foreach($personel->competencies as $competency)
-                                                <span class="inline-flex items-center whitespace-nowrap text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">{{ $competency->name }}</span>
+                                                <span wire:key="comp-{{ $personel->id }}-{{ $competency->id }}" class="inline-flex items-center whitespace-nowrap text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">{{ $competency->name }}</span>
                                             @endforeach
                                         </div>
                                     </div>
@@ -177,7 +177,7 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Tools / Peralatan</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 @foreach($module->tools as $tool)
-                    <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div wire:key="tool-{{ $tool->id }}" class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <div class="flex items-start gap-3">
                             <div class="flex-shrink-0 w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center justify-center">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Deliverables</h3>
             <div class="space-y-2">
                 @foreach($module->deliverables as $deliverable)
-                    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                    <div wire:key="mod-deliv-{{ $deliverable->id }}" class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
                         <span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xs font-bold">{{ $deliverable->order }}</span>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-800 dark:text-white">{{ $deliverable->name }}</p>
