@@ -682,137 +682,57 @@
     @endif
 
     {{-- Reject Modal --}}
-    @if($showRejectModal)
-        <div class="fixed inset-0 z-[60] overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showRejectModal', false)"></div>
-                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
-                    <div class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Tolak Project</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Jelaskan alasan penolakan project ini.</p>
-                    <div class="mb-6 text-left">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Alasan Penolakan <span class="text-red-500">*</span>
-                        </label>
-                        <textarea
-                            wire:model="rejectionReason"
-                            rows="4"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-yellow-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Minimal 10 karakter"></textarea>
-                        @error('rejectionReason')
-                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeRejectModal" target="closeRejectModal" />
-                        <button wire:click="reject"
-                            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
-                            wire:loading.attr="disabled"
-                            wire:loading.class="opacity-70 cursor-not-allowed"
-                            wire:target="reject">
-                            <svg wire:loading wire:target="reject" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                            </svg>
-                            Tolak Project
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    <x-action-modal
+        :show="$showRejectModal"
+        type="warning"
+        title="Tolak Project"
+        description="Jelaskan alasan penolakan project ini."
+        close-method="closeRejectModal"
+        show-var="showRejectModal"
+        action-method="reject"
+        action-text="Tolak Project"
+        :textarea="true"
+        textarea-model="rejectionReason"
+        textarea-label="Alasan Penolakan"
+        :textarea-required="true"
+        :textarea-rows="4"
+        textarea-placeholder="Minimal 10 karakter"
+    />
 
     {{-- Close Modal --}}
-    @if($showCloseModal)
-        <div class="fixed inset-0 z-[60] overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showCloseModal', false)"></div>
-                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
-                    <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Tutup Project</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Project yang ditutup tidak dapat diedit atau diajukan kembali.</p>
-                    <div class="mb-6 text-left">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Alasan Penutupan <span class="text-red-500">*</span>
-                        </label>
-                        <textarea
-                            wire:model="closeReason"
-                            rows="4"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Minimal 10 karakter"></textarea>
-                        @error('closeReason')
-                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeCloseModal" target="closeCloseModal" variant="secondary" />
-                        <button wire:click="closeProject"
-                            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
-                            wire:loading.attr="disabled"
-                            wire:loading.class="opacity-70 cursor-not-allowed"
-                            wire:target="closeProject">
-                            <svg wire:loading wire:target="closeProject" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                            </svg>
-                            Tutup Project
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    <x-action-modal
+        :show="$showCloseModal"
+        type="danger"
+        title="Tutup Project"
+        description="Project yang ditutup tidak dapat diedit atau diajukan kembali."
+        close-method="closeCloseModal"
+        show-var="showCloseModal"
+        action-method="closeProject"
+        action-text="Tutup Project"
+        :textarea="true"
+        textarea-model="closeReason"
+        textarea-label="Alasan Penutupan"
+        :textarea-required="true"
+        :textarea-rows="4"
+        textarea-placeholder="Minimal 10 karakter"
+    />
 
     {{-- Approve Confirmation Modal --}}
-    @if($showApproveModal)
-        <div class="fixed inset-0 z-[60] overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showApproveModal', false)"></div>
-                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
-                    <div class="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Setujui Project</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Apakah Anda yakin ingin menyetujui project ini? Project yang disetujui akan berstatus aktif.</p>
-                    <div class="mb-6 text-left">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Catatan Persetujuan <span class="text-gray-400 text-xs">(opsional)</span>
-                        </label>
-                        <textarea
-                            wire:model="approvalNote"
-                            rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Catatan tambahan untuk persetujuan (opsional)"></textarea>
-                        @error('approvalNote')
-                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeApproveModal" target="closeApproveModal" variant="secondary" />
-                        <button wire:click="approve"
-                            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
-                            wire:loading.attr="disabled"
-                            wire:loading.class="opacity-70 cursor-not-allowed"
-                            wire:target="approve">
-                            <svg wire:loading wire:target="approve" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                            </svg>
-                            Ya, Setujui
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    <x-action-modal
+        :show="$showApproveModal"
+        type="success"
+        icon="check"
+        title="Setujui Project"
+        description="Apakah Anda yakin ingin menyetujui project ini? Project yang disetujui akan berstatus aktif."
+        close-method="closeApproveModal"
+        show-var="showApproveModal"
+        action-method="approve"
+        action-text="Ya, Setujui"
+        :textarea="true"
+        textarea-model="approvalNote"
+        textarea-label="Catatan Persetujuan"
+        :textarea-required="false"
+        :textarea-rows="3"
+        textarea-placeholder="Catatan tambahan untuk persetujuan (opsional)"
+    />
 </div>

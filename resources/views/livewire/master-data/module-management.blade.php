@@ -257,100 +257,39 @@
     />
 
     <!-- Approve Review Modul Modal -->
-    @if($showApproveReviewModal)
-        <div class="fixed inset-0 z-[60] overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showApproveReviewModal', false)"></div>
-                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
-                    <div class="w-12 h-12 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Setujui Review Modul</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Konfirmasi persetujuan review modul <strong>{{ $approvingModuleName }}</strong>.</p>
-                    <div class="mb-6 text-left">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Catatan Persetujuan <span class="text-gray-400 text-xs">(opsional)</span>
-                        </label>
-                        <textarea
-                            wire:model="approvalNote"
-                            rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-yellow-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Catatan tambahan untuk persetujuan (opsional)"></textarea>
-                        @error('approvalNote')
-                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeApproveReviewModal" target="closeApproveReviewModal" variant="secondary" />
-                        <button wire:click="approveReview"
-                            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
-                            wire:loading.attr="disabled"
-                            wire:loading.class="opacity-70 cursor-not-allowed"
-                            wire:target="approveReview">
-                            <svg wire:loading.class="hidden" wire:target="approveReview" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            <svg wire:loading wire:target="approveReview" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                            </svg>
-                            <span wire:loading.class="hidden" wire:target="approveReview">Ya, Setujui</span>
-                            <span wire:loading wire:target="approveReview">Memproses...</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    <x-action-modal
+        :show="$showApproveReviewModal"
+        type="warning"
+        button-color="green"
+        title="Setujui Review Modul"
+        description="Konfirmasi persetujuan review modul <strong>{{ $approvingModuleName }}</strong>."
+        close-method="closeApproveReviewModal"
+        show-var="showApproveReviewModal"
+        action-method="approveReview"
+        action-text="Ya, Setujui"
+        :textarea="true"
+        textarea-model="approvalNote"
+        textarea-label="Catatan Persetujuan"
+        :textarea-required="false"
+        :textarea-rows="3"
+        textarea-placeholder="Catatan tambahan untuk persetujuan (opsional)"
+    />
 
     <!-- Reject Review Modul Modal -->
-    @if($showRejectReviewModal)
-        <div class="fixed inset-0 z-[60] overflow-y-auto">
-            <div class="flex items-center justify-center min-h-screen px-4 py-6">
-                <div class="fixed inset-0 bg-gray-500/75 dark:bg-gray-900/80" @click="$wire.set('showRejectReviewModal', false)"></div>
-                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md z-10 p-6 text-center">
-                    <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-1">Tolak Review Modul</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Jelaskan alasan penolakan review modul <strong>{{ $rejectingModuleName }}</strong>.</p>
-                    <div class="mb-6 text-left">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Alasan Penolakan <span class="text-red-500">*</span>
-                        </label>
-                        <textarea
-                            wire:model="rejectionReason"
-                            rows="4"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Minimal 10 karakter"></textarea>
-                        @error('rejectionReason')
-                            <span class="text-red-500 text-xs mt-1">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="flex items-center justify-center gap-3">
-                        <x-cancel-button wire:click="closeRejectReviewModal" target="closeRejectReviewModal" variant="secondary" />
-                        <button wire:click="rejectReview"
-                            class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl shadow-sm transition-all"
-                            wire:loading.attr="disabled"
-                            wire:loading.class="opacity-70 cursor-not-allowed"
-                            wire:target="rejectReview">
-                            <svg wire:loading.class="hidden" wire:target="rejectReview" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                            <svg wire:loading wire:target="rejectReview" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                            </svg>
-                            <span wire:loading.class="hidden" wire:target="rejectReview">Tolak Modul</span>
-                            <span wire:loading wire:target="rejectReview">Memproses...</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+    <x-action-modal
+        :show="$showRejectReviewModal"
+        type="danger"
+        title="Tolak Review Modul"
+        description="Jelaskan alasan penolakan review modul <strong>{{ $rejectingModuleName }}</strong>."
+        close-method="closeRejectReviewModal"
+        show-var="showRejectReviewModal"
+        action-method="rejectReview"
+        action-text="Tolak Modul"
+        :textarea="true"
+        textarea-model="rejectionReason"
+        textarea-label="Alasan Penolakan"
+        :textarea-required="true"
+        :textarea-rows="4"
+        textarea-placeholder="Minimal 10 karakter"
+    />
 </div>
