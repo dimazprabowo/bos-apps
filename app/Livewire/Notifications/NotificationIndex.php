@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Notifications;
 
+use App\Livewire\Traits\HasNotification;
 use App\Models\Notification;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +11,7 @@ use Livewire\WithPagination;
 
 class NotificationIndex extends Component
 {
-    use WithPagination, AuthorizesRequests;
+    use WithPagination, AuthorizesRequests, HasNotification;
 
     public string $filter = 'all'; // all, unread, read
 
@@ -41,6 +42,7 @@ class NotificationIndex extends Component
         if ($notification) {
             $notification->markAsRead();
             $this->dispatch('notifications-read');
+            $this->notifySuccess('Notifikasi ditandai sudah dibaca.');
         }
     }
 
@@ -51,6 +53,7 @@ class NotificationIndex extends Component
             ->update(['read_at' => now()]);
 
         $this->dispatch('notifications-read');
+        $this->notifySuccess('Semua notifikasi ditandai sudah dibaca.');
     }
 
     public function confirmDeleteNotification(int $notificationId): void
@@ -76,6 +79,7 @@ class NotificationIndex extends Component
         $this->deletingNotificationId = null;
         $this->deletingNotificationTitle = null;
         $this->dispatch('notifications-read');
+        $this->notifySuccess('Notifikasi berhasil dihapus.');
     }
 
     public function confirmDeleteAllRead(): void
@@ -91,6 +95,7 @@ class NotificationIndex extends Component
 
         $this->showDeleteAllModal = false;
         $this->dispatch('notifications-read');
+        $this->notifySuccess('Semua notifikasi yang sudah dibaca berhasil dihapus.');
     }
 
     public function getListeners(): array
