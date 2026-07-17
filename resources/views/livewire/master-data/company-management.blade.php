@@ -6,15 +6,18 @@
                 class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
         </div>
 
-        <!-- Filter Status -->
-        <div class="w-full md:w-44">
-            <x-searchable-select
-                wire:model.live="statusFilter"
-                :options="$this->statusOptions"
-                placeholder="Semua Status"
-                searchPlaceholder="Cari status..."
-            />
-        </div>
+        <!-- Filter Popover -->
+        <x-filter-popover :filters="['statusFilter']">
+            <div>
+                <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Status</label>
+                <x-searchable-select
+                    wire:model.live="statusFilter"
+                    :options="$this->statusOptions"
+                    placeholder="Semua Status"
+                    searchPlaceholder="Cari status..."
+                />
+            </div>
+        </x-filter-popover>
 
         <!-- Action Buttons -->
         <div class="flex items-center justify-center gap-2 w-full md:w-auto md:justify-start">
@@ -159,7 +162,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center">
+                            <td colspan="7" class="px-6 py-12 text-center">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                 </svg>
